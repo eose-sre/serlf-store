@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>serlf — Dashboard</title>
+<style>
+:root { --bg: #060610; --surface: #0c0c1a; --surface2: #12122a; --border: #1a1a3e; --text: #e8e8f0; --muted: #6b6b8d; --green: #34d399; --cyan: #22d3ee; --accent: #7c6df0; --accent2: #f06292; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; }
+nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+.nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.nav-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: color 0.3s; }
+.nav-links a:hover { color: var(--text); }
+.nav-badge { background: rgba(52,211,153,0.15); color: var(--green); padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+.container { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
+
+.welcome-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
+.welcome-bar h1 { font-size: 1.8rem; font-weight: 800; }
+.welcome-bar h1 span { background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.status-pill { display: flex; align-items: center; gap: 0.5rem; background: var(--surface); border: 1px solid var(--green); border-radius: 20px; padding: 6px 16px; font-size: 0.85rem; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: all 0.3s; }
+.card:hover { border-color: var(--green); }
+.card-icon { font-size: 2rem; margin-bottom: 1rem; }
+.card-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+.card-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem; }
+.card-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; }
+.card-status .dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot-live { background: var(--green); }
+.dot-setup { background: var(--cyan); animation: pulse 1.5s ease-in-out infinite; }
+
+.section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; }
+
+.actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 3rem; }
+.action { display: flex; align-items: center; gap: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.5rem; text-decoration: none; color: var(--text); transition: all 0.3s; }
+.action:hover { border-color: var(--green); transform: translateY(-2px); }
+.action-icon { font-size: 1.5rem; }
+.action-text { font-weight: 600; font-size: 0.95rem; }
+.action-sub { color: var(--muted); font-size: 0.8rem; }
+
+.plan-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+.plan-info { }
+.plan-name { font-weight: 700; }
+.plan-price { color: var(--green); font-size: 0.9rem; }
+.plan-btn { padding: 8px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; background: rgba(52,211,153,0.1); color: var(--green); border: 1px solid rgba(52,211,153,0.3); text-decoration: none; transition: all 0.3s; }
+.plan-btn:hover { background: rgba(52,211,153,0.2); }
+
+@media (max-width: 768px) {
+  .grid { grid-template-columns: 1fr; }
+  .actions { grid-template-columns: 1fr; }
+  .welcome-bar { flex-direction: column; gap: 1rem; align-items: flex-start; }
+  .plan-bar { flex-direction: column; gap: 1rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">serlf</div>
+  <div class="nav-links">
+    <span class="nav-badge">Subscriber</span>
+    <a href="https://serlf.com">Home</a>
+    <a href="mailto:hello@serlf.com">Support</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="welcome-bar">
+    <h1>Welcome to <span>serlf</span></h1>
+    <div class="status-pill">
+      <div class="status-dot"></div>
+      Setting up your environment
+    </div>
+  </div>
+
+  <div class="section-title">Your Products</div>
+  <div class="grid">
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <div class="card-title">serlf Platform</div>
+      <div class="card-desc">Your dedicated AI team, learning your business.</div>
+      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <div class="card-title">serlf Sites</div>
+      <div class="card-desc">Your AI-managed website, always online.</div>
+      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔐</div>
+      <div class="card-title">serlf Security</div>
+      <div class="card-desc">Enterprise-grade protection for your environment.</div>
+      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">☁️</div>
+      <div class="card-title">serlf Transform</div>
+      <div class="card-desc">Your professional cloud infrastructure.</div>
+      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <div class="card-title">serlf Intelligence</div>
+      <div class="card-desc">AI-powered insights for your business.</div>
+      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧪</div>
+      <div class="card-title">serlf Labs</div>
+      <div class="card-desc">Cutting-edge AI research, applied to you.</div>
+      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
+    </div>
+  </div>
+
+  <div class="section-title">Quick Actions</div>
+  <div class="actions">
+    <a href="mailto:hello@serlf.com?subject=Onboarding" class="action">
+      <div class="action-icon">💬</div>
+      <div>
+        <div class="action-text">Start Onboarding</div>
+        <div class="action-sub">Tell us about your business</div>
+      </div>
+    </a>
+    <a href="mailto:hello@serlf.com?subject=Support" class="action">
+      <div class="action-icon">🛟</div>
+      <div>
+        <div class="action-text">Get Support</div>
+        <div class="action-sub">We're here to help</div>
+      </div>
+    </a>
+    <a href="mailto:hello@serlf.com?subject=Manage Subscription" class="action">
+      <div class="action-icon">💳</div>
+      <div>
+        <div class="action-text">Manage Billing</div>
+        <div class="action-sub">Update payment or cancel</div>
+      </div>
+    </a>
+    <a href="https://serlf.com" class="action">
+      <div class="action-icon">📖</div>
+      <div>
+        <div class="action-text">Learn More</div>
+        <div class="action-sub">See all features and products</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="plan-bar">
+    <div class="plan-info">
+      <div class="plan-name">serlf — All Products</div>
+      <div class="plan-price">$1 CAD / month · Active</div>
+    </div>
+    <a href="mailto:hello@serlf.com?subject=Manage Subscription" class="plan-btn">Manage Plan</a>
+  </div>
+
+</div>
+
+</body>
+</html>
