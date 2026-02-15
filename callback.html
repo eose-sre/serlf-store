@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signing in... | serlf</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a1628 0%, #1e3a5f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .callback-container {
+            text-align: center;
+            max-width: 400px;
+            padding: 2rem;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 2rem;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: #3b82f6;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 1.5rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .status-text {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            color: #fecaca;
+        }
+        
+        .error-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .retry-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: background-color 0.2s;
+        }
+        
+        .retry-btn:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="callback-container">
+        <div class="logo">serlf</div>
+        <div class="spinner"></div>
+        <div class="status-text">Signing you in...</div>
+        <div id="error-container" class="error-message" style="display: none;">
+            <div class="error-title">Sign-in Failed</div>
+            <div id="error-text">Something went wrong. Please try again.</div>
+            <button class="retry-btn" onclick="handleRetry()">Try Again</button>
+        </div>
+    </div>
+
+    <script src="/auth.js"></script>
+    <script>
+        // OAuth callback handler
+        (function() {
+            'use strict';
+            
+            function showError(title, message) {
+                const spinner = document.querySelector('.spinner');
+                const statusText = document.querySelector('.status-text');
+                const errorContainer = document.getElementById('error-container');
+                const errorTitle = errorContainer.querySelector('.error-title');
+                const errorText = document.getElementById('error-text');
+                
+                spinner.style.display = 'none';
+                statusText.style.display = 'none';
+                errorContainer.style.display = 'block';
+                errorTitle.textContent = title;
+                errorText.textContent = message;
+            }
+            
+            function handleOAuthCallback() {
+                // Check for error parameters first
+                const urlParams = new URLSearchParams(window.location.search);
+                const error = urlParams.get('error');
+                
+                if (error) {
+                    const errorDescription = urlParams.get('error_description') || 'Authorization failed';
+                    console.error('OAuth error:', error, errorDescription);
+                    showError('Authorization Denied', errorDescription);
+                    return;
+                }
+                
+                // Check for authorization code or token
+                const code = urlParams.get('code');
+                const state = urlParams.get('state');
+                
+                // Handle hash fragment for implicit flow (less common with Google)
+                let hashParams = new URLSearchParams(window.location.hash.replace('#', ''));
+                const accessToken = hashParams.get('access_token');
+                const idToken = hashParams.get('id_token');
+                
+                if (!code && !accessToken && !idToken) {
+                    showError('Missing Authorization', 'No authorization code or token received from Google.');
+                    return;
+                }
+                
+                // For this implementation, we expect the credential to be passed via postMessage
+                // from the Google Sign-In popup/iframe
+                console.log('Callback received, waiting for credential...');
+            }
+            
+            // Listen for postMessage from Google Sign-In
+            window.addEventListener('message', function(event) {
+                if (event.origin !== window.location.origin) return;
+                
+                if (event.data.type === 'GOOGLE_SIGNIN_SUCCESS') {
+                    handleGoogleSignIn(event.data.credential);
+                } else if (event.data.type === 'GOOGLE_SIGNIN_ERROR') {
+                    showError('Sign-in Failed', event.data.error || 'Google sign-in failed');
+                }
+            });
+            
+            function handleGoogleSignIn(credential) {
+                try {
+                    // Validate and decode the JWT token
+                    const userData = SERLF_AUTH.validateGoogleToken(credential);
+                    
+                    if (!userData) {
+                        showError('Invalid Token', 'The authentication token is invalid or expired.');
+                        return;
+                    }
+                    
+                    // Check if user is authorized (admin or any Google account for customers)
+                    const isAdmin = SERLF_AUTH.isAdmin(userData.email);
+                    const isValidUser = isAdmin || userData.email_verified;
+                    
+                    if (!isValidUser) {
+                        showError('Access Denied', 'Your account is not authorized to access serlf.');
+                        return;
+                    }
+                    
+                    // Store session
+                    userData.token = credential;
+                    SERLF_AUTH.setSession(userData);
+                    
+                    // Redirect to portal or intended page
+                    const redirectUrl = SERLF_AUTH.getRedirectUrl();
+                    console.log('Sign-in successful, redirecting to:', redirectUrl);
+                    
+                    // Small delay to show success before redirect
+                    setTimeout(() => {
+                        window.location.href = redirectUrl;
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error('Sign-in error:', error);
+                    showError('Sign-in Error', 'An unexpected error occurred during sign-in.');
+                }
+            }
+            
+            // Global retry function
+            window.handleRetry = function() {
+                window.location.href = '/login.html';
+            };
+            
+            // Handle direct URL access with parameters
+            if (window.location.search || window.location.hash) {
+                handleOAuthCallback();
+            }
+            
+            // If no parameters and no postMessage within 10 seconds, show error
+            setTimeout(() => {
+                if (SERLF_AUTH.isAuthenticated()) return;
+                
+                const errorContainer = document.getElementById('error-container');
+                if (errorContainer.style.display === 'none') {
+                    showError('Timeout', 'Sign-in process timed out. Please try again.');
+                }
+            }, 10000);
+            
+        })();
+    </script>
+</body>
+</html>

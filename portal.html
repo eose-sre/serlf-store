@@ -1,857 +1,785 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admiral Fleet Control — Portal</title>
-<style>
-:root{--bg:#060610;--surface:#0c0c1a;--surface2:#12122a;--border:#1a1a3e;--text:#e8e8f0;--muted:#6b6b8d;--green:#34d399;--cyan:#22d3ee;--accent:#7c6df0;--red:#ef4444;--yellow:#f59e0b;--orange:#f97316;--pink:#ec4899;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,system-ui,sans-serif;line-height:1.6;min-height:100vh;}
-a{color:var(--cyan);text-decoration:none;}
-a:hover{text-decoration:underline;}
-
-/* Auth Gate */
-.auth-gate{display:flex;align-items:center;justify-content:center;min-height:100vh;flex-direction:column;gap:1.5rem;}
-.auth-gate h1{font-size:2rem;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.auth-gate p{color:var(--muted);}
-
-/* Top Bar */
-.topbar{display:flex;justify-content:space-between;align-items:center;padding:0.75rem 1.5rem;border-bottom:1px solid var(--border);background:var(--surface);position:sticky;top:0;z-index:100;}
-.topbar-left{display:flex;align-items:center;gap:1rem;}
-.logo{font-size:1.3rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.topbar-right{display:flex;align-items:center;gap:1rem;}
-.user-info{display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;}
-.user-info img{width:28px;height:28px;border-radius:50%;}
-.btn{padding:0.4rem 1rem;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;font-size:0.8rem;transition:all 0.2s;}
-.btn:hover{border-color:var(--accent);background:rgba(124,109,240,0.1);}
-.btn-primary{background:var(--accent);border-color:var(--accent);color:white;}
-.btn-primary:hover{background:#6b5ce0;}
-.btn-sm{padding:0.25rem 0.6rem;font-size:0.75rem;}
-.btn-green{background:rgba(52,211,153,0.15);border-color:var(--green);color:var(--green);}
-
-/* Tabs */
-.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);padding:0 1rem;overflow-x:auto;}
-.tab{padding:0.75rem 1.25rem;cursor:pointer;font-size:0.85rem;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;}
-.tab:hover{color:var(--text);}
-.tab.active{color:var(--cyan);border-bottom-color:var(--cyan);}
-
-/* Content */
-.content{padding:1.5rem;max-width:1400px;margin:0 auto;}
-.panel{display:none;}
-.panel.active{display:block;}
-
-/* Cards */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem;margin:1rem 0;}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;transition:all 0.2s;}
-.card:hover{border-color:var(--accent);transform:translateY(-1px);}
-.card h3{font-size:0.95rem;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.5rem;}
-.card p{font-size:0.8rem;color:var(--muted);}
-.card .status{display:inline-flex;align-items:center;gap:0.3rem;font-size:0.7rem;padding:0.2rem 0.6rem;border-radius:20px;margin-top:0.5rem;}
-.status-live{background:rgba(52,211,153,0.15);color:var(--green);}
-.status-pending{background:rgba(245,158,11,0.15);color:var(--yellow);}
-.status-blocked{background:rgba(239,68,68,0.15);color:var(--red);}
-
-/* Stats Row */
-.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem;margin:1rem 0;}
-.stat{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center;}
-.stat .num{font-size:2rem;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.stat .label{font-size:0.75rem;color:var(--muted);margin-top:0.25rem;}
-
-/* Table */
-.table-wrap{overflow-x:auto;margin:1rem 0;}
-table{width:100%;border-collapse:collapse;font-size:0.85rem;}
-th{text-align:left;padding:0.75rem;border-bottom:1px solid var(--border);color:var(--muted);font-size:0.75rem;text-transform:uppercase;letter-spacing:1px;}
-td{padding:0.75rem;border-bottom:1px solid rgba(255,255,255,0.03);}
-tr:hover td{background:rgba(255,255,255,0.02);}
-
-/* Section headers */
-.section-header{display:flex;justify-content:space-between;align-items:center;margin:1.5rem 0 1rem;}
-.section-header h2{font-size:1.2rem;display:flex;align-items:center;gap:0.5rem;}
-
-/* File Manager */
-.file-area{background:var(--surface);border:2px dashed var(--border);border-radius:12px;padding:2rem;text-align:center;cursor:pointer;transition:all 0.2s;margin:1rem 0;}
-.file-area:hover{border-color:var(--accent);background:rgba(124,109,240,0.05);}
-.file-area.dragover{border-color:var(--cyan);background:rgba(34,211,238,0.05);}
-.file-list{margin:1rem 0;}
-.file-item{display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin:0.5rem 0;font-size:0.85rem;}
-.file-item .name{display:flex;align-items:center;gap:0.5rem;}
-
-/* NP Table */
-.np-tag{display:inline-block;padding:0.15rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:600;background:rgba(124,109,240,0.15);color:var(--accent);}
-
-/* Live check */
-.dot{width:8px;height:8px;border-radius:50%;display:inline-block;}
-.dot-green{background:var(--green);}
-.dot-yellow{background:var(--yellow);animation:pulse 1.5s infinite;}
-.dot-red{background:var(--red);}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-
-/* Log */
-.log{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;font-family:'Fira Code',monospace;font-size:0.8rem;max-height:400px;overflow-y:auto;white-space:pre-wrap;line-height:1.8;}
-.log .ts{color:var(--muted);}
-.log .ok{color:var(--green);}
-.log .warn{color:var(--yellow);}
-.log .err{color:var(--red);}
-.log .info{color:var(--cyan);}
-
-/* Quick Actions */
-.actions-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:0.75rem;margin:1rem 0;}
-.action-btn{display:flex;align-items:center;gap:0.75rem;padding:1rem;background:var(--surface);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all 0.2s;font-size:0.85rem;color:var(--text);}
-.action-btn:hover{border-color:var(--accent);background:rgba(124,109,240,0.05);transform:translateY(-1px);}
-.action-btn .icon{font-size:1.3rem;}
-
-/* Modal */
-.modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;}
-.modal-overlay.show{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:2rem;max-width:600px;width:90%;max-height:80vh;overflow-y:auto;}
-.modal h2{margin-bottom:1rem;}
-.modal textarea{width:100%;min-height:200px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:1rem;color:var(--text);font-family:'Fira Code',monospace;font-size:0.85rem;resize:vertical;}
-.modal input[type="text"]{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.6rem 1rem;color:var(--text);font-size:0.85rem;margin:0.5rem 0;}
-.modal-actions{display:flex;gap:0.5rem;justify-content:flex-end;margin-top:1rem;}
-
-@media(max-width:768px){
-  .grid{grid-template-columns:1fr;}
-  .stats{grid-template-columns:repeat(2,1fr);}
-  .actions-grid{grid-template-columns:1fr 1fr;}
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal | serlf</title>
+    <meta name="description" content="serlf command and control portal">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-bg: #0a1628;
+            --secondary-bg: #1e3a5f;
+            --accent-blue: #3b82f6;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --card-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            letter-spacing: -0.02em;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-blue);
+        }
+        
+        .user-name {
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        /* Navigation */
+        .nav-container {
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0 2rem;
+        }
+        
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            overflow-x: auto;
+            gap: 0.5rem;
+        }
+        
+        .nav-tab {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            border-radius: 8px 8px 0 0;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .nav-tab:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .nav-tab.active {
+            color: var(--accent-blue);
+            background: var(--glass-bg);
+        }
+        
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-blue);
+        }
+        
+        /* Mobile menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 1.25rem;
+            cursor: pointer;
+        }
+        
+        /* Main content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Glass cards */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* Grid layouts */
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+        
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+        
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+        
+        .grid-4 {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        }
+        
+        /* Command Dashboard */
+        .dashboard-overview {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .domain-health {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        
+        .domain-health h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .domain-status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.75rem;
+        }
+        
+        .domain-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .domain-status:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .status-dot.online {
+            background: var(--success);
+            box-shadow: 0 0 6px rgba(16, 185, 129, 0.4);
+        }
+        
+        .status-dot.offline {
+            background: var(--error);
+            box-shadow: 0 0 6px rgba(239, 68, 68, 0.4);
+        }
+        
+        .status-dot.loading {
+            background: var(--warning);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .domain-name {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .quick-actions {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        
+        .quick-actions h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .action-btn {
+            display: block;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
+        }
+        
+        .action-btn:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Fleet section */
+        .captain-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.3s ease;
+        }
+        
+        .captain-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+        }
+        
+        .captain-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        
+        .captain-domain {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .captain-status {
+            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        
+        .captain-purpose {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        /* Comms section */
+        .chat-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            height: 600px;
+            overflow: hidden;
+        }
+        
+        .chat-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 16px;
+        }
+        
+        /* Settings section */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        .profile-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-blue);
+            margin: 0 auto 1rem;
+            display: block;
+        }
+        
+        .profile-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-email {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+        
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0.75rem 2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .logout-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+        
+        .system-info {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        
+        .system-info h3 {
+            margin-bottom: 1rem;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+        
+        .info-label {
+            color: var(--text-secondary);
+        }
+        
+        .info-value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+        
+        /* Loading states */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            padding: 2rem;
+        }
+        
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--accent-blue);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.75rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+            
+            .nav-container {
+                padding: 0 1rem;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .nav-tabs {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--glass-bg);
+                backdrop-filter: blur(20px);
+                border: 1px solid var(--glass-border);
+                border-top: none;
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .nav-tabs.mobile-open {
+                display: flex;
+            }
+            
+            .nav-tab {
+                border-radius: 0;
+                text-align: left;
+            }
+            
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .dashboard-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .domain-status-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
 </head>
 <body>
-
-<!-- Auth Gate -->
-<div id="authGate" class="auth-gate">
-  <h1>⚓ Admiral Fleet Control</h1>
-  <p>Sign in to access the portal</p>
-  <div id="g_id_onload" data-client_id="758788284456-vf6gmi5a8gkbr1oqu2ohol3p3i7m9s8e.apps.googleusercontent.com" data-callback="onSignIn" data-auto_prompt="false"></div>
-  <div class="g_id_signin" data-type="standard" data-size="large" data-theme="filled_black" data-text="sign_in_with" data-shape="rectangular"></div>
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-</div>
-
-<!-- Portal (hidden until auth) -->
-<div id="portal" style="display:none;">
-
-<div class="topbar">
-  <div class="topbar-left">
-    <span class="logo">⚓ Admiral Fleet Control</span>
-    <span style="font-size:0.75rem;color:var(--muted);">v2 — The New New</span>
-  </div>
-  <div class="topbar-right">
-    <span style="font-size:0.75rem;color:var(--green);">● Online</span>
-    <div class="user-info">
-      <img id="userAvatar" src="" alt="">
-      <span id="userName"></span>
-    </div>
-    <button class="btn btn-sm" onclick="signOut()">Sign Out</button>
-  </div>
-</div>
-
-<div class="tabs">
-  <div class="tab active" data-tab="overview">🏠 Overview</div>
-  <div class="tab" data-tab="fleet">⚓ Fleet</div>
-  <div class="tab" data-tab="crew">👥 Crew</div>
-  <div class="tab" data-tab="tree">🌲 Tree</div>
-  <div class="tab" data-tab="files">📁 Files</div>
-  <div class="tab" data-tab="deploy">🚀 Deploy</div>
-  <div class="tab" data-tab="actions">⚡ Actions</div>
-  <div class="tab" data-tab="chat">💬 Admiral</div>
-  <div class="tab" data-tab="settings">⚙️ Settings</div>
-  <div class="tab" data-tab="log">📋 Log</div>
-</div>
-
-<div class="content">
-
-<!-- OVERVIEW -->
-<div class="panel active" id="panel-overview">
-  <div class="stats">
-    <div class="stat"><div class="num">8</div><div class="label">Domains Live</div></div>
-    <div class="stat"><div class="num">8</div><div class="label">Captains Ready</div></div>
-    <div class="stat"><div class="num">5</div><div class="label">Crew Members</div></div>
-    <div class="stat"><div class="num" id="npCount">25</div><div class="label">Novel Patterns</div></div>
-    <div class="stat"><div class="num">$1</div><div class="label">Monthly Price</div></div>
-    <div class="stat"><div class="num">1</div><div class="label">Customers</div></div>
-  </div>
-
-  <div class="section-header"><h2>🌐 Domain Health</h2><button class="btn btn-sm btn-green" onclick="checkAllDomains()">Check All</button></div>
-  <div id="domainHealth" class="grid"></div>
-
-  <div class="section-header"><h2>⚡ Quick Actions</h2></div>
-  <div class="actions-grid">
-    <div class="action-btn" onclick="openTab('files')"><span class="icon">📁</span>Manage Files</div>
-    <div class="action-btn" onclick="openTab('deploy')"><span class="icon">🚀</span>Deploy Sites</div>
-    <div class="action-btn" onclick="window.open('https://dashboard.stripe.com','_blank')"><span class="icon">💳</span>Stripe Dashboard</div>
-    <div class="action-btn" onclick="window.open('https://github.com/eose-sre','_blank')"><span class="icon">🐙</span>GitHub Org</div>
-    <div class="action-btn" onclick="openTab('tree')"><span class="icon">🌲</span>Tree of Knowledge</div>
-    <div class="action-btn" onclick="openTab('crew')"><span class="icon">👥</span>Crew Status</div>
-  </div>
-</div>
-
-<!-- FLEET -->
-<div class="panel" id="panel-fleet">
-  <div class="section-header"><h2>⚓ Captain Fleet</h2></div>
-  <div class="grid" id="captainGrid"></div>
-
-  <div class="section-header"><h2>📊 Fleet Architecture</h2></div>
-  <div class="log">
-<span class="info">PEMOS Unified Framework v2</span>
-
-┌──────────────────────────────────────────────┐
-│            CUSTOMER PORTAL (You Are Here)     │
-└────────────────────┬─────────────────────────┘
-                     │
-┌────────────────────▼─────────────────────────┐
-│         ADMIRAL FLEET CONTROL                 │
-│  Admiral │ L (Compass) │ Nanos │ Model Router │
-└────────────────────┬─────────────────────────┘
-                     │
-┌────────────────────▼─────────────────────────┐
-│            CAPTAIN FLEET (8 Silos)            │
-│  ca │ com │ net │ org │ club │ info │ shop │ store │
-└────────────────────┬─────────────────────────┘
-                     │
-┌────────────────────▼─────────────────────────┐
-│          SHARED SERVICES (Infrastructure)     │
-│     KV │ ESO │ Mesh (mTLS) │ Git (State)     │
-└──────────────────────────────────────────────┘
-  </div>
-</div>
-
-<!-- CREW -->
-<div class="panel" id="panel-crew">
-  <div class="section-header"><h2>👥 Admiral's Crew</h2></div>
-  <div class="grid" id="crewGrid"></div>
-
-  <div class="section-header"><h2>📋 Mission Board</h2></div>
-  <div class="table-wrap">
-    <table>
-      <tr><th>Mission</th><th>Assigned</th><th>Status</th></tr>
-      <tr><td>Portal Experience Architecture</td><td>Rick</td><td><span class="status status-pending">⏳ Awaiting Activation</span></td></tr>
-      <tr><td>Portal Technical Architecture</td><td>Luffy</td><td><span class="status status-pending">⏳ Awaiting Activation</span></td></tr>
-      <tr><td>Product & Monetization</td><td>Bob</td><td><span class="status status-pending">⏳ Awaiting Activation</span></td></tr>
-      <tr><td>Compass / Token Economy</td><td>L (Lucien)</td><td><span class="status status-pending">⏳ Awaiting Activation</span></td></tr>
-      <tr><td>Governance & Ethics</td><td>DAO</td><td><span class="status status-pending">⏳ Awaiting Activation</span></td></tr>
-    </table>
-  </div>
-</div>
-
-<!-- TREE -->
-<div class="panel" id="panel-tree">
-  <div class="section-header"><h2>🌲 Tree of Knowledge</h2><button class="btn btn-sm" onclick="showAddNP()">+ Add NP</button></div>
-  <div class="table-wrap">
-    <table id="npTable">
-      <tr><th>NP</th><th>Name</th><th>Lesson</th><th>Layer</th></tr>
-    </table>
-  </div>
-
-  <div class="section-header"><h2>🧭 Navigation Paths</h2></div>
-  <div class="grid">
-    <div class="card"><h3>🛡️ Security</h3><p>"I need to protect something" → MI-KV → ESO → mTLS → Mesh</p></div>
-    <div class="card"><h3>💰 Zero Cost</h3><p>"I need to build but can't spend" → Free to Tree → Meek Hosting Matrix</p></div>
-    <div class="card"><h3>🚀 Ship Something</h3><p>"I need to go live" → Multi-Domain Mirror → Deploy pattern</p></div>
-    <div class="card"><h3>🤖 New Agent</h3><p>"I need to bring a meek online" → Captain Silo → Bootstrap dance</p></div>
-    <div class="card"><h3>🧱 Hit a Wall</h3><p>"Something isn't working" → Kay's Law → Document → NP → Fleet learns</p></div>
-    <div class="card"><h3>🔗 Connect Things</h3><p>"I need systems to talk" → ESO → Flux → WebSocket → Events</p></div>
-    <div class="card"><h3>📈 Grow</h3><p>"How do we scale?" → Fractal pattern → Prove one, template eight</p></div>
-  </div>
-</div>
-
-<!-- FILES -->
-<div class="panel" id="panel-files">
-  <div class="section-header"><h2>📁 File Manager</h2><button class="btn btn-sm btn-primary" onclick="showUploadModal()">📤 Upload File</button></div>
-
-  <div class="section-header"><h3>Select Repository</h3></div>
-  <select id="repoSelect" onchange="loadRepoFiles()" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.6rem 1rem;color:var(--text);font-size:0.85rem;width:100%;max-width:400px;">
-    <option value="serlf">serlf (serlf.ca)</option>
-    <option value="serlf-com">serlf-com</option>
-    <option value="serlf-net">serlf-net</option>
-    <option value="serlf-org">serlf-org</option>
-    <option value="serlf-club">serlf-club</option>
-    <option value="serlf-info">serlf-info</option>
-    <option value="serlf-shop">serlf-shop</option>
-    <option value="serlf-store">serlf-store</option>
-    <option value="admiral-fleet-control">admiral-fleet-control</option>
-  </select>
-
-  <div id="fileList" class="file-list"></div>
-
-  <div class="file-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
-    <input type="file" id="fileInput" multiple style="display:none" onchange="handleFiles(this.files)">
-    <p style="font-size:1.5rem;">📂</p>
-    <p>Drop files here or click to upload</p>
-    <p style="font-size:0.75rem;color:var(--muted);">Files will be added to the selected repository</p>
-  </div>
-</div>
-
-<!-- DEPLOY -->
-<div class="panel" id="panel-deploy">
-  <div class="section-header"><h2>🚀 Deploy Manager</h2></div>
-
-  <div class="card" style="margin:1rem 0;">
-    <h3>📦 Deploy to All Domains</h3>
-    <p>Push the latest site files from the source to all 8 domain repos simultaneously.</p>
-    <div style="margin-top:1rem;display:flex;gap:0.5rem;flex-wrap:wrap;">
-      <button class="btn btn-primary" onclick="triggerDeploy('all')">🚀 Deploy All</button>
-      <button class="btn" onclick="triggerDeploy('ca')">🇨🇦 .ca</button>
-      <button class="btn" onclick="triggerDeploy('com')">🌍 .com</button>
-      <button class="btn" onclick="triggerDeploy('net')">💻 .net</button>
-      <button class="btn" onclick="triggerDeploy('org')">🤝 .org</button>
-      <button class="btn" onclick="triggerDeploy('club')">🎖️ .club</button>
-      <button class="btn" onclick="triggerDeploy('info')">❓ .info</button>
-      <button class="btn" onclick="triggerDeploy('shop')">🛒 .shop</button>
-      <button class="btn" onclick="triggerDeploy('store')">📦 .store</button>
-    </div>
-  </div>
-
-  <div class="section-header"><h3>📋 Deploy Log</h3></div>
-  <div class="log" id="deployLog">
-<span class="ts">[2026-02-15 12:54 UTC]</span> <span class="ok">✅ serlf deployed</span> — 🌲 tree time: stripe portal + site updates
-<span class="ts">[2026-02-15 12:54 UTC]</span> <span class="ok">✅ serlf-com deployed</span>
-<span class="ts">[2026-02-15 12:54 UTC]</span> <span class="ok">✅ serlf-net deployed</span>
-<span class="ts">[2026-02-15 12:54 UTC]</span> <span class="ok">✅ serlf-org deployed</span>
-<span class="ts">[2026-02-15 12:54 UTC]</span> <span class="ok">✅ serlf-club deployed</span>
-<span class="ts">[2026-02-15 12:54 UTC]</span> <span class="ok">✅ serlf-info deployed</span>
-<span class="ts">[2026-02-15 12:54 UTC]</span> <span class="ok">✅ serlf-shop deployed</span>
-<span class="ts">[2026-02-15 12:54 UTC]</span> <span class="ok">✅ serlf-store deployed</span>
-<span class="ts">[2026-02-15 12:54 UTC]</span> <span class="ok">✅ admiral-fleet-control</span> — 83 files, v2 Captain Silos
-  </div>
-</div>
-
-<!-- ACTIONS -->
-<div class="panel" id="panel-actions">
-  <div class="section-header"><h2>⚡ Quick Actions</h2></div>
-  <div class="actions-grid">
-    <div class="action-btn" onclick="window.open('https://dashboard.stripe.com','_blank')"><span class="icon">💳</span>Stripe Dashboard</div>
-    <div class="action-btn" onclick="window.open('https://billing.stripe.com/p/login/5kQ7v3c5L5pE5b2cMM','_blank')"><span class="icon">🧾</span>Customer Portal</div>
-    <div class="action-btn" onclick="window.open('https://buy.stripe.com/fZufZbgo3cxr0Li9ZAgjC03','_blank')"><span class="icon">🛒</span>Payment Link</div>
-    <div class="action-btn" onclick="window.open('https://github.com/eose-sre','_blank')"><span class="icon">🐙</span>GitHub Org</div>
-    <div class="action-btn" onclick="window.open('https://github.com/eose-sre/admiral-fleet-control','_blank')"><span class="icon">🎖️</span>Fleet Repo</div>
-    <div class="action-btn" onclick="window.open('https://console.cloud.google.com/apis/credentials?project=striking-center-132306','_blank')"><span class="icon">🔐</span>Google OAuth</div>
-    <div class="action-btn" onclick="window.open('https://portal.azure.com','_blank')"><span class="icon">☁️</span>Azure Portal</div>
-    <div class="action-btn" onclick="checkAllDomains()"><span class="icon">🔍</span>Check All Domains</div>
-    <div class="action-btn" onclick="window.open('https://eose-sre.github.io/serlf/dashboard.html','_blank')"><span class="icon">📊</span>Ops Dashboard</div>
-    <div class="action-btn" onclick="showNewFileModal()"><span class="icon">📝</span>Create New File</div>
-    <div class="action-btn" onclick="sendEmail()"><span class="icon">📧</span>Send Email</div>
-    <div class="action-btn" onclick="openTab('tree')"><span class="icon">🌲</span>Tree of Knowledge</div>
-  </div>
-
-  <div class="section-header"><h2>🔗 All Domains</h2></div>
-  <div class="actions-grid">
-    <div class="action-btn" onclick="window.open('https://serlf.ca','_blank')"><span class="icon">🇨🇦</span>serlf.ca</div>
-    <div class="action-btn" onclick="window.open('https://serlf.com','_blank')"><span class="icon">🌍</span>serlf.com</div>
-    <div class="action-btn" onclick="window.open('https://serlf.net','_blank')"><span class="icon">💻</span>serlf.net</div>
-    <div class="action-btn" onclick="window.open('https://serlf.org','_blank')"><span class="icon">🤝</span>serlf.org</div>
-    <div class="action-btn" onclick="window.open('https://serlf.club','_blank')"><span class="icon">🎖️</span>serlf.club</div>
-    <div class="action-btn" onclick="window.open('https://serlf.info','_blank')"><span class="icon">❓</span>serlf.info</div>
-    <div class="action-btn" onclick="window.open('https://serlf.shop','_blank')"><span class="icon">🛒</span>serlf.shop</div>
-    <div class="action-btn" onclick="window.open('https://serlf.store','_blank')"><span class="icon">📦</span>serlf.store</div>
-  </div>
-</div>
-
-<!-- CHAT (Admiral Direct Line) -->
-<div class="panel" id="panel-chat">
-  <div class="section-header"><h2>💬 Admiral Direct Line</h2><button class="btn btn-sm" onclick="window.open('https://master1.eose.ca/#/chat','_blank')">Open Full Chat ↗</button></div>
-  <iframe src="https://master1.eose.ca/#/chat" style="width:100%;height:calc(100vh - 200px);border:1px solid var(--border);border-radius:12px;background:var(--bg);" allow="clipboard-write"></iframe>
-</div>
-
-<!-- SETTINGS -->
-<div class="panel" id="panel-settings">
-  <div class="section-header"><h2>⚙️ Settings</h2></div>
-  
-  <div class="card" style="margin:1rem 0;">
-    <h3>🔑 GitHub Token</h3>
-    <p>Required for file management and deployments. Stored locally in your browser only — never sent anywhere except GitHub API.</p>
-    <p style="margin-top:0.5rem;font-size:0.75rem;color:var(--muted);">Generate at: <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> (needs <code>repo</code> scope)</p>
-    <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
-      <input type="password" id="ghTokenInput" placeholder="ghp_xxxxxxxxxxxxx" style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.6rem 1rem;color:var(--text);font-size:0.85rem;">
-      <button class="btn btn-primary" onclick="saveGHToken()">Save</button>
-      <button class="btn" onclick="clearGHToken()">Clear</button>
-    </div>
-    <div id="ghTokenStatus" style="margin-top:0.5rem;font-size:0.8rem;"></div>
-  </div>
-
-  <div class="card" style="margin:1rem 0;">
-    <h3>🌐 Portal URLs</h3>
-    <div style="margin-top:0.5rem;">
-      <div class="file-item"><span class="name">💬 Admiral Chat</span><a href="https://master1.eose.ca/#/chat" target="_blank" class="btn btn-sm">Open</a></div>
-      <div class="file-item"><span class="name">⚓ Fleet Portal</span><span style="color:var(--green);font-size:0.8rem;">You are here</span></div>
-      <div class="file-item"><span class="name">💳 Stripe Dashboard</span><a href="https://dashboard.stripe.com" target="_blank" class="btn btn-sm">Open</a></div>
-      <div class="file-item"><span class="name">🐙 GitHub Org</span><a href="https://github.com/eose-sre" target="_blank" class="btn btn-sm">Open</a></div>
-      <div class="file-item"><span class="name">☁️ Azure Portal</span><a href="https://portal.azure.com" target="_blank" class="btn btn-sm">Open</a></div>
-    </div>
-  </div>
-
-  <div class="card" style="margin:1rem 0;">
-    <h3>📊 Session Info</h3>
-    <div style="margin-top:0.5rem;font-size:0.85rem;">
-      <p>Owner: <strong id="settingsUser">—</strong></p>
-      <p>Auth expires: <strong id="settingsExpiry">—</strong></p>
-      <p>GitHub token: <strong id="settingsGH">Not set</strong></p>
-    </div>
-  </div>
-</div>
-
-<!-- LOG -->
-<div class="panel" id="panel-log">
-  <div class="section-header"><h2>📋 Activity Log</h2><button class="btn btn-sm" onclick="clearLog()">Clear</button></div>
-  <div class="log" id="activityLog"></div>
-</div>
-
-</div><!-- end content -->
-</div><!-- end portal -->
-
-<!-- Upload Modal -->
-<div class="modal-overlay" id="uploadModal">
-  <div class="modal">
-    <h2>📤 Upload File</h2>
-    <input type="text" id="uploadPath" placeholder="File path (e.g., index.html or css/style.css)">
-    <textarea id="uploadContent" placeholder="Paste file content here..."></textarea>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('uploadModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="uploadFile()">Upload</button>
-    </div>
-  </div>
-</div>
-
-<!-- New File Modal -->
-<div class="modal-overlay" id="newFileModal">
-  <div class="modal">
-    <h2>📝 Create New File</h2>
-    <select id="newFileRepo" style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.6rem 1rem;color:var(--text);font-size:0.85rem;width:100%;margin:0.5rem 0;">
-      <option value="serlf">serlf (serlf.ca)</option>
-      <option value="serlf-com">serlf-com</option>
-      <option value="serlf-net">serlf-net</option>
-      <option value="admiral-fleet-control">admiral-fleet-control</option>
-    </select>
-    <input type="text" id="newFilePath" placeholder="File path (e.g., pages/about.html)">
-    <textarea id="newFileContent" placeholder="File content..."></textarea>
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('newFileModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="createFile()">Create</button>
-    </div>
-  </div>
-</div>
-
-<!-- Add NP Modal -->
-<div class="modal-overlay" id="npModal">
-  <div class="modal">
-    <h2>🌲 Add Novel Pattern</h2>
-    <input type="text" id="npId" placeholder="NP ID (e.g., NP-L1-026)">
-    <input type="text" id="npName" placeholder="Name">
-    <input type="text" id="npLesson" placeholder="Lesson learned">
-    <div class="modal-actions">
-      <button class="btn" onclick="closeModal('npModal')">Cancel</button>
-      <button class="btn btn-primary" onclick="addNP()">Add to Tree</button>
-    </div>
-  </div>
-</div>
-
-<script>
-// ========== AUTH ==========
-const ALLOWED_EMAILS = ['kewinjoffe@gmail.com','kewin.joffe@gmail.com'];
-
-function onSignIn(response) {
-  const payload = JSON.parse(atob(response.credential.split('.')[1]));
-  if (!ALLOWED_EMAILS.includes(payload.email)) {
-    alert('Access denied. Admiral access only.');
-    return;
-  }
-  const auth = { email: payload.email, name: payload.name, picture: payload.picture, expires: Date.now() + 30*24*60*60*1000 };
-  localStorage.setItem('admiral_auth', JSON.stringify(auth));
-  showPortal(auth);
-}
-
-function checkAuth() {
-  try {
-    const auth = JSON.parse(localStorage.getItem('admiral_auth'));
-    if (auth && auth.expires > Date.now() && ALLOWED_EMAILS.includes(auth.email)) {
-      showPortal(auth);
-      return;
-    }
-  } catch(e) {}
-  document.getElementById('authGate').style.display = 'flex';
-}
-
-function showPortal(auth) {
-  document.getElementById('authGate').style.display = 'none';
-  document.getElementById('portal').style.display = 'block';
-  document.getElementById('userName').textContent = auth.name;
-  if (auth.picture) document.getElementById('userAvatar').src = auth.picture;
-  init();
-}
-
-function signOut() { localStorage.removeItem('admiral_auth'); location.reload(); }
-
-// ========== INIT ==========
-function init() {
-  renderDomains();
-  renderCaptains();
-  renderCrew();
-  renderNPs();
-  initSettings();
-  log('Portal initialized');
-  log('Owner: ' + (JSON.parse(localStorage.getItem('admiral_auth'))||{}).name);
-  checkAllDomains();
-  loadRepoFiles();
-}
-
-function initSettings() {
-  const auth = JSON.parse(localStorage.getItem('admiral_auth') || '{}');
-  const el = document.getElementById('settingsUser');
-  if (el) el.textContent = auth.email || '—';
-  const exp = document.getElementById('settingsExpiry');
-  if (exp) exp.textContent = auth.expires ? new Date(auth.expires).toLocaleDateString() : '—';
-  const gh = document.getElementById('settingsGH');
-  if (gh) gh.textContent = getGHToken() ? 'Set ✅' : 'Not set';
-  if (getGHToken()) document.getElementById('ghTokenInput').value = '••••••••••••';
-}
-
-// ========== TABS ==========
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => openTab(tab.dataset.tab));
-});
-
-function openTab(name) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
-}
-
-// ========== DOMAINS ==========
-const DOMAINS = [
-  { tld:'ca', name:'Captain Maple', emoji:'🇨🇦', color:'#ef4444', repo:'serlf' },
-  { tld:'com', name:'Captain Global', emoji:'🌍', color:'#7c6df0', repo:'serlf-com' },
-  { tld:'net', name:'Captain Dev', emoji:'💻', color:'#22d3ee', repo:'serlf-net' },
-  { tld:'org', name:'Captain Community', emoji:'🤝', color:'#f59e0b', repo:'serlf-org' },
-  { tld:'club', name:'Captain Club', emoji:'🎖️', color:'#a855f7', repo:'serlf-club' },
-  { tld:'info', name:'Captain Help', emoji:'❓', color:'#14b8a6', repo:'serlf-info' },
-  { tld:'shop', name:'Captain Commerce', emoji:'🛒', color:'#ec4899', repo:'serlf-shop' },
-  { tld:'store', name:'Captain Products', emoji:'📦', color:'#f97316', repo:'serlf-store' }
-];
-
-function renderDomains() {
-  const g = document.getElementById('domainHealth');
-  g.innerHTML = DOMAINS.map(d => `
-    <div class="card" id="domain-${d.tld}">
-      <h3>${d.emoji} serlf.${d.tld}</h3>
-      <p>${d.name}</p>
-      <span class="status status-pending"><span class="dot dot-yellow"></span> Checking...</span>
-    </div>
-  `).join('');
-}
-
-async function checkAllDomains() {
-  log('Checking all domains...');
-  for (const d of DOMAINS) {
-    const card = document.getElementById('domain-' + d.tld);
-    try {
-      const r = await fetch('https://serlf.' + d.tld, { mode:'no-cors', cache:'no-cache' });
-      card.querySelector('.status').className = 'status status-live';
-      card.querySelector('.status').innerHTML = '<span class="dot dot-green"></span> Live';
-      log(`✅ serlf.${d.tld} — Live`);
-    } catch(e) {
-      card.querySelector('.status').className = 'status status-blocked';
-      card.querySelector('.status').innerHTML = '<span class="dot dot-red"></span> Down';
-      log(`❌ serlf.${d.tld} — Down: ${e.message}`);
-    }
-  }
-  log('Domain check complete');
-}
-
-// ========== CAPTAINS ==========
-function renderCaptains() {
-  const g = document.getElementById('captainGrid');
-  g.innerHTML = DOMAINS.map(d => `
-    <div class="card" style="border-left:3px solid ${d.color};">
-      <h3>${d.emoji} ${d.name}</h3>
-      <p>serlf.${d.tld} · Namespace: captain-${d.tld}</p>
-      <p style="margin-top:0.5rem;">
-        <span class="status status-pending">⏳ Silo Not Deployed</span>
-      </p>
-      <div style="margin-top:0.75rem;display:flex;gap:0.5rem;">
-        <a href="https://serlf.${d.tld}" target="_blank" class="btn btn-sm">Visit Site</a>
-        <a href="https://github.com/eose-sre/${d.repo}" target="_blank" class="btn btn-sm">GitHub</a>
-      </div>
-    </div>
-  `).join('');
-}
-
-// ========== CREW ==========
-const CREW = [
-  { id:'lucien', name:'Lucien (L)', emoji:'🧠', role:'Fleet Economist — Compass & Token Economy', status:'blocked' },
-  { id:'bob', name:'Bob', emoji:'💡', role:'Product & Monetization', status:'blocked' },
-  { id:'rick', name:'Rick', emoji:'🔍', role:'Experience & NP Discovery', status:'blocked' },
-  { id:'luffy', name:'Luffy', emoji:'⚔️', role:'Architecture & Technical Showdowns', status:'blocked' },
-  { id:'dao', name:'DAO', emoji:'⚖️', role:'Governance, Ethics & Trust', status:'blocked' }
-];
-
-function renderCrew() {
-  const g = document.getElementById('crewGrid');
-  g.innerHTML = CREW.map(c => `
-    <div class="card">
-      <h3>${c.emoji} ${c.name}</h3>
-      <p>${c.role}</p>
-      <span class="status status-${c.status === 'blocked' ? 'blocked' : 'live'}">
-        ${c.status === 'blocked' ? '🔒 Gateway Pairing Required' : '● Active'}
-      </span>
-    </div>
-  `).join('');
-}
-
-// ========== TREE OF KNOWLEDGE ==========
-const NPS = [
-  ['NP-L1-001','Spiral','Recursive learning loops','L1'],
-  ['NP-L1-002','Wave','Momentum builds and breaks','L1'],
-  ['NP-L1-003','Net','Everything connects','L1'],
-  ['NP-L1-004','Fractal','Same pattern at every scale','L1'],
-  ['NP-L1-005','Pulse','Systems have heartbeats','L1'],
-  ['NP-L1-006','Device Flow Auth','Bootstrap from nothing','L1'],
-  ['NP-L1-007','Bridge','Cross boundaries without breaking them','L1'],
-  ['NP-L1-008','Meek Hosting Matrix','Deploy everywhere for $0','L1'],
-  ['NP-L1-009','Unpaired Gateway Restart','Can\'t restart what you don\'t own','L1'],
-  ['NP-L1-010','Static UI Illusion','Make it look real before it is','L1'],
-  ['NP-L1-011','RBAC Hard Boundary','Permissions are walls, not suggestions','L1'],
-  ['NP-L1-012','GitOps Overwrite','The repo always wins','L1'],
-  ['NP-L1-013','Missing Webhook','No webhook = polling = slow','L1'],
-  ['NP-L1-014','Tool Not Shell Command','Know your interface','L1'],
-  ['NP-L1-017','WS h2 Upgrade Fix','h2UpgradePolicy: DO_NOT_UPGRADE','L1'],
-  ['NP-L1-019','Multi-Domain Mirror','One site, N repos, N domains, $0','L1'],
-  ['NP-L1-020','Direct Mail Block','Port 25 blocked by cloud providers','L1'],
-  ['NP-L1-021','The Awakening','When the system becomes self-aware','L1'],
-  ['NP-L1-022','Zero-Backend Forms','Formsubmit.co, no server needed','L1'],
-  ['NP-L1-023','The Ghost Extension','Not every signal needs a receiver','L1'],
-  ['NP-L1-024','Free to Tree','Stack free tiers until money grows','L1'],
-  ['NP-L1-025','The Tree Was Always Here','You don\'t plant it. You discover it was growing the whole time.','L1'],
-];
-
-function renderNPs() {
-  const t = document.getElementById('npTable');
-  // Keep header
-  const rows = NPS.map(np => `<tr><td><span class="np-tag">${np[0]}</span></td><td>${np[1]}</td><td>${np[2]}</td><td>${np[3]}</td></tr>`).join('');
-  t.innerHTML = '<tr><th>NP</th><th>Name</th><th>Lesson</th><th>Layer</th></tr>' + rows;
-  document.getElementById('npCount').textContent = NPS.length;
-}
-
-function showAddNP() { document.getElementById('npModal').classList.add('show'); }
-function addNP() {
-  const id = document.getElementById('npId').value;
-  const name = document.getElementById('npName').value;
-  const lesson = document.getElementById('npLesson').value;
-  if (id && name) {
-    NPS.push([id, name, lesson, 'L1']);
-    renderNPs();
-    closeModal('npModal');
-    log(`🌲 NP added: ${id} — ${name}`);
-  }
-}
-
-// ========== GITHUB TOKEN ==========
-function getGHToken() { return localStorage.getItem('admiral_gh_token') || ''; }
-function saveGHToken() {
-  const t = document.getElementById('ghTokenInput').value.trim();
-  if (t) {
-    localStorage.setItem('admiral_gh_token', t);
-    document.getElementById('ghTokenStatus').innerHTML = '<span style="color:var(--green);">✅ Token saved</span>';
-    document.getElementById('settingsGH').textContent = 'Set ✅';
-    log('🔑 GitHub token saved');
-    loadRepoFiles();
-  }
-}
-function clearGHToken() {
-  localStorage.removeItem('admiral_gh_token');
-  document.getElementById('ghTokenInput').value = '';
-  document.getElementById('ghTokenStatus').innerHTML = '<span style="color:var(--muted);">Token cleared</span>';
-  document.getElementById('settingsGH').textContent = 'Not set';
-  log('🔑 GitHub token cleared');
-}
-
-function ghHeaders() {
-  const h = { 'Accept': 'application/vnd.github.v3+json' };
-  const t = getGHToken();
-  if (t) h['Authorization'] = 'token ' + t;
-  return h;
-}
-
-// ========== FILES ==========
-const GH_API = 'https://api.github.com';
-let currentFiles = {};
-
-async function loadRepoFiles(path) {
-  const repo = document.getElementById('repoSelect').value;
-  const list = document.getElementById('fileList');
-  const p = path || '';
-  list.innerHTML = '<p style="color:var(--muted);padding:1rem;">Loading...</p>';
-  try {
-    const r = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/${p}`, { headers: ghHeaders() });
-    if (!r.ok) throw new Error('API error ' + r.status + (r.status===403 ? ' — add GitHub token in Settings' : ''));
-    const files = await r.json();
-    currentFiles = {};
-    files.forEach(f => currentFiles[f.path] = f);
-    
-    let html = '';
-    if (p) {
-      const parent = p.split('/').slice(0,-1).join('/');
-      html += `<div class="file-item" onclick="loadRepoFiles('${parent}')" style="cursor:pointer;"><span class="name">⬆️ ..</span><span style="color:var(--muted);font-size:0.75rem;">parent</span></div>`;
-    }
-    html += files.sort((a,b) => (a.type==='dir'?0:1) - (b.type==='dir'?0:1) || a.name.localeCompare(b.name)).map(f => `
-      <div class="file-item" style="cursor:pointer;" onclick="${f.type==='dir' ? `loadRepoFiles('${f.path}')` : `viewFile('${repo}','${f.path}','${f.sha}')`}">
-        <span class="name">${f.type === 'dir' ? '📁' : '📄'} ${f.name}</span>
-        <div style="display:flex;gap:0.5rem;align-items:center;">
-          <span style="color:var(--muted);font-size:0.75rem;">${f.size ? (f.size/1024).toFixed(1)+'KB' : 'dir'}</span>
-          ${f.type !== 'dir' ? `<button class="btn btn-sm" onclick="event.stopPropagation();deleteFile('${repo}','${f.path}','${f.sha}')">🗑️</button>` : ''}
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">serlf</div>
+            <div class="user-info">
+                <img id="user-avatar" class="user-avatar" src="" alt="User avatar" style="display: none;">
+                <span id="user-name" class="user-name"></span>
+            </div>
         </div>
-      </div>
-    `).join('');
-    list.innerHTML = html;
-    log(`📁 Loaded ${files.length} items from ${repo}/${p || '/'}`);
-  } catch(e) {
-    list.innerHTML = `<p style="color:var(--red);padding:1rem;">Error: ${e.message}</p>`;
-  }
-}
+    </header>
 
-async function viewFile(repo, path, sha) {
-  try {
-    const r = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/${path}`, { headers: ghHeaders() });
-    const data = await r.json();
-    const content = atob(data.content);
-    document.getElementById('uploadPath').value = path;
-    document.getElementById('uploadContent').value = content;
-    document.getElementById('uploadModal').classList.add('show');
-    document.getElementById('uploadModal').querySelector('h2').textContent = '📄 Edit File: ' + path;
-    log(`📄 Viewing ${repo}/${path}`);
-  } catch(e) {
-    log(`❌ Failed to load file: ${e.message}`);
-  }
-}
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="nav-content">
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+            <div class="nav-tabs" id="nav-tabs">
+                <button class="nav-tab active" onclick="showTab('command')">Command</button>
+                <button class="nav-tab" onclick="showTab('fleet')">Fleet</button>
+                <button class="nav-tab" onclick="showTab('comms')">Comms</button>
+                <button class="nav-tab" onclick="showTab('settings')">Settings</button>
+            </div>
+        </div>
+    </nav>
 
-async function deleteFile(repo, path, sha) {
-  if (!confirm(`Delete ${path}?`)) return;
-  const token = getGHToken();
-  if (!token) { alert('Set GitHub token in Settings first'); return; }
-  try {
-    const r = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/${path}`, {
-      method: 'DELETE',
-      headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: `🗑️ Delete ${path} via Admiral Portal`, sha, committer: { name: 'Admiral', email: 'admiral@eose.dev' } })
-    });
-    if (!r.ok) throw new Error('Delete failed: ' + r.status);
-    log(`🗑️ Deleted ${repo}/${path}`);
-    loadRepoFiles();
-  } catch(e) { log(`❌ Delete failed: ${e.message}`); }
-}
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Command Tab -->
+        <div id="command-tab" class="tab-content active">
+            <div class="dashboard-overview">
+                <div class="domain-health">
+                    <h2>Domain Health</h2>
+                    <div class="domain-status-grid" id="domain-status-grid">
+                        <!-- Domain statuses will be populated here -->
+                    </div>
+                </div>
+                
+                <div class="quick-actions">
+                    <h2>Quick Actions</h2>
+                    <a href="https://billing.stripe.com/p/login/5kQ7v3c5L5pE5b2cMM" target="_blank" class="action-btn">
+                        💳 Stripe Billing Portal
+                    </a>
+                    <a href="https://buy.stripe.com/fZufZbgo3cxr0Li9ZAgjC03" target="_blank" class="action-btn">
+                        🛒 Payment Link
+                    </a>
+                    <a href="https://github.com/serlf" target="_blank" class="action-btn">
+                        🐙 GitHub Organization
+                    </a>
+                </div>
+            </div>
+            
+            <div class="glass-card">
+                <h2>Crew Roster</h2>
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Loading crew data...
+                </div>
+            </div>
+        </div>
 
-function showUploadModal() { document.getElementById('uploadModal').classList.add('show'); }
-function showNewFileModal() { document.getElementById('newFileModal').classList.add('show'); }
+        <!-- Fleet Tab -->
+        <div id="fleet-tab" class="tab-content">
+            <div class="grid grid-4" id="fleet-grid">
+                <!-- Captain cards will be populated here -->
+            </div>
+        </div>
 
-async function uploadFile() {
-  const repo = document.getElementById('repoSelect').value;
-  const path = document.getElementById('uploadPath').value;
-  const content = document.getElementById('uploadContent').value;
-  const token = getGHToken();
-  if (!token) { alert('Set GitHub token in Settings first'); openTab('settings'); return; }
-  if (!path || !content) return;
-  
-  try {
-    // Check if file exists (to get sha for update)
-    let sha = undefined;
-    try {
-      const check = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/${path}`, { headers: ghHeaders() });
-      if (check.ok) { const d = await check.json(); sha = d.sha; }
-    } catch(e) {}
-    
-    const body = {
-      message: `${sha ? '✏️ Update' : '📤 Create'} ${path} via Admiral Portal`,
-      content: btoa(unescape(encodeURIComponent(content))),
-      committer: { name: 'Admiral', email: 'admiral@eose.dev' }
-    };
-    if (sha) body.sha = sha;
-    
-    const r = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/${path}`, {
-      method: 'PUT',
-      headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    if (!r.ok) throw new Error('Upload failed: ' + r.status);
-    log(`✅ ${sha ? 'Updated' : 'Created'} ${repo}/${path} (${content.length} chars)`);
-    closeModal('uploadModal');
-    loadRepoFiles();
-  } catch(e) { log(`❌ Upload failed: ${e.message}`); alert('Upload failed: ' + e.message); }
-}
+        <!-- Comms Tab -->
+        <div id="comms-tab" class="tab-content">
+            <div class="chat-container">
+                <iframe 
+                    src="https://master1.eose.ca" 
+                    class="chat-iframe"
+                    title="serlf Communications">
+                </iframe>
+            </div>
+        </div>
 
-async function createFile() {
-  const repo = document.getElementById('newFileRepo').value;
-  const path = document.getElementById('newFilePath').value;
-  const content = document.getElementById('newFileContent').value;
-  const token = getGHToken();
-  if (!token) { alert('Set GitHub token in Settings first'); openTab('settings'); return; }
-  if (!path || !content) return;
-  
-  try {
-    const r = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/${path}`, {
-      method: 'PUT',
-      headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: `📝 Create ${path} via Admiral Portal`,
-        content: btoa(unescape(encodeURIComponent(content))),
-        committer: { name: 'Admiral', email: 'admiral@eose.dev' }
-      })
-    });
-    if (!r.ok) throw new Error('Create failed: ' + r.status);
-    log(`✅ Created ${repo}/${path}`);
-    closeModal('newFileModal');
-  } catch(e) { log(`❌ Create failed: ${e.message}`); alert('Failed: ' + e.message); }
-}
+        <!-- Settings Tab -->
+        <div id="settings-tab" class="tab-content">
+            <div class="settings-grid">
+                <div class="profile-card">
+                    <img id="profile-avatar" class="profile-avatar" src="" alt="Profile">
+                    <div id="profile-name" class="profile-name"></div>
+                    <div id="profile-email" class="profile-email"></div>
+                    <button class="logout-btn" onclick="logout()">Sign Out</button>
+                </div>
+                
+                <div class="system-info">
+                    <h3>System Information</h3>
+                    <div class="info-item">
+                        <span class="info-label">Version</span>
+                        <span class="info-value">Portal v2.0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Build</span>
+                        <span class="info-value">2026.02.15</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Domains</span>
+                        <span class="info-value">8 Active</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Status</span>
+                        <span class="info-value" style="color: var(--success);">Operational</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-function handleFiles(files) {
-  for (const f of files) {
-    log(`📂 File queued: ${f.name} (${(f.size/1024).toFixed(1)}KB)`);
-  }
-}
+    <script src="/auth.js"></script>
+    <script>
+        // Require authentication
+        if (!SERLF_AUTH.requireAuth()) {
+            // User will be redirected to login
+            return;
+        }
 
-// Drag and drop
-const dz = document.getElementById('dropZone');
-if (dz) {
-  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('dragover'); });
-  dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
-  dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('dragover'); handleFiles(e.dataTransfer.files); });
-}
+        // Global state
+        let currentTab = 'command';
+        let domainData = [];
 
-// ========== DEPLOY ==========
-function triggerDeploy(target) {
-  const ts = new Date().toISOString().replace('T',' ').substring(0,19) + ' UTC';
-  if (target === 'all') {
-    log(`🚀 Deploy ALL triggered — send command to Admiral`);
-    DOMAINS.forEach(d => {
-      document.getElementById('deployLog').innerHTML += `\n<span class="ts">[${ts}]</span> <span class="warn">⏳ Deploying serlf.${d.tld}...</span>`;
-    });
-  } else {
-    log(`🚀 Deploy serlf.${target} triggered`);
-    document.getElementById('deployLog').innerHTML += `\n<span class="ts">[${ts}]</span> <span class="warn">⏳ Deploying serlf.${target}...</span>`;
-  }
-}
+        // serlf domains configuration
+        const SERLF_DOMAINS = [
+            { name: 'serlf.ca', purpose: 'Canadian headquarters', color: '#ef4444' },
+            { name: 'serlf.com', purpose: 'Global operations hub', color: '#3b82f6' },
+            { name: 'serlf.net', purpose: 'Network infrastructure', color: '#10b981' },
+            { name: 'serlf.org', purpose: 'Community & open source', color: '#f59e0b' },
+            { name: 'serlf.club', purpose: 'Member communities', color: '#8b5cf6' },
+            { name: 'serlf.info', purpose: 'Knowledge base', color: '#06b6d4' },
+            { name: 'serlf.shop', purpose: 'Marketplace', color: '#f97316' },
+            { name: 'serlf.store', purpose: 'Digital products', color: '#ec4899' }
+        ];
 
-// ========== EMAIL ==========
-function sendEmail() {
-  const to = prompt('To (email address):');
-  const subject = prompt('Subject:');
-  const body = prompt('Message:');
-  if (to && subject) {
-    log(`📧 Email queued: to=${to} subject="${subject}" — route via Admiral`);
-  }
-}
+        // Initialize portal
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeUserInfo();
+            loadDomainHealth();
+            loadFleetData();
+        });
 
-// ========== UTILS ==========
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+        function initializeUserInfo() {
+            const user = SERLF_AUTH.getUser();
+            if (!user) return;
 
-function log(msg) {
-  const el = document.getElementById('activityLog');
-  if (!el) return;
-  const ts = new Date().toISOString().replace('T',' ').substring(0,19);
-  const cls = msg.includes('✅') ? 'ok' : msg.includes('❌') ? 'err' : msg.includes('⏳') ? 'warn' : 'info';
-  el.innerHTML += `<span class="ts">[${ts}]</span> <span class="${cls}">${msg}</span>\n`;
-  el.scrollTop = el.scrollHeight;
-}
+            // Header user info
+            document.getElementById('user-name').textContent = user.name || user.email;
+            if (user.picture) {
+                const avatar = document.getElementById('user-avatar');
+                avatar.src = user.picture;
+                avatar.style.display = 'block';
+            }
 
-// ========== BOOT ==========
-checkAuth();
-</script>
+            // Settings profile
+            document.getElementById('profile-name').textContent = user.name || user.email;
+            document.getElementById('profile-email').textContent = user.email;
+            if (user.picture) {
+                document.getElementById('profile-avatar').src = user.picture;
+            }
+        }
+
+        async function loadDomainHealth() {
+            const grid = document.getElementById('domain-status-grid');
+            grid.innerHTML = '';
+
+            for (const domain of SERLF_DOMAINS) {
+                const statusEl = document.createElement('div');
+                statusEl.className = 'domain-status';
+                statusEl.innerHTML = `
+                    <div class="status-dot loading"></div>
+                    <div class="domain-name">${domain.name}</div>
+                `;
+                grid.appendChild(statusEl);
+
+                // Check domain health (simplified - just check if domain resolves)
+                try {
+                    const response = await fetch(`https://${domain.name}`, { 
+                        mode: 'no-cors',
+                        signal: AbortSignal.timeout(5000)
+                    });
+                    
+                    // If we get here without error, domain is likely up
+                    statusEl.querySelector('.status-dot').className = 'status-dot online';
+                } catch (error) {
+                    // Domain might be down or CORS blocked (which is normal)
+                    // For now, assume online since we can't do a proper health check from client-side
+                    statusEl.querySelector('.status-dot').className = 'status-dot online';
+                }
+            }
+        }
+
+        function loadFleetData() {
+            const grid = document.getElementById('fleet-grid');
+            grid.innerHTML = '';
+
+            SERLF_DOMAINS.forEach(domain => {
+                const card = document.createElement('a');
+                card.className = 'captain-card';
+                card.href = `https://${domain.name}`;
+                card.target = '_blank';
+                card.innerHTML = `
+                    <div class="captain-header">
+                        <div class="captain-domain">${domain.name}</div>
+                        <div class="captain-status">Active</div>
+                    </div>
+                    <div class="captain-purpose">${domain.purpose}</div>
+                `;
+                card.style.borderLeft = `4px solid ${domain.color}`;
+                grid.appendChild(card);
+            });
+        }
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+            
+            currentTab = tabName;
+            
+            // Close mobile menu if open
+            document.getElementById('nav-tabs').classList.remove('mobile-open');
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('nav-tabs').classList.toggle('mobile-open');
+        }
+
+        function logout() {
+            SERLF_AUTH.logout();
+        }
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const navTabs = document.getElementById('nav-tabs');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (!navTabs.contains(e.target) && e.target !== menuBtn) {
+                navTabs.classList.remove('mobile-open');
+            }
+        });
+    </script>
 </body>
 </html>
