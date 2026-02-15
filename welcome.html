@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Welcome to serlf</title>
+<style>
+:root { --bg: #060610; --surface: #0c0c1a; --border: #1a1a3e; --text: #e8e8f0; --muted: #6b6b8d; --green: #34d399; --cyan: #22d3ee; --accent: #7c6df0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; }
+.welcome-card { max-width: 600px; background: var(--surface); border: 2px solid var(--green); border-radius: 24px; padding: 4rem 3rem; position: relative; overflow: hidden; }
+.welcome-card::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(52,211,153,0.05) 0%, transparent 60%); }
+.check { font-size: 4rem; margin-bottom: 1.5rem; }
+h1 { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.subtitle { font-size: 1.2rem; color: var(--muted); margin-bottom: 2rem; }
+.steps { text-align: left; max-width: 400px; margin: 0 auto 2.5rem; }
+.step { display: flex; gap: 1rem; align-items: flex-start; padding: 0.8rem 0; border-bottom: 1px solid rgba(26,26,62,0.5); }
+.step-num { width: 32px; height: 32px; border-radius: 50%; background: rgba(52,211,153,0.15); color: var(--green); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
+.step-text { font-size: 0.95rem; }
+.step-text strong { color: var(--text); }
+.step-text span { color: var(--muted); }
+.cta { display: inline-block; padding: 0.9rem 2.5rem; border-radius: 8px; font-size: 1rem; font-weight: 600; background: linear-gradient(135deg, var(--green), var(--cyan)); color: #060610; text-decoration: none; transition: all 0.3s; }
+.cta:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(52,211,153,0.4); }
+.footer { margin-top: 2rem; color: var(--muted); font-size: 0.8rem; }
+.footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<div class="welcome-card">
+  <div class="check">✅</div>
+  <h1>You're In</h1>
+  <p class="subtitle">Welcome to serlf. Here's what happens next.</p>
+  
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text"><strong>We're setting up your environment.</strong><br><span>Your private cloud, your AI team, your security — all being configured right now.</span></div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text"><strong>You'll hear from us within 24 hours.</strong><br><span>We'll reach out with your login details and a quick walkthrough of everything.</span></div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text"><strong>It only gets better from here.</strong><br><span>Your platform learns and improves every day. You focus on your business.</span></div>
+    </div>
+  </div>
+
+  <a href="https://serlf.com" class="cta">Back to serlf.com</a>
+</div>
+
+<div class="footer">
+  Questions? <a href="mailto:hello@serlf.com">hello@serlf.com</a>
+</div>
+
+</body>
+</html>
