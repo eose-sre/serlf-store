@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>serlf Labs — The Cutting Edge</title>
+<style>
+:root { --bg: #060610; --surface: #0c0c1a; --surface2: #12122a; --border: #1a1a3e; --text: #e8e8f0; --muted: #6b6b8d; --green: #34d399; --cyan: #22d3ee; --accent: #7c6df0; --accent2: #f06292; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; }
+nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+.nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.nav-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-decoration: none; }
+.nav-badge { background: rgba(124,109,240,0.15); color: var(--accent); padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.container { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; }
+.header-icon { font-size: 3rem; margin-bottom: 1rem; }
+h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+h1 span { background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.desc { color: var(--muted); font-size: 1.05rem; margin-bottom: 3rem; }
+.experiments { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
+.experiment { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; gap: 1rem; align-items: flex-start; }
+.exp-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 0.2rem; }
+.exp-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.3rem; }
+.exp-desc { color: var(--muted); font-size: 0.85rem; }
+.exp-tag { display: inline-block; margin-top: 0.5rem; padding: 2px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.tag-active { background: rgba(52,211,153,0.15); color: var(--green); }
+.tag-soon { background: rgba(34,211,238,0.15); color: var(--cyan); }
+.tag-research { background: rgba(124,109,240,0.15); color: var(--accent); }
+.btn { display: inline-block; padding: 0.8rem 2rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.3s; }
+.btn-primary { background: linear-gradient(135deg, var(--green), var(--cyan)); color: #060610; }
+.btn-secondary { color: var(--text); border: 1px solid var(--border); }
+</style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html" class="nav-logo">serlf</a>
+  <div class="nav-links"><span class="nav-badge">Labs</span><a href="dashboard.html">Dashboard</a></div>
+</nav>
+<div class="container">
+  <div class="header-icon">🧪</div>
+  <h1>serlf <span>Labs</span></h1>
+  <p class="desc">The cutting edge. AI research applied to your business before anyone else sees it.</p>
+
+  <div class="experiments">
+    <div class="experiment">
+      <div class="exp-icon">🎯</div>
+      <div><div class="exp-title">AI Accuracy Verification</div><div class="exp-desc">We test our AI's responses against ground truth to ensure you get reliable answers, not hallucinations.</div><span class="exp-tag tag-active">Active</span></div>
+    </div>
+    <div class="experiment">
+      <div class="exp-icon">🧠</div>
+      <div><div class="exp-title">Multi-Model Intelligence</div><div class="exp-desc">Your AI team uses 53+ models, automatically picking the best one for each task.</div><span class="exp-tag tag-active">Active</span></div>
+    </div>
+    <div class="experiment">
+      <div class="exp-icon">📈</div>
+      <div><div class="exp-title">Predictive Business Insights</div><div class="exp-desc">AI that spots trends before they happen and alerts you to opportunities.</div><span class="exp-tag tag-soon">Coming Soon</span></div>
+    </div>
+    <div class="experiment">
+      <div class="exp-icon">🗣️</div>
+      <div><div class="exp-title">Voice Interface</div><div class="exp-desc">Talk to your AI team naturally. Voice in, voice out.</div><span class="exp-tag tag-soon">Coming Soon</span></div>
+    </div>
+    <div class="experiment">
+      <div class="exp-icon">🔮</div>
+      <div><div class="exp-title">Self-Evolving Architecture</div><div class="exp-desc">Your platform improves itself based on how you use it. No updates needed.</div><span class="exp-tag tag-research">In Research</span></div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:1rem;">
+    <a href="mailto:hello@serlf.com?subject=Labs Early Access" class="btn btn-primary">Request Early Access</a>
+    <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+  </div>
+</div>
+</body>
+</html>

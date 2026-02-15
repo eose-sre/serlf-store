@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>serlf Sites — Your Website</title>
+<style>
+:root { --bg: #060610; --surface: #0c0c1a; --surface2: #12122a; --border: #1a1a3e; --text: #e8e8f0; --muted: #6b6b8d; --green: #34d399; --cyan: #22d3ee; --accent: #7c6df0; --accent2: #f06292; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; }
+nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+.nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.nav-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-decoration: none; }
+.nav-links a:hover { color: var(--text); }
+.nav-badge { background: rgba(240,98,146,0.15); color: var(--accent2); padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
+.container { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; }
+.header { margin-bottom: 3rem; }
+.header-icon { font-size: 3rem; margin-bottom: 1rem; }
+.header h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+.header h1 span { background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.header p { color: var(--muted); font-size: 1.05rem; }
+
+.wizard { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; margin-bottom: 2rem; }
+.wizard-title { font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem; }
+.wizard-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+
+.form-group { margin-bottom: 1.5rem; }
+.form-label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--text); }
+.form-hint { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; }
+input[type="text"], textarea, select {
+  width: 100%; padding: 0.8rem 1rem; border-radius: 10px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--text); font-family: inherit; font-size: 0.95rem;
+  transition: border-color 0.3s; outline: none;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--green); }
+textarea { min-height: 80px; resize: vertical; }
+select { cursor: pointer; }
+
+.templates { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.template {
+  background: var(--surface2); border: 2px solid var(--border); border-radius: 12px;
+  padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s;
+}
+.template:hover { border-color: var(--green); }
+.template.selected { border-color: var(--green); background: rgba(52,211,153,0.05); }
+.template-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.template-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem; }
+.template-desc { color: var(--muted); font-size: 0.75rem; }
+
+.btn {
+  display: inline-block; padding: 0.9rem 2.5rem; border-radius: 8px; font-size: 1rem;
+  font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; text-decoration: none;
+}
+.btn-primary { background: linear-gradient(135deg, var(--green), var(--cyan)); color: #060610; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(52,211,153,0.4); }
+.btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-secondary:hover { border-color: var(--green); }
+.btn-group { display: flex; gap: 1rem; margin-top: 2rem; }
+
+.features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.feature {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem;
+}
+.feature-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.feature-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.3rem; }
+.feature-desc { color: var(--muted); font-size: 0.85rem; }
+
+.result { display: none; background: var(--surface); border: 2px solid var(--green); border-radius: 20px; padding: 2.5rem; text-align: center; margin-bottom: 2rem; }
+.result h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.result-url { display: inline-block; margin: 1rem 0; padding: 0.6rem 1.5rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; font-family: monospace; font-size: 0.95rem; color: var(--green); }
+
+@media (max-width: 768px) {
+  .templates { grid-template-columns: 1fr; }
+  .features { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="dashboard.html" class="nav-logo">serlf</a>
+  <div class="nav-links">
+    <span class="nav-badge">Sites</span>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="mailto:hello@serlf.com">Support</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="header">
+    <div class="header-icon">🌐</div>
+    <h1>serlf <span>Sites</span></h1>
+    <p>Create your professional website in under 2 minutes. AI-managed, always online, zero maintenance.</p>
+  </div>
+
+  <div class="wizard" id="wizard">
+    <div class="wizard-title">Set Up Your Site</div>
+    <div class="wizard-desc">Tell us about your business and we'll build your website.</div>
+
+    <div class="form-group">
+      <label class="form-label">Business Name</label>
+      <input type="text" id="bizName" placeholder="e.g. Cape Town Coffee Co.">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">What do you do?</label>
+      <textarea id="bizDesc" placeholder="e.g. We roast and deliver specialty coffee across South Africa..."></textarea>
+      <div class="form-hint">A few sentences is perfect. Our AI will build your content from this.</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Industry</label>
+      <select id="bizIndustry">
+        <option value="">Select your industry...</option>
+        <option value="tech">Technology</option>
+        <option value="retail">Retail & E-commerce</option>
+        <option value="food">Food & Beverage</option>
+        <option value="health">Health & Wellness</option>
+        <option value="finance">Finance & Consulting</option>
+        <option value="creative">Creative & Design</option>
+        <option value="education">Education & Training</option>
+        <option value="construction">Construction & Trades</option>
+        <option value="realestate">Real Estate</option>
+        <option value="nonprofit">Non-Profit</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Contact Email</label>
+      <input type="text" id="bizEmail" placeholder="you@yourbusiness.com">
+    </div>
+
+    <label class="form-label">Choose a Style</label>
+    <div class="templates" id="templates">
+      <div class="template" data-style="clean" onclick="selectTemplate(this)">
+        <div class="template-icon">✨</div>
+        <div class="template-name">Clean</div>
+        <div class="template-desc">Minimal, modern, professional</div>
+      </div>
+      <div class="template" data-style="bold" onclick="selectTemplate(this)">
+        <div class="template-icon">⚡</div>
+        <div class="template-name">Bold</div>
+        <div class="template-desc">High contrast, impactful</div>
+      </div>
+      <div class="template" data-style="warm" onclick="selectTemplate(this)">
+        <div class="template-icon">🌅</div>
+        <div class="template-name">Warm</div>
+        <div class="template-desc">Friendly, approachable</div>
+      </div>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn btn-primary" onclick="createSite()">Create My Website</button>
+      <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <div class="result" id="result">
+    <div style="font-size:3rem;margin-bottom:1rem;">🚀</div>
+    <h2>Your Site is Being Built</h2>
+    <p style="color:var(--muted);margin-bottom:1rem;">We're generating your website with AI. You'll receive an email when it's ready.</p>
+    <div class="result-url" id="resultUrl">yoursite.serlf.com</div>
+    <p style="color:var(--muted);font-size:0.85rem;margin-top:1rem;">Typically ready within a few hours. We'll email you with the link and instructions.</p>
+    <div class="btn-group" style="justify-content:center;">
+      <a href="dashboard.html" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">🤖</div>
+      <div class="feature-title">AI-Generated Content</div>
+      <div class="feature-desc">Your business description becomes a full website with professional copy.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📱</div>
+      <div class="feature-title">Mobile Responsive</div>
+      <div class="feature-desc">Looks great on every device, automatically.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔍</div>
+      <div class="feature-title">SEO Optimized</div>
+      <div class="feature-desc">Built to rank. Metadata, structure, speed — all handled.</div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔒</div>
+      <div class="feature-title">SSL Included</div>
+      <div class="feature-desc">HTTPS by default. Secure and trusted.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let selectedStyle = '';
+
+function selectTemplate(el) {
+  document.querySelectorAll('.template').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedStyle = el.dataset.style;
+}
+
+function createSite() {
+  const name = document.getElementById('bizName').value.trim();
+  const desc = document.getElementById('bizDesc').value.trim();
+  const email = document.getElementById('bizEmail').value.trim();
+  
+  if (!name) { alert('Please enter your business name'); return; }
+  if (!desc) { alert('Please describe your business'); return; }
+  if (!email) { alert('Please enter your contact email'); return; }
+  
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+  document.getElementById('resultUrl').textContent = slug + '.serlf.com';
+  document.getElementById('wizard').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+  
+  // In production, this would POST to an API
+  console.log('Site request:', { name, desc, email, style: selectedStyle });
+}
+</script>
+
+</body>
+</html>
