@@ -154,6 +154,8 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   <div class="tab" data-tab="files">📁 Files</div>
   <div class="tab" data-tab="deploy">🚀 Deploy</div>
   <div class="tab" data-tab="actions">⚡ Actions</div>
+  <div class="tab" data-tab="chat">💬 Admiral</div>
+  <div class="tab" data-tab="settings">⚙️ Settings</div>
   <div class="tab" data-tab="log">📋 Log</div>
 </div>
 
@@ -345,6 +347,49 @@ tr:hover td{background:rgba(255,255,255,0.02);}
   </div>
 </div>
 
+<!-- CHAT (Admiral Direct Line) -->
+<div class="panel" id="panel-chat">
+  <div class="section-header"><h2>💬 Admiral Direct Line</h2><button class="btn btn-sm" onclick="window.open('https://master1.eose.ca/#/chat','_blank')">Open Full Chat ↗</button></div>
+  <iframe src="https://master1.eose.ca/#/chat" style="width:100%;height:calc(100vh - 200px);border:1px solid var(--border);border-radius:12px;background:var(--bg);" allow="clipboard-write"></iframe>
+</div>
+
+<!-- SETTINGS -->
+<div class="panel" id="panel-settings">
+  <div class="section-header"><h2>⚙️ Settings</h2></div>
+  
+  <div class="card" style="margin:1rem 0;">
+    <h3>🔑 GitHub Token</h3>
+    <p>Required for file management and deployments. Stored locally in your browser only — never sent anywhere except GitHub API.</p>
+    <p style="margin-top:0.5rem;font-size:0.75rem;color:var(--muted);">Generate at: <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a> (needs <code>repo</code> scope)</p>
+    <div style="display:flex;gap:0.5rem;margin-top:0.75rem;">
+      <input type="password" id="ghTokenInput" placeholder="ghp_xxxxxxxxxxxxx" style="flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:0.6rem 1rem;color:var(--text);font-size:0.85rem;">
+      <button class="btn btn-primary" onclick="saveGHToken()">Save</button>
+      <button class="btn" onclick="clearGHToken()">Clear</button>
+    </div>
+    <div id="ghTokenStatus" style="margin-top:0.5rem;font-size:0.8rem;"></div>
+  </div>
+
+  <div class="card" style="margin:1rem 0;">
+    <h3>🌐 Portal URLs</h3>
+    <div style="margin-top:0.5rem;">
+      <div class="file-item"><span class="name">💬 Admiral Chat</span><a href="https://master1.eose.ca/#/chat" target="_blank" class="btn btn-sm">Open</a></div>
+      <div class="file-item"><span class="name">⚓ Fleet Portal</span><span style="color:var(--green);font-size:0.8rem;">You are here</span></div>
+      <div class="file-item"><span class="name">💳 Stripe Dashboard</span><a href="https://dashboard.stripe.com" target="_blank" class="btn btn-sm">Open</a></div>
+      <div class="file-item"><span class="name">🐙 GitHub Org</span><a href="https://github.com/eose-sre" target="_blank" class="btn btn-sm">Open</a></div>
+      <div class="file-item"><span class="name">☁️ Azure Portal</span><a href="https://portal.azure.com" target="_blank" class="btn btn-sm">Open</a></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin:1rem 0;">
+    <h3>📊 Session Info</h3>
+    <div style="margin-top:0.5rem;font-size:0.85rem;">
+      <p>Owner: <strong id="settingsUser">—</strong></p>
+      <p>Auth expires: <strong id="settingsExpiry">—</strong></p>
+      <p>GitHub token: <strong id="settingsGH">Not set</strong></p>
+    </div>
+  </div>
+</div>
+
 <!-- LOG -->
 <div class="panel" id="panel-log">
   <div class="section-header"><h2>📋 Activity Log</h2><button class="btn btn-sm" onclick="clearLog()">Clear</button></div>
@@ -442,8 +487,22 @@ function init() {
   renderCaptains();
   renderCrew();
   renderNPs();
+  initSettings();
   log('Portal initialized');
+  log('Owner: ' + (JSON.parse(localStorage.getItem('admiral_auth'))||{}).name);
   checkAllDomains();
+  loadRepoFiles();
+}
+
+function initSettings() {
+  const auth = JSON.parse(localStorage.getItem('admiral_auth') || '{}');
+  const el = document.getElementById('settingsUser');
+  if (el) el.textContent = auth.email || '—';
+  const exp = document.getElementById('settingsExpiry');
+  if (exp) exp.textContent = auth.expires ? new Date(auth.expires).toLocaleDateString() : '—';
+  const gh = document.getElementById('settingsGH');
+  if (gh) gh.textContent = getGHToken() ? 'Set ✅' : 'Not set';
+  if (getGHToken()) document.getElementById('ghTokenInput').value = '••••••••••••';
 }
 
 // ========== TABS ==========
@@ -584,51 +643,161 @@ function addNP() {
   }
 }
 
+// ========== GITHUB TOKEN ==========
+function getGHToken() { return localStorage.getItem('admiral_gh_token') || ''; }
+function saveGHToken() {
+  const t = document.getElementById('ghTokenInput').value.trim();
+  if (t) {
+    localStorage.setItem('admiral_gh_token', t);
+    document.getElementById('ghTokenStatus').innerHTML = '<span style="color:var(--green);">✅ Token saved</span>';
+    document.getElementById('settingsGH').textContent = 'Set ✅';
+    log('🔑 GitHub token saved');
+    loadRepoFiles();
+  }
+}
+function clearGHToken() {
+  localStorage.removeItem('admiral_gh_token');
+  document.getElementById('ghTokenInput').value = '';
+  document.getElementById('ghTokenStatus').innerHTML = '<span style="color:var(--muted);">Token cleared</span>';
+  document.getElementById('settingsGH').textContent = 'Not set';
+  log('🔑 GitHub token cleared');
+}
+
+function ghHeaders() {
+  const h = { 'Accept': 'application/vnd.github.v3+json' };
+  const t = getGHToken();
+  if (t) h['Authorization'] = 'token ' + t;
+  return h;
+}
+
 // ========== FILES ==========
 const GH_API = 'https://api.github.com';
+let currentFiles = {};
 
-async function loadRepoFiles() {
+async function loadRepoFiles(path) {
   const repo = document.getElementById('repoSelect').value;
   const list = document.getElementById('fileList');
+  const p = path || '';
   list.innerHTML = '<p style="color:var(--muted);padding:1rem;">Loading...</p>';
   try {
-    const r = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/`, {
-      headers: { 'Accept': 'application/vnd.github.v3+json' }
-    });
-    if (!r.ok) throw new Error('API error ' + r.status);
+    const r = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/${p}`, { headers: ghHeaders() });
+    if (!r.ok) throw new Error('API error ' + r.status + (r.status===403 ? ' — add GitHub token in Settings' : ''));
     const files = await r.json();
-    list.innerHTML = files.map(f => `
-      <div class="file-item">
+    currentFiles = {};
+    files.forEach(f => currentFiles[f.path] = f);
+    
+    let html = '';
+    if (p) {
+      const parent = p.split('/').slice(0,-1).join('/');
+      html += `<div class="file-item" onclick="loadRepoFiles('${parent}')" style="cursor:pointer;"><span class="name">⬆️ ..</span><span style="color:var(--muted);font-size:0.75rem;">parent</span></div>`;
+    }
+    html += files.sort((a,b) => (a.type==='dir'?0:1) - (b.type==='dir'?0:1) || a.name.localeCompare(b.name)).map(f => `
+      <div class="file-item" style="cursor:pointer;" onclick="${f.type==='dir' ? `loadRepoFiles('${f.path}')` : `viewFile('${repo}','${f.path}','${f.sha}')`}">
         <span class="name">${f.type === 'dir' ? '📁' : '📄'} ${f.name}</span>
-        <span style="color:var(--muted);font-size:0.75rem;">${f.size ? (f.size/1024).toFixed(1)+'KB' : 'dir'}</span>
+        <div style="display:flex;gap:0.5rem;align-items:center;">
+          <span style="color:var(--muted);font-size:0.75rem;">${f.size ? (f.size/1024).toFixed(1)+'KB' : 'dir'}</span>
+          ${f.type !== 'dir' ? `<button class="btn btn-sm" onclick="event.stopPropagation();deleteFile('${repo}','${f.path}','${f.sha}')">🗑️</button>` : ''}
+        </div>
       </div>
     `).join('');
-    log(`📁 Loaded ${files.length} files from ${repo}`);
+    list.innerHTML = html;
+    log(`📁 Loaded ${files.length} items from ${repo}/${p || '/'}`);
   } catch(e) {
-    list.innerHTML = `<p style="color:var(--red);padding:1rem;">Error: ${e.message}. (Public repos only without token)</p>`;
+    list.innerHTML = `<p style="color:var(--red);padding:1rem;">Error: ${e.message}</p>`;
   }
+}
+
+async function viewFile(repo, path, sha) {
+  try {
+    const r = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/${path}`, { headers: ghHeaders() });
+    const data = await r.json();
+    const content = atob(data.content);
+    document.getElementById('uploadPath').value = path;
+    document.getElementById('uploadContent').value = content;
+    document.getElementById('uploadModal').classList.add('show');
+    document.getElementById('uploadModal').querySelector('h2').textContent = '📄 Edit File: ' + path;
+    log(`📄 Viewing ${repo}/${path}`);
+  } catch(e) {
+    log(`❌ Failed to load file: ${e.message}`);
+  }
+}
+
+async function deleteFile(repo, path, sha) {
+  if (!confirm(`Delete ${path}?`)) return;
+  const token = getGHToken();
+  if (!token) { alert('Set GitHub token in Settings first'); return; }
+  try {
+    const r = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/${path}`, {
+      method: 'DELETE',
+      headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: `🗑️ Delete ${path} via Admiral Portal`, sha, committer: { name: 'Admiral', email: 'admiral@eose.dev' } })
+    });
+    if (!r.ok) throw new Error('Delete failed: ' + r.status);
+    log(`🗑️ Deleted ${repo}/${path}`);
+    loadRepoFiles();
+  } catch(e) { log(`❌ Delete failed: ${e.message}`); }
 }
 
 function showUploadModal() { document.getElementById('uploadModal').classList.add('show'); }
 function showNewFileModal() { document.getElementById('newFileModal').classList.add('show'); }
 
-function uploadFile() {
+async function uploadFile() {
+  const repo = document.getElementById('repoSelect').value;
   const path = document.getElementById('uploadPath').value;
   const content = document.getElementById('uploadContent').value;
-  if (path && content) {
-    log(`📤 File staged: ${path} (${content.length} chars) — push via Admiral to deploy`);
+  const token = getGHToken();
+  if (!token) { alert('Set GitHub token in Settings first'); openTab('settings'); return; }
+  if (!path || !content) return;
+  
+  try {
+    // Check if file exists (to get sha for update)
+    let sha = undefined;
+    try {
+      const check = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/${path}`, { headers: ghHeaders() });
+      if (check.ok) { const d = await check.json(); sha = d.sha; }
+    } catch(e) {}
+    
+    const body = {
+      message: `${sha ? '✏️ Update' : '📤 Create'} ${path} via Admiral Portal`,
+      content: btoa(unescape(encodeURIComponent(content))),
+      committer: { name: 'Admiral', email: 'admiral@eose.dev' }
+    };
+    if (sha) body.sha = sha;
+    
+    const r = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/${path}`, {
+      method: 'PUT',
+      headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (!r.ok) throw new Error('Upload failed: ' + r.status);
+    log(`✅ ${sha ? 'Updated' : 'Created'} ${repo}/${path} (${content.length} chars)`);
     closeModal('uploadModal');
-  }
+    loadRepoFiles();
+  } catch(e) { log(`❌ Upload failed: ${e.message}`); alert('Upload failed: ' + e.message); }
 }
 
-function createFile() {
+async function createFile() {
   const repo = document.getElementById('newFileRepo').value;
   const path = document.getElementById('newFilePath').value;
   const content = document.getElementById('newFileContent').value;
-  if (path && content) {
-    log(`📝 File created: ${repo}/${path} (${content.length} chars) — push via Admiral to deploy`);
+  const token = getGHToken();
+  if (!token) { alert('Set GitHub token in Settings first'); openTab('settings'); return; }
+  if (!path || !content) return;
+  
+  try {
+    const r = await fetch(`${GH_API}/repos/eose-sre/${repo}/contents/${path}`, {
+      method: 'PUT',
+      headers: { ...ghHeaders(), 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: `📝 Create ${path} via Admiral Portal`,
+        content: btoa(unescape(encodeURIComponent(content))),
+        committer: { name: 'Admiral', email: 'admiral@eose.dev' }
+      })
+    });
+    if (!r.ok) throw new Error('Create failed: ' + r.status);
+    log(`✅ Created ${repo}/${path}`);
     closeModal('newFileModal');
-  }
+  } catch(e) { log(`❌ Create failed: ${e.message}`); alert('Failed: ' + e.message); }
 }
 
 function handleFiles(files) {
