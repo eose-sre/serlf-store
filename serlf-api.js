@@ -1,6 +1,35 @@
 // serlf client-side API — sends form data via Formsubmit (free, no signup)
 // NP-L1-022: Zero-Backend Forms
 
+const SERLF_OWNERS = ['kewinjoffe@gmail.com', 'kewin.joffe@gmail.com'];
+
+const SERLF_AUTH = {
+  get() {
+    try {
+      var auth = JSON.parse(localStorage.getItem('serlf_auth'));
+      if (auth && auth.expires > Date.now()) return auth;
+      localStorage.removeItem('serlf_auth');
+    } catch(e) {}
+    return null;
+  },
+  isOwner() {
+    var auth = this.get();
+    return auth && SERLF_OWNERS.includes(auth.email.toLowerCase());
+  },
+  isSubscriber() {
+    var auth = this.get();
+    return !!auth;
+  },
+  email() {
+    var auth = this.get();
+    return auth ? auth.email : null;
+  },
+  name() {
+    var auth = this.get();
+    return auth ? (auth.name || auth.email.split('@')[0]) : null;
+  }
+};
+
 const SERLF_API = {
   endpoint: 'https://formsubmit.co/ajax/kewinjoffe@gmail.com',
   

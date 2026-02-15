@@ -169,8 +169,51 @@ nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-i
     <a href="mailto:hello@serlf.com?subject=Manage Subscription" class="plan-btn">Manage Plan</a>
   </div>
 
+  <!-- Owner Panel -->
+  <div id="owner-panel" style="display:none;margin-top:2rem;">
+    <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:1rem;color:var(--accent2);">⚓ Owner Panel</h2>
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
+      <a href="https://dashboard.stripe.com" target="_blank" class="card" style="text-decoration:none;">
+        <div class="card-icon">💳</div>
+        <div class="card-title">Stripe Dashboard</div>
+        <div class="card-desc">Payments, customers, revenue</div>
+      </a>
+      <a href="https://github.com/orgs/eose-sre/repositories" target="_blank" class="card" style="text-decoration:none;">
+        <div class="card-icon">📦</div>
+        <div class="card-title">GitHub Repos</div>
+        <div class="card-desc">All 8 serlf repos</div>
+      </a>
+      <a href="https://portal.azure.com" target="_blank" class="card" style="text-decoration:none;">
+        <div class="card-icon">☁️</div>
+        <div class="card-title">Azure Portal</div>
+        <div class="card-desc">DNS, KV, AKS, infrastructure</div>
+      </a>
+      <a href="https://master1.eose.ca" target="_blank" class="card" style="text-decoration:none;">
+        <div class="card-icon">⚓</div>
+        <div class="card-title">Admiral Fleet Control</div>
+        <div class="card-desc">Captain fleet management</div>
+      </a>
+      <a href="https://console.cloud.google.com" target="_blank" class="card" style="text-decoration:none;">
+        <div class="card-icon">🔑</div>
+        <div class="card-title">Google Cloud</div>
+        <div class="card-desc">OAuth, SSO, APIs</div>
+      </a>
+      <div class="card" id="stats-card">
+        <div class="card-icon">📊</div>
+        <div class="card-title">Quick Stats</div>
+        <div class="card-desc" id="quick-stats">Loading...</div>
+      </div>
+    </div>
+
+    <div style="margin-top:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;">
+      <div style="font-weight:700;margin-bottom:0.75rem;">🚀 Fleet Status</div>
+      <div style="display:flex;flex-wrap:wrap;gap:0.75rem;" id="fleet-domains"></div>
+    </div>
+  </div>
+
 </div>
 
+<script src="serlf-api.js"></script>
 <script>
 // Load user info from auth
 (function() {
@@ -187,6 +230,32 @@ nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-i
   if (auth.name) {
     var h1 = document.querySelector('.welcome-bar h1');
     if (h1) h1.innerHTML = 'Welcome, <span>' + auth.name.split(' ')[0] + '</span>';
+  }
+
+  // Owner panel
+  if (SERLF_AUTH.isOwner()) {
+    document.getElementById('owner-panel').style.display = 'block';
+    
+    // Badge
+    var badge = document.querySelector('.nav-badge');
+    if (badge) { badge.textContent = 'Owner'; badge.style.background = 'rgba(240,98,146,0.15)'; badge.style.color = '#f06292'; }
+
+    // Fleet domains
+    var domains = ['serlf.ca','serlf.com','serlf.net','serlf.org','serlf.club','serlf.info','serlf.shop','serlf.store'];
+    var fleetEl = document.getElementById('fleet-domains');
+    domains.forEach(function(d) {
+      var link = document.createElement('a');
+      link.href = 'https://' + d;
+      link.target = '_blank';
+      link.style.cssText = 'padding:6px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--green);font-size:0.85rem;font-weight:600;text-decoration:none;transition:all 0.2s;';
+      link.textContent = d;
+      link.onmouseover = function() { this.style.borderColor = 'var(--green)'; };
+      link.onmouseout = function() { this.style.borderColor = 'var(--border)'; };
+      fleetEl.appendChild(link);
+    });
+
+    // Quick stats
+    document.getElementById('quick-stats').innerHTML = '8 domains · 6 products · 1 customer · $1 MRR';
   }
 })();
 
