@@ -68,6 +68,8 @@ nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-i
     <span class="nav-badge">Subscriber</span>
     <a href="https://serlf.com">Home</a>
     <a href="mailto:hello@serlf.com">Support</a>
+    <span id="user-info" style="display:flex;align-items:center;gap:8px;"></span>
+    <a href="#" onclick="signOut()" style="color:var(--muted);font-size:0.8rem;">Sign Out</a>
   </div>
 </nav>
 
@@ -168,6 +170,31 @@ nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-i
   </div>
 
 </div>
+
+<script>
+// Load user info from auth
+(function() {
+  var auth = JSON.parse(localStorage.getItem('serlf_auth') || '{}');
+  var userInfo = document.getElementById('user-info');
+  if (auth.picture) {
+    userInfo.innerHTML = '<img src="' + auth.picture + '" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--green);" alt="">';
+  }
+  if (auth.name || auth.email) {
+    var name = auth.name || auth.email.split('@')[0];
+    userInfo.innerHTML += '<span style="color:var(--text);font-size:0.85rem;font-weight:500;">' + name + '</span>';
+  }
+  // Personalize welcome
+  if (auth.name) {
+    var h1 = document.querySelector('.welcome-bar h1');
+    if (h1) h1.innerHTML = 'Welcome, <span>' + auth.name.split(' ')[0] + '</span>';
+  }
+})();
+
+function signOut() {
+  localStorage.removeItem('serlf_auth');
+  window.location.href = 'login.html';
+}
+</script>
 
 </body>
 </html>
