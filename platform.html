@@ -8,32 +8,34 @@
 <style>
 :root { --bg: #060610; --surface: #0c0c1a; --surface2: #12122a; --border: #1a1a3e; --text: #e8e8f0; --muted: #6b6b8d; --green: #34d399; --cyan: #22d3ee; --accent: #7c6df0; --accent2: #f06292; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; }
-nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; height: 100vh; display: flex; flex-direction: column; }
+nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
 .nav-links { display: flex; gap: 1.5rem; align-items: center; }
 .nav-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-decoration: none; }
 .nav-badge { background: rgba(52,211,153,0.15); color: var(--green); padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-.container { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; }
-.header-icon { font-size: 3rem; margin-bottom: 1rem; }
-h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
-h1 span { background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.desc { color: var(--muted); font-size: 1.05rem; margin-bottom: 3rem; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
-.card-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
-.card-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
-.status { display: inline-flex; align-items: center; gap: 0.5rem; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
-.status-setup { background: rgba(34,211,238,0.1); color: var(--cyan); }
-.agent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; }
-.agent { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; text-align: center; }
-.agent-icon { font-size: 2rem; margin-bottom: 0.5rem; }
-.agent-name { font-weight: 700; font-size: 0.9rem; }
-.agent-role { color: var(--muted); font-size: 0.75rem; }
-.agent-status { margin-top: 0.5rem; font-size: 0.7rem; color: var(--cyan); }
-.btn { display: inline-block; padding: 0.8rem 2rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.3s; }
-.btn-primary { background: linear-gradient(135deg, var(--green), var(--cyan)); color: #060610; }
-.btn-secondary { color: var(--text); border: 1px solid var(--border); }
-@media (max-width: 768px) { .agent-grid { grid-template-columns: 1fr; } }
+
+.chat-container { flex: 1; display: flex; flex-direction: column; max-width: 900px; width: 100%; margin: 0 auto; overflow: hidden; }
+
+.agents-bar { display: flex; gap: 0.75rem; padding: 1rem 2rem; border-bottom: 1px solid var(--border); overflow-x: auto; flex-shrink: 0; }
+.agent-chip { display: flex; align-items: center; gap: 0.5rem; padding: 6px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+.agent-chip:hover, .agent-chip.active { border-color: var(--green); background: rgba(52,211,153,0.08); }
+.agent-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+
+.messages { flex: 1; overflow-y: auto; padding: 2rem; display: flex; flex-direction: column; gap: 1rem; }
+.msg { max-width: 80%; padding: 1rem 1.2rem; border-radius: 16px; font-size: 0.95rem; line-height: 1.6; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.msg-ai { background: var(--surface); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; }
+.msg-user { background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.2); align-self: flex-end; border-bottom-right-radius: 4px; }
+.msg-name { font-size: 0.75rem; font-weight: 600; color: var(--green); margin-bottom: 4px; }
+.msg-typing { color: var(--muted); font-style: italic; }
+
+.input-bar { padding: 1rem 2rem 1.5rem; border-top: 1px solid var(--border); flex-shrink: 0; }
+.input-wrap { display: flex; gap: 0.75rem; }
+.input-wrap input { flex: 1; padding: 0.9rem 1.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 0.95rem; font-family: inherit; outline: none; transition: border-color 0.2s; }
+.input-wrap input:focus { border-color: var(--green); }
+.input-wrap button { padding: 0.9rem 1.5rem; background: linear-gradient(135deg, var(--green), var(--cyan)); color: #060610; border: none; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s; }
+.input-wrap button:hover { transform: translateY(-1px); }
 </style>
 </head>
 <body>
@@ -41,36 +43,124 @@ h1 span { background: linear-gradient(135deg, var(--green), var(--cyan)); -webki
   <a href="dashboard.html" class="nav-logo">serlf</a>
   <div class="nav-links"><span class="nav-badge">Platform</span><a href="dashboard.html">Dashboard</a></div>
 </nav>
-<div class="container">
-  <div class="header-icon">🤖</div>
-  <h1>serlf <span>Platform</span></h1>
-  <p class="desc">Your dedicated AI team. They learn your business, handle your tasks, and get smarter every day.</p>
 
-  <div class="card">
-    <div class="card-title">Your AI Team</div>
-    <div class="card-desc">These agents are being configured for your business. Once active, they'll handle operations, content, security, and more.</div>
-    <div class="agent-grid">
-      <div class="agent"><div class="agent-icon">💼</div><div class="agent-name">Operations</div><div class="agent-role">Business tasks & workflow</div><div class="agent-status">⏳ Setting up</div></div>
-      <div class="agent"><div class="agent-icon">✍️</div><div class="agent-name">Content</div><div class="agent-role">Writing & communications</div><div class="agent-status">⏳ Setting up</div></div>
-      <div class="agent"><div class="agent-icon">🔐</div><div class="agent-name">Security</div><div class="agent-role">Monitoring & compliance</div><div class="agent-status">⏳ Setting up</div></div>
+<div class="chat-container">
+  <div class="agents-bar">
+    <div class="agent-chip active" onclick="switchAgent('operations')"><span class="agent-dot"></span> 💼 Operations</div>
+    <div class="agent-chip" onclick="switchAgent('content')"><span class="agent-dot"></span> ✍️ Content</div>
+    <div class="agent-chip" onclick="switchAgent('security')"><span class="agent-dot"></span> 🔐 Security</div>
+    <div class="agent-chip" onclick="switchAgent('research')"><span class="agent-dot"></span> 🔍 Research</div>
+    <div class="agent-chip" onclick="switchAgent('creative')"><span class="agent-dot"></span> 🎨 Creative</div>
+  </div>
+
+  <div class="messages" id="messages"></div>
+
+  <div class="input-bar">
+    <div class="input-wrap">
+      <input type="text" id="chatInput" placeholder="Ask your AI team anything..." onkeydown="if(event.key==='Enter')sendMessage()">
+      <button onclick="sendMessage()">Send</button>
     </div>
   </div>
-
-  <div class="card">
-    <div class="card-title">How It Works</div>
-    <div class="card-desc">Your AI team runs in a private environment dedicated only to you. They learn from your interactions and improve automatically. No shared data, no shared context — everything is yours.</div>
-    <span class="status status-setup">⏳ Environment being configured</span>
-  </div>
-
-  <div class="card">
-    <div class="card-title">What's Next</div>
-    <div class="card-desc">Once your environment is ready, you'll be able to chat with your AI team directly from this dashboard. They'll help with anything from drafting emails to analyzing your business data.</div>
-  </div>
-
-  <div style="margin-top:2rem;display:flex;gap:1rem;">
-    <a href="mailto:hello@serlf.com?subject=Platform Onboarding" class="btn btn-primary">Start Onboarding</a>
-    <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
-  </div>
 </div>
+
+<script src="serlf-api.js"></script>
+<script>
+const auth = JSON.parse(localStorage.getItem('serlf_auth') || '{}');
+const userName = (auth.name || 'there').split(' ')[0];
+let currentAgent = 'operations';
+
+const agents = {
+  operations: { name: '💼 Operations', greeting: `Hi ${userName}! I'm your Operations agent. I can help with task management, scheduling, workflows, and business processes. What do you need help with?` },
+  content: { name: '✍️ Content', greeting: `Hey ${userName}! I'm your Content agent. I write emails, blog posts, social media content, and marketing copy. What should we create?` },
+  security: { name: '🔐 Security', greeting: `Hello ${userName}. I'm your Security agent. I monitor your systems, check for vulnerabilities, and keep everything locked down. What would you like me to check?` },
+  research: { name: '🔍 Research', greeting: `Hi ${userName}! I'm your Research agent. I dig into data, find competitors, analyze markets, and surface insights. What should I research?` },
+  creative: { name: '🎨 Creative', greeting: `Hey ${userName}! 🎨 I'm your Creative agent. Design ideas, branding, visual concepts, art direction — let's make something beautiful. What's the vision?` }
+};
+
+const responses = {
+  operations: [
+    "I can set that up for you. Let me organize a workflow around that. Would you like me to create a checklist or a timeline?",
+    "Great idea. I'll draft a process for that. Should I also set up reminders?",
+    "On it. I've noted this in your task queue. Want me to prioritize your current items?",
+    "I'll handle the scheduling. What's your preferred timeline — this week or next?"
+  ],
+  content: [
+    "Love it! Let me draft something. I'll have a first version for you in a moment. What tone — professional, casual, or bold?",
+    "I'll write that up. Should I keep it short and punchy or detailed and thorough?",
+    "Great topic. I'm thinking a hook-first approach. Let me sketch out a structure for you.",
+    "On it! I'll create 3 variations so you can pick the one that fits best."
+  ],
+  security: [
+    "I'll run a scan on that. Initial checks look good — no immediate red flags. Want a detailed report?",
+    "Security audit initiated. I'm checking SSL, headers, exposed endpoints, and DNS configuration.",
+    "All systems green currently. Your environment is isolated and encrypted. Want me to tighten any specific area?",
+    "I've flagged one item worth reviewing. Nothing critical, but let's discuss the best approach."
+  ],
+  research: [
+    "Interesting angle. Let me pull some data on that. Initial findings suggest there's a growing market here.",
+    "I found several relevant competitors. Want me to compare their pricing, features, and positioning?",
+    "The data shows an upward trend. Let me compile a summary report with key metrics.",
+    "I've gathered 15+ sources on this topic. Want the executive summary or the deep dive?"
+  ],
+  creative: [
+    "Ooh I love this direction! I'm thinking clean lines, bold typography, maybe a gradient accent. Let me sketch it out.",
+    "What about a dark theme with pops of color? Very modern, very sleek. Want to see a mockup?",
+    "I'll design 3 concepts for you — minimal, bold, and playful. Which direction excites you most?",
+    "Great vision! The mood board is coming together. Earthy tones or electric vibes?"
+  ]
+};
+
+function addMessage(text, type, agentName) {
+  const div = document.createElement('div');
+  div.className = 'msg msg-' + type;
+  if (type === 'ai' && agentName) {
+    div.innerHTML = '<div class="msg-name">' + agentName + '</div>' + text;
+  } else {
+    div.textContent = text;
+  }
+  document.getElementById('messages').appendChild(div);
+  document.getElementById('messages').scrollTop = 99999;
+}
+
+function switchAgent(agent) {
+  currentAgent = agent;
+  document.querySelectorAll('.agent-chip').forEach(c => c.classList.remove('active'));
+  event.target.closest('.agent-chip').classList.add('active');
+  document.getElementById('messages').innerHTML = '';
+  addMessage(agents[agent].greeting, 'ai', agents[agent].name);
+}
+
+function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  
+  addMessage(text, 'user');
+  input.value = '';
+  
+  // Show typing
+  const typing = document.createElement('div');
+  typing.className = 'msg msg-ai msg-typing';
+  typing.innerHTML = '<div class="msg-name">' + agents[currentAgent].name + '</div>Thinking...';
+  document.getElementById('messages').appendChild(typing);
+  document.getElementById('messages').scrollTop = 99999;
+  
+  // Simulate response
+  const resps = responses[currentAgent];
+  const delay = 800 + Math.random() * 1200;
+  setTimeout(() => {
+    typing.remove();
+    const resp = resps[Math.floor(Math.random() * resps.length)];
+    addMessage(resp, 'ai', agents[currentAgent].name);
+    
+    // Log to serlf
+    SERLF_API.submit('Platform', { agent: currentAgent, message: text, response: resp }).catch(() => {});
+  }, delay);
+}
+
+// Initial greeting
+addMessage(agents.operations.greeting, 'ai', agents.operations.name);
+document.getElementById('chatInput').focus();
+</script>
 </body>
 </html>

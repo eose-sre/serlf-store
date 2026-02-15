@@ -163,11 +163,18 @@ select { cursor: pointer; }
   <div class="result" id="result">
     <div style="font-size:3rem;margin-bottom:1rem;">🚀</div>
     <h2>Your Site is Being Built</h2>
-    <p style="color:var(--muted);margin-bottom:1rem;">We're generating your website with AI. You'll receive an email when it's ready.</p>
+    <p style="color:var(--muted);margin-bottom:1rem;">We've received your details and are generating your website.</p>
     <div class="result-url" id="resultUrl">yoursite.serlf.com</div>
-    <p style="color:var(--muted);font-size:0.85rem;margin-top:1rem;">Typically ready within a few hours. We'll email you with the link and instructions.</p>
+    <p style="color:var(--muted);font-size:0.85rem;margin-top:1rem;">You'll receive an email at <span id="resultEmail" style="color:var(--green);"></span> when it's live.</p>
+    
+    <div style="margin:2rem 0;text-align:left;">
+      <p style="font-weight:600;margin-bottom:1rem;">Preview of your site:</p>
+      <div id="sitePreview" style="background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--border);"></div>
+    </div>
+    
     <div class="btn-group" style="justify-content:center;">
-      <a href="dashboard.html" class="btn btn-primary">Back to Dashboard</a>
+      <button class="btn btn-primary" onclick="downloadSite()">Download Site</button>
+      <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
     </div>
   </div>
 
@@ -196,8 +203,10 @@ select { cursor: pointer; }
 
 </div>
 
+<script src="serlf-api.js"></script>
 <script>
-let selectedStyle = '';
+let selectedStyle = 'clean';
+let generatedHTML = '';
 
 function selectTemplate(el) {
   document.querySelectorAll('.template').forEach(t => t.classList.remove('selected'));
@@ -205,9 +214,75 @@ function selectTemplate(el) {
   selectedStyle = el.dataset.style;
 }
 
-function createSite() {
+const themes = {
+  clean: { bg:'#ffffff', text:'#1a1a2e', accent:'#0ea5e9', hero:'linear-gradient(135deg,#f8fafc,#e2e8f0)' },
+  bold: { bg:'#0f172a', text:'#f8fafc', accent:'#f43f5e', hero:'linear-gradient(135deg,#1e293b,#0f172a)' },
+  warm: { bg:'#fffbeb', text:'#44403c', accent:'#d97706', hero:'linear-gradient(135deg,#fef3c7,#fde68a)' }
+};
+
+function generateSite(name, desc, industry, email, style) {
+  const t = themes[style] || themes.clean;
+  const sections = desc.split(/[.!]\s+/).filter(s => s.length > 10).slice(0, 3);
+  
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${name}</title>
+<meta name="description" content="${desc.substring(0, 160)}">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:${t.bg};color:${t.text};line-height:1.7}
+nav{padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;max-width:1200px;margin:0 auto}
+nav h1{font-size:1.4rem;font-weight:800}
+nav a{color:${t.accent};text-decoration:none;font-weight:600}
+.hero{padding:6rem 2rem;text-align:center;background:${t.hero}}
+.hero h2{font-size:3rem;font-weight:900;margin-bottom:1rem;max-width:700px;margin-left:auto;margin-right:auto}
+.hero p{font-size:1.2rem;opacity:0.8;max-width:600px;margin:0 auto 2rem}
+.hero a{display:inline-block;background:${t.accent};color:#fff;padding:14px 36px;border-radius:8px;font-weight:700;text-decoration:none;font-size:1.1rem}
+.section{padding:4rem 2rem;max-width:1000px;margin:0 auto}
+.section h3{font-size:1.8rem;font-weight:800;margin-bottom:1rem}
+.section p{font-size:1.05rem;opacity:0.85;margin-bottom:1.5rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:2rem;margin-top:2rem}
+.card{padding:2rem;border-radius:12px;border:1px solid rgba(0,0,0,0.1);background:rgba(255,255,255,0.5)}
+.card h4{font-size:1.1rem;margin-bottom:0.5rem}
+.card p{font-size:0.9rem;opacity:0.7}
+.cta{padding:4rem 2rem;text-align:center;background:${t.hero}}
+.cta h3{font-size:2rem;font-weight:800;margin-bottom:1rem}
+.cta a{display:inline-block;background:${t.accent};color:#fff;padding:14px 36px;border-radius:8px;font-weight:700;text-decoration:none}
+footer{padding:2rem;text-align:center;font-size:0.85rem;opacity:0.5}
+@media(max-width:768px){.hero h2{font-size:2rem}.hero{padding:4rem 1.5rem}}
+</style>
+</head>
+<body>
+<nav><h1>${name}</h1><a href="mailto:${email}">Contact</a></nav>
+<div class="hero">
+<h2>${name}</h2>
+<p>${desc.substring(0, 200)}</p>
+<a href="mailto:${email}">Get in Touch</a>
+</div>
+<div class="section">
+<h3>What We Do</h3>
+<p>${desc}</p>
+<div class="grid">
+${sections.map((s, i) => `<div class="card"><h4>${['Our Mission','Our Approach','Our Promise'][i] || 'More'}</h4><p>${s.trim()}.</p></div>`).join('\n')}
+</div>
+</div>
+<div class="cta">
+<h3>Ready to get started?</h3>
+<p style="opacity:0.7;margin-bottom:1.5rem">Reach out today and let's make it happen.</p>
+<a href="mailto:${email}">Contact Us</a>
+</div>
+<footer>&copy; ${new Date().getFullYear()} ${name}. All rights reserved. Powered by serlf.</footer>
+</body>
+</html>`;
+}
+
+async function createSite() {
   const name = document.getElementById('bizName').value.trim();
   const desc = document.getElementById('bizDesc').value.trim();
+  const industry = document.getElementById('bizIndustry').value;
   const email = document.getElementById('bizEmail').value.trim();
   
   if (!name) { alert('Please enter your business name'); return; }
@@ -215,12 +290,33 @@ function createSite() {
   if (!email) { alert('Please enter your contact email'); return; }
   
   const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+  
+  // Generate the actual site
+  generatedHTML = generateSite(name, desc, industry, email, selectedStyle);
+  
+  // Show preview
   document.getElementById('resultUrl').textContent = slug + '.serlf.com';
+  document.getElementById('resultEmail').textContent = email;
   document.getElementById('wizard').style.display = 'none';
   document.getElementById('result').style.display = 'block';
   
-  // In production, this would POST to an API
-  console.log('Site request:', { name, desc, email, style: selectedStyle });
+  const preview = document.getElementById('sitePreview');
+  const iframe = document.createElement('iframe');
+  iframe.style.cssText = 'width:100%;height:500px;border:none;border-radius:12px;';
+  iframe.srcdoc = generatedHTML;
+  preview.appendChild(iframe);
+  
+  // Submit to serlf
+  SERLF_API.submit('Sites', { business_name: name, description: desc, industry: industry, contact_email: email, style: selectedStyle, slug: slug });
+}
+
+function downloadSite() {
+  if (!generatedHTML) return;
+  const blob = new Blob([generatedHTML], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'index.html';
+  a.click();
 }
 </script>
 

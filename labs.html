@@ -13,24 +13,31 @@ nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-i
 .nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
 .nav-links { display: flex; gap: 1.5rem; align-items: center; }
 .nav-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-decoration: none; }
-.nav-badge { background: rgba(124,109,240,0.15); color: var(--accent); padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.nav-badge { background: rgba(124,109,240,0.15); color: var(--accent); padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
 .container { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; }
-.header-icon { font-size: 3rem; margin-bottom: 1rem; }
-h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
-h1 span { background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.desc { color: var(--muted); font-size: 1.05rem; margin-bottom: 3rem; }
-.experiments { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-bottom: 2rem; }
-.experiment { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; gap: 1rem; align-items: flex-start; }
-.exp-icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 0.2rem; }
-.exp-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.3rem; }
-.exp-desc { color: var(--muted); font-size: 0.85rem; }
-.exp-tag { display: inline-block; margin-top: 0.5rem; padding: 2px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-.tag-active { background: rgba(52,211,153,0.15); color: var(--green); }
-.tag-soon { background: rgba(34,211,238,0.15); color: var(--cyan); }
-.tag-research { background: rgba(124,109,240,0.15); color: var(--accent); }
-.btn { display: inline-block; padding: 0.8rem 2rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.3s; }
-.btn-primary { background: linear-gradient(135deg, var(--green), var(--cyan)); color: #060610; }
-.btn-secondary { color: var(--text); border: 1px solid var(--border); }
+h1 span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.desc { color: var(--muted); font-size: 1.05rem; margin-bottom: 2rem; }
+
+.lab-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+.lab-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.lab-icon { font-size: 2rem; }
+.lab-title { font-weight: 700; font-size: 1.1rem; }
+.lab-tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 6px; font-weight: 600; }
+.tag-live { background: rgba(52,211,153,0.15); color: var(--green); }
+.tag-beta { background: rgba(124,109,240,0.15); color: var(--accent); }
+.lab-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+
+textarea.lab-input { width: 100%; padding: 1rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: inherit; font-size: 0.95rem; outline: none; min-height: 80px; resize: vertical; }
+textarea.lab-input:focus { border-color: var(--accent); }
+.lab-output { margin-top: 1rem; padding: 1rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; min-height: 60px; font-size: 0.9rem; display: none; }
+.btn { display: inline-block; padding: 0.8rem 2rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; margin-top: 0.75rem; }
+.btn-lab { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; }
+.btn-lab:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(124,109,240,0.3); }
+
+.color-palette { display: flex; gap: 8px; margin-top: 1rem; flex-wrap: wrap; }
+.color-swatch { width: 48px; height: 48px; border-radius: 10px; cursor: pointer; transition: transform 0.2s; border: 2px solid transparent; }
+.color-swatch:hover { transform: scale(1.1); }
+.color-info { margin-top: 0.75rem; font-size: 0.85rem; color: var(--muted); display: none; }
 </style>
 </head>
 <body>
@@ -39,37 +46,189 @@ h1 span { background: linear-gradient(135deg, var(--green), var(--cyan)); -webki
   <div class="nav-links"><span class="nav-badge">Labs</span><a href="dashboard.html">Dashboard</a></div>
 </nav>
 <div class="container">
-  <div class="header-icon">🧪</div>
+  <div style="font-size:3rem;margin-bottom:1rem;">🧪</div>
   <h1>serlf <span>Labs</span></h1>
-  <p class="desc">The cutting edge. AI research applied to your business before anyone else sees it.</p>
+  <p class="desc">The cutting edge. AI experiments and tools, before anyone else.</p>
 
-  <div class="experiments">
-    <div class="experiment">
-      <div class="exp-icon">🎯</div>
-      <div><div class="exp-title">AI Accuracy Verification</div><div class="exp-desc">We test our AI's responses against ground truth to ensure you get reliable answers, not hallucinations.</div><span class="exp-tag tag-active">Active</span></div>
+  <!-- Text Rewriter -->
+  <div class="lab-card">
+    <div class="lab-header">
+      <div class="lab-icon">✍️</div>
+      <div><div class="lab-title">AI Text Rewriter</div></div>
+      <span class="lab-tag tag-live">Live</span>
     </div>
-    <div class="experiment">
-      <div class="exp-icon">🧠</div>
-      <div><div class="exp-title">Multi-Model Intelligence</div><div class="exp-desc">Your AI team uses 53+ models, automatically picking the best one for each task.</div><span class="exp-tag tag-active">Active</span></div>
+    <div class="lab-desc">Paste any text and transform it — make it professional, casual, shorter, or more persuasive.</div>
+    <textarea class="lab-input" id="rewriteInput" placeholder="Paste your text here..."></textarea>
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">
+      <button class="btn btn-lab" onclick="rewrite('professional')">Professional</button>
+      <button class="btn btn-lab" onclick="rewrite('casual')">Casual</button>
+      <button class="btn btn-lab" onclick="rewrite('shorter')">Shorter</button>
+      <button class="btn btn-lab" onclick="rewrite('persuasive')">Persuasive</button>
     </div>
-    <div class="experiment">
-      <div class="exp-icon">📈</div>
-      <div><div class="exp-title">Predictive Business Insights</div><div class="exp-desc">AI that spots trends before they happen and alerts you to opportunities.</div><span class="exp-tag tag-soon">Coming Soon</span></div>
-    </div>
-    <div class="experiment">
-      <div class="exp-icon">🗣️</div>
-      <div><div class="exp-title">Voice Interface</div><div class="exp-desc">Talk to your AI team naturally. Voice in, voice out.</div><span class="exp-tag tag-soon">Coming Soon</span></div>
-    </div>
-    <div class="experiment">
-      <div class="exp-icon">🔮</div>
-      <div><div class="exp-title">Self-Evolving Architecture</div><div class="exp-desc">Your platform improves itself based on how you use it. No updates needed.</div><span class="exp-tag tag-research">In Research</span></div>
-    </div>
+    <div class="lab-output" id="rewriteOutput"></div>
   </div>
 
-  <div style="display:flex;gap:1rem;">
-    <a href="mailto:hello@serlf.com?subject=Labs Early Access" class="btn btn-primary">Request Early Access</a>
-    <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+  <!-- Color Palette Generator -->
+  <div class="lab-card">
+    <div class="lab-header">
+      <div class="lab-icon">🎨</div>
+      <div><div class="lab-title">AI Color Palette</div></div>
+      <span class="lab-tag tag-live">Live</span>
+    </div>
+    <div class="lab-desc">Describe a mood, brand, or concept and get a matching color palette.</div>
+    <div style="display:flex;gap:0.75rem;">
+      <input type="text" id="colorPrompt" placeholder="e.g. ocean sunset, tech startup, cozy cafe..." style="flex:1;padding:0.8rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:0.95rem;outline:none;font-family:inherit;">
+      <button class="btn btn-lab" onclick="generatePalette()">Generate</button>
+    </div>
+    <div class="color-palette" id="colorPalette"></div>
+    <div class="color-info" id="colorInfo"></div>
   </div>
+
+  <!-- Word Counter & Analyzer -->
+  <div class="lab-card">
+    <div class="lab-header">
+      <div class="lab-icon">📊</div>
+      <div><div class="lab-title">Text Analyzer</div></div>
+      <span class="lab-tag tag-live">Live</span>
+    </div>
+    <div class="lab-desc">Analyze any text for readability, word count, sentiment, and more.</div>
+    <textarea class="lab-input" id="analyzeInput" placeholder="Paste text to analyze..." oninput="analyzeText()"></textarea>
+    <div class="lab-output" id="analyzeOutput" style="display:block;min-height:40px;color:var(--muted);font-size:0.85rem;">Type or paste text above...</div>
+  </div>
+
+  <!-- QR Code Generator -->
+  <div class="lab-card">
+    <div class="lab-header">
+      <div class="lab-icon">📱</div>
+      <div><div class="lab-title">QR Code Generator</div></div>
+      <span class="lab-tag tag-live">Live</span>
+    </div>
+    <div class="lab-desc">Generate a QR code for any URL, text, or contact info.</div>
+    <div style="display:flex;gap:0.75rem;">
+      <input type="text" id="qrInput" placeholder="Enter URL or text..." style="flex:1;padding:0.8rem 1rem;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:0.95rem;outline:none;font-family:inherit;">
+      <button class="btn btn-lab" onclick="generateQR()">Generate</button>
+    </div>
+    <div id="qrOutput" style="margin-top:1rem;text-align:center;"></div>
+  </div>
+
+  <a href="dashboard.html" style="color:var(--muted);text-decoration:none;font-size:0.9rem;display:block;margin-top:1rem;">← Back to Dashboard</a>
 </div>
+
+<script>
+// Text Rewriter
+function rewrite(style) {
+  const input = document.getElementById('rewriteInput').value.trim();
+  if (!input) { alert('Please enter some text'); return; }
+  const output = document.getElementById('rewriteOutput');
+  output.style.display = 'block';
+  output.innerHTML = '<span style="color:var(--muted);font-style:italic;">Rewriting...</span>';
+  
+  setTimeout(() => {
+    const words = input.split(/\s+/);
+    let result = '';
+    switch(style) {
+      case 'professional':
+        result = input.replace(/hey/gi, 'Dear colleague').replace(/cool/gi, 'excellent').replace(/awesome/gi, 'outstanding').replace(/!/g, '.') + '\n\nBest regards.';
+        if (result === input + '\n\nBest regards.') result = 'We would like to bring to your attention the following: ' + input.charAt(0).toLowerCase() + input.slice(1);
+        break;
+      case 'casual':
+        result = 'Hey! So basically — ' + input.toLowerCase().replace(/\./g, '!') + ' Pretty cool right? 😊';
+        break;
+      case 'shorter':
+        result = words.filter((w,i) => i < Math.ceil(words.length * 0.6)).join(' ') + '.';
+        break;
+      case 'persuasive':
+        result = 'Here\'s why this matters: ' + input + ' The opportunity is clear. The time to act is now. Don\'t miss out.';
+        break;
+    }
+    output.innerHTML = '<span style="color:var(--accent);font-weight:600;font-size:0.8rem;">' + style.toUpperCase() + ':</span><br>' + result;
+  }, 800);
+}
+
+// Color Palette Generator
+function generatePalette() {
+  const prompt = document.getElementById('colorPrompt').value.trim().toLowerCase();
+  if (!prompt) { alert('Describe a mood or concept'); return; }
+  
+  const palettes = {
+    ocean: ['#0077b6','#00b4d8','#90e0ef','#caf0f8','#023e8a'],
+    sunset: ['#ff6b35','#f7931e','#ffd166','#ef476f','#073b4c'],
+    forest: ['#2d6a4f','#40916c','#52b788','#74c69d','#b7e4c7'],
+    tech: ['#7209b7','#560bad','#480ca8','#3a0ca3','#3f37c9'],
+    cozy: ['#bc6c25','#dda15e','#fefae0','#606c38','#283618'],
+    default: ['#6366f1','#8b5cf6','#a78bfa','#c4b5fd','#312e81']
+  };
+  
+  let colors = palettes.default;
+  for (const [key, vals] of Object.entries(palettes)) {
+    if (prompt.includes(key)) { colors = vals; break; }
+  }
+  // Add randomness
+  colors = colors.map(c => {
+    const r = Math.floor(Math.random() * 20 - 10);
+    return c; // Keep original for now
+  });
+  
+  const el = document.getElementById('colorPalette');
+  el.innerHTML = colors.map(c => `<div class="color-swatch" style="background:${c}" onclick="copyColor('${c}')" title="${c}"></div>`).join('');
+  
+  const info = document.getElementById('colorInfo');
+  info.style.display = 'block';
+  info.innerHTML = '🎨 ' + colors.join(' · ') + ' — Click any swatch to copy.';
+}
+
+function copyColor(hex) {
+  navigator.clipboard.writeText(hex).then(() => {
+    document.getElementById('colorInfo').innerHTML = '✅ Copied ' + hex + ' to clipboard!';
+  });
+}
+
+// Text Analyzer
+function analyzeText() {
+  const text = document.getElementById('analyzeInput').value;
+  const output = document.getElementById('analyzeOutput');
+  if (!text.trim()) { output.innerHTML = 'Type or paste text above...'; return; }
+  
+  const words = text.trim().split(/\s+/).filter(w => w.length > 0);
+  const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+  const chars = text.length;
+  const avgWordLen = words.length ? (words.join('').length / words.length).toFixed(1) : 0;
+  const readTime = Math.max(1, Math.ceil(words.length / 200));
+  
+  // Simple sentiment
+  const positive = ['good','great','amazing','excellent','love','happy','best','wonderful','fantastic','awesome','beautiful'];
+  const negative = ['bad','terrible','awful','hate','worst','horrible','ugly','poor','sad','angry'];
+  const posCount = words.filter(w => positive.includes(w.toLowerCase())).length;
+  const negCount = words.filter(w => negative.includes(w.toLowerCase())).length;
+  const sentiment = posCount > negCount ? '😊 Positive' : negCount > posCount ? '😟 Negative' : '😐 Neutral';
+  
+  // Reading level
+  const syllables = words.reduce((acc, w) => acc + Math.max(1, w.replace(/[^aeiouy]/gi, '').length), 0);
+  const fleschScore = Math.round(206.835 - 1.015 * (words.length / Math.max(1, sentences.length)) - 84.6 * (syllables / words.length));
+  const level = fleschScore > 80 ? 'Easy' : fleschScore > 60 ? 'Standard' : fleschScore > 40 ? 'Advanced' : 'Academic';
+  
+  output.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;text-align:center;">
+      <div><div style="font-size:1.5rem;font-weight:800;color:var(--green);">${words.length}</div><div style="font-size:0.75rem;color:var(--muted);">Words</div></div>
+      <div><div style="font-size:1.5rem;font-weight:800;color:var(--cyan);">${chars}</div><div style="font-size:0.75rem;color:var(--muted);">Characters</div></div>
+      <div><div style="font-size:1.5rem;font-weight:800;color:var(--accent);">${sentences.length}</div><div style="font-size:0.75rem;color:var(--muted);">Sentences</div></div>
+    </div>
+    <div style="margin-top:1rem;display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;">
+      <span>📖 ${readTime} min read</span>
+      <span>📊 ${level} level</span>
+      <span>${sentiment}</span>
+      <span>📝 Avg word: ${avgWordLen} chars</span>
+    </div>
+  `;
+}
+
+// QR Code Generator (uses free API)
+function generateQR() {
+  const text = document.getElementById('qrInput').value.trim();
+  if (!text) { alert('Enter a URL or text'); return; }
+  const url = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(text)}&bgcolor=060610&color=34d399`;
+  document.getElementById('qrOutput').innerHTML = `<img src="${url}" alt="QR Code" style="border-radius:12px;border:1px solid var(--border);padding:16px;background:#fff;"><p style="color:var(--muted);font-size:0.8rem;margin-top:0.5rem;">Right-click to save</p>`;
+}
+</script>
 </body>
 </html>

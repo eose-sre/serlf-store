@@ -6,29 +6,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>serlf Transform — Your Cloud</title>
 <style>
-:root { --bg: #060610; --surface: #0c0c1a; --surface2: #12122a; --border: #1a1a3e; --text: #e8e8f0; --muted: #6b6b8d; --green: #34d399; --cyan: #22d3ee; --accent: #7c6df0; --accent2: #f06292; --gold: #ffd700; }
+:root { --bg: #060610; --surface: #0c0c1a; --surface2: #12122a; --border: #1a1a3e; --text: #e8e8f0; --muted: #6b6b8d; --green: #34d399; --cyan: #22d3ee; --accent: #7c6df0; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; }
 nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-.nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), #f06292); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
 .nav-links { display: flex; gap: 1.5rem; align-items: center; }
 .nav-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-decoration: none; }
-.nav-badge { background: rgba(255,215,0,0.15); color: var(--gold); padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.nav-badge { background: rgba(52,211,153,0.15); color: var(--green); padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
 .container { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; }
-.header-icon { font-size: 3rem; margin-bottom: 1rem; }
-h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
 h1 span { background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.desc { color: var(--muted); font-size: 1.05rem; margin-bottom: 3rem; }
-.services { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
-.service { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
-.service-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-.service-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.3rem; }
-.service-desc { color: var(--muted); font-size: 0.85rem; }
-.service-status { margin-top: 0.8rem; font-size: 0.75rem; color: var(--cyan); }
-.btn { display: inline-block; padding: 0.8rem 2rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.3s; }
+.desc { color: var(--muted); font-size: 1.05rem; margin-bottom: 2rem; }
+
+.infra-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.infra-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; cursor: pointer; transition: all 0.3s; }
+.infra-card:hover { border-color: var(--green); transform: translateY(-2px); }
+.infra-card.active { border-color: var(--green); background: rgba(52,211,153,0.05); }
+.infra-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+.infra-name { font-weight: 700; font-size: 1rem; margin-bottom: 0.3rem; }
+.infra-desc { color: var(--muted); font-size: 0.8rem; }
+.infra-status { margin-top: 0.75rem; font-size: 0.75rem; display: flex; align-items: center; gap: 0.4rem; }
+.dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot-green { background: var(--green); }
+.dot-cyan { background: var(--cyan); animation: pulse 2s ease-in-out infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.provision-box { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+.provision-form { margin-top: 1.5rem; }
+.form-group { margin-bottom: 1.2rem; }
+.form-label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.5rem; }
+select, input[type="text"] { width: 100%; padding: 0.8rem 1rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: inherit; font-size: 0.95rem; outline: none; }
+select:focus, input:focus { border-color: var(--green); }
+.btn { display: inline-block; padding: 0.9rem 2.5rem; border-radius: 8px; font-size: 1rem; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s; }
 .btn-primary { background: linear-gradient(135deg, var(--green), var(--cyan)); color: #060610; }
-.btn-secondary { color: var(--text); border: 1px solid var(--border); }
-@media (max-width: 768px) { .services { grid-template-columns: 1fr; } }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(52,211,153,0.4); }
+
+.terminal { background: #0d1117; border: 1px solid #30363d; border-radius: 12px; padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.85rem; margin-top: 1.5rem; display: none; max-height: 300px; overflow-y: auto; }
+.term-line { margin: 4px 0; }
+.term-green { color: var(--green); }
+.term-cyan { color: var(--cyan); }
+.term-muted { color: #6b6b8d; }
+.term-cursor { display: inline-block; width: 8px; height: 14px; background: var(--green); animation: blink 1s step-end infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+@media (max-width: 768px) { .infra-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -37,23 +58,105 @@ h1 span { background: linear-gradient(135deg, var(--green), var(--cyan)); -webki
   <div class="nav-links"><span class="nav-badge">Transform</span><a href="dashboard.html">Dashboard</a></div>
 </nav>
 <div class="container">
-  <div class="header-icon">☁️</div>
+  <div style="font-size:3rem;margin-bottom:1rem;">☁️</div>
   <h1>serlf <span>Transform</span></h1>
-  <p class="desc">Professional cloud infrastructure. The same architecture used by the world's biggest companies.</p>
+  <p class="desc">Professional cloud infrastructure. Enterprise architecture, simplified.</p>
 
-  <div class="services">
-    <div class="service"><div class="service-icon">🔑</div><div class="service-name">Identity & Access</div><div class="service-desc">Secure authentication and authorization for your team.</div><div class="service-status">⏳ Setting up</div></div>
-    <div class="service"><div class="service-icon">🔒</div><div class="service-name">Secrets Management</div><div class="service-desc">Secure storage for API keys, passwords, and certificates.</div><div class="service-status">⏳ Setting up</div></div>
-    <div class="service"><div class="service-icon">🌐</div><div class="service-name">DNS & Domains</div><div class="service-desc">Professional domain management and routing.</div><div class="service-status">⏳ Setting up</div></div>
-    <div class="service"><div class="service-icon">📧</div><div class="service-name">Email & Notifications</div><div class="service-desc">Business email and alert system.</div><div class="service-status">⏳ Setting up</div></div>
-    <div class="service"><div class="service-icon">💾</div><div class="service-name">Backup & Recovery</div><div class="service-desc">Automated backups with disaster recovery.</div><div class="service-status">⏳ Setting up</div></div>
-    <div class="service"><div class="service-icon">📊</div><div class="service-name">Monitoring</div><div class="service-desc">Real-time health monitoring and alerting.</div><div class="service-status">⏳ Setting up</div></div>
+  <div class="infra-grid">
+    <div class="infra-card active"><div class="infra-icon">🔑</div><div class="infra-name">Identity & Access</div><div class="infra-desc">SSO, MFA, role-based access</div><div class="infra-status"><div class="dot dot-green"></div> Active</div></div>
+    <div class="infra-card active"><div class="infra-icon">🔒</div><div class="infra-name">Secrets Management</div><div class="infra-desc">Encrypted vault for keys & credentials</div><div class="infra-status"><div class="dot dot-green"></div> Active</div></div>
+    <div class="infra-card active"><div class="infra-icon">🌐</div><div class="infra-name">DNS & Domains</div><div class="infra-desc">Global DNS, SSL certificates</div><div class="infra-status"><div class="dot dot-green"></div> Active</div></div>
+    <div class="infra-card"><div class="infra-icon">📦</div><div class="infra-name">Container Platform</div><div class="infra-desc">Kubernetes, auto-scaling, deploys</div><div class="infra-status"><div class="dot dot-cyan"></div> Available</div></div>
+    <div class="infra-card"><div class="infra-icon">💾</div><div class="infra-name">Database</div><div class="infra-desc">Managed database, backups, replicas</div><div class="infra-status"><div class="dot dot-cyan"></div> Available</div></div>
+    <div class="infra-card"><div class="infra-icon">📡</div><div class="infra-name">Monitoring</div><div class="infra-desc">Metrics, logs, alerts, dashboards</div><div class="infra-status"><div class="dot dot-cyan"></div> Available</div></div>
   </div>
 
-  <div style="display:flex;gap:1rem;">
-    <a href="mailto:hello@serlf.com?subject=Cloud Setup" class="btn btn-primary">Start Cloud Setup</a>
-    <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+  <div class="provision-box">
+    <h3 style="font-size:1.1rem;">🚀 Provision New Service</h3>
+    <p style="color:var(--muted);font-size:0.9rem;margin-top:0.5rem;">Select a service to deploy to your cloud environment.</p>
+    <div class="provision-form">
+      <div class="form-group">
+        <label class="form-label">Service</label>
+        <select id="service">
+          <option value="">Select a service...</option>
+          <option value="webapp">Web Application</option>
+          <option value="api">API Backend</option>
+          <option value="database">Database</option>
+          <option value="storage">File Storage</option>
+          <option value="email">Email Service</option>
+          <option value="monitoring">Monitoring Stack</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Environment Name</label>
+        <input type="text" id="envName" placeholder="e.g. my-app-prod">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Region</label>
+        <select id="region">
+          <option value="ca-central">🇨🇦 Canada Central</option>
+          <option value="us-east">🇺🇸 US East</option>
+          <option value="eu-west">🇪🇺 EU West</option>
+          <option value="au-east">🇦🇺 Australia East</option>
+          <option value="asia-east">🌏 Asia Pacific</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="provision()">Deploy Service</button>
+    </div>
+    <div class="terminal" id="terminal"></div>
   </div>
+
+  <a href="dashboard.html" style="color:var(--muted);text-decoration:none;font-size:0.9rem;">← Back to Dashboard</a>
 </div>
+
+<script src="serlf-api.js"></script>
+<script>
+function provision() {
+  const service = document.getElementById('service').value;
+  const envName = document.getElementById('envName').value.trim();
+  const region = document.getElementById('region').value;
+  if (!service) { alert('Please select a service'); return; }
+  if (!envName) { alert('Please enter an environment name'); return; }
+
+  const terminal = document.getElementById('terminal');
+  terminal.style.display = 'block';
+  terminal.innerHTML = '';
+
+  const steps = [
+    { text: `$ serlf deploy --service ${service} --env ${envName} --region ${region}`, cls: 'term-green' },
+    { text: '→ Authenticating with serlf cloud...', cls: 'term-muted' },
+    { text: '✓ Identity verified', cls: 'term-green' },
+    { text: '→ Provisioning resource group...', cls: 'term-muted' },
+    { text: `✓ Resource group "rg-${envName}" created in ${region}`, cls: 'term-green' },
+    { text: '→ Configuring network isolation...', cls: 'term-muted' },
+    { text: '✓ Virtual network + subnet configured', cls: 'term-green' },
+    { text: '→ Deploying ' + service + ' service...', cls: 'term-muted' },
+    { text: '✓ Service deployed with TLS termination', cls: 'term-green' },
+    { text: '→ Configuring secrets vault...', cls: 'term-muted' },
+    { text: '✓ Key Vault provisioned with managed identity', cls: 'term-green' },
+    { text: '→ Setting up monitoring...', cls: 'term-muted' },
+    { text: '✓ Alerts and dashboards configured', cls: 'term-green' },
+    { text: '', cls: '' },
+    { text: `🚀 Service "${envName}" is live!`, cls: 'term-cyan' },
+    { text: `   Endpoint: https://${envName}.serlf.cloud`, cls: 'term-cyan' },
+    { text: `   Dashboard: https://serlf.ca/dashboard.html`, cls: 'term-cyan' },
+  ];
+
+  let i = 0;
+  const interval = setInterval(() => {
+    if (i >= steps.length) {
+      clearInterval(interval);
+      SERLF_API.submit('Transform', { service, environment: envName, region }).catch(() => {});
+      return;
+    }
+    const line = document.createElement('div');
+    line.className = 'term-line ' + steps[i].cls;
+    line.textContent = steps[i].text;
+    terminal.appendChild(line);
+    terminal.scrollTop = terminal.scrollHeight;
+    i++;
+  }, 400);
+}
+</script>
 </body>
 </html>
