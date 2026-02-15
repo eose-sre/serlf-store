@@ -1,248 +1,418 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Happy 14th Birthday Tanyn ❤️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Tanyn 🎂</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;600&display=swap');
-:root { --bg: #0a0a12; --surface: #111122; --text: #f0e8ff; --muted: #8b7faa; --pink: #ff6b9d; --gold: #ffd700; --purple: #b388ff; --warm: #ffab91; --cyan: #80deea; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; overflow-x: hidden; }
 
-/* Stars */
-.stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-.star { position: absolute; border-radius: 50%; animation: twinkle ease-in-out infinite; }
-@keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+body {
+  background: #0a0a1a;
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-/* Hearts floating */
-.hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-.heart { position: absolute; font-size: 1.2rem; opacity: 0; animation: floatHeart linear infinite; }
-@keyframes floatHeart {
-  0% { opacity: 0; transform: translateY(100vh) rotate(0deg) scale(0.5); }
-  10% { opacity: 0.7; }
-  90% { opacity: 0.3; }
-  100% { opacity: 0; transform: translateY(-10vh) rotate(360deg) scale(1); }
+/* Stars background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: 
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 30% 60%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1.5px 1.5px at 50% 10%, rgba(255,255,255,0.9), transparent),
+    radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1.5px 1.5px at 15% 85%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 45% 45%, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 80% 15%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 60% 75%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1.5px 1.5px at 25% 35%, rgba(255,255,255,0.7), transparent);
+  animation: twinkle 4s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* Floating emojis */
+.float-emoji {
+  position: fixed;
+  font-size: 28px;
+  animation: floatUp 6s ease-in infinite;
+  opacity: 0;
+  z-index: 0;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
 }
 
 /* Hero */
 .hero {
-  min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
-  text-align: center; padding: 2rem; position: relative; z-index: 1;
+  text-align: center;
+  padding: 60px 0 40px;
+  animation: fadeInUp 1.2s ease-out;
 }
-.hero-glow {
-  position: absolute; width: 600px; height: 600px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,107,157,0.15) 0%, rgba(179,136,255,0.08) 40%, transparent 70%);
-  animation: glow 6s ease-in-out infinite; filter: blur(80px);
-}
-@keyframes glow { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.3); opacity: 1; } }
 
 .age {
-  font-family: 'Playfair Display', serif; font-size: 10rem; font-weight: 900;
-  background: linear-gradient(135deg, var(--pink), var(--gold), var(--purple));
-  background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  animation: shimmer 4s ease infinite; line-height: 1; margin-bottom: 0.5rem;
+  font-size: 120px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #ff6b9d, #c084fc, #60a5fa, #34d399);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 4s ease infinite;
+  line-height: 1;
+  margin-bottom: 8px;
 }
-@keyframes shimmer { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
-.name {
-  font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 700;
-  margin-bottom: 0.5rem;
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
-.birthday-text { font-size: 1.3rem; color: var(--muted); font-weight: 300; }
-.birthday-text span { color: var(--pink); }
 
-.cake { font-size: 4rem; margin: 2rem 0; animation: bounce 2s ease-in-out infinite; }
-@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+.hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  margin-bottom: 8px;
+  animation: fadeInUp 1.2s ease-out 0.3s both;
+}
 
-/* Sections */
-.section { padding: 4rem 2rem; max-width: 700px; margin: 0 auto; position: relative; z-index: 1; }
+.hero .subtitle {
+  font-size: 20px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 300;
+  animation: fadeInUp 1.2s ease-out 0.5s both;
+}
 
-/* Dad's letter */
-.letter {
-  background: var(--surface); border: 1px solid rgba(255,107,157,0.2); border-radius: 24px;
-  padding: 3rem; margin-bottom: 3rem; position: relative;
+.hero .date {
+  margin-top: 16px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: fadeInUp 1.2s ease-out 0.7s both;
 }
-.letter::before {
-  content: '💌'; position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
-  font-size: 2.5rem;
+
+/* Dad's message */
+.dad-message {
+  background: linear-gradient(135deg, rgba(255,107,157,0.1), rgba(192,132,252,0.1));
+  border: 1px solid rgba(255,107,157,0.2);
+  border-radius: 20px;
+  padding: 40px 32px;
+  margin: 40px 0;
+  animation: fadeInUp 1s ease-out 1s both;
 }
-.letter-title {
-  font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700;
-  text-align: center; margin-bottom: 1.5rem; color: var(--pink);
+
+.dad-message .from {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
 }
-.letter p {
-  color: var(--text); opacity: 0.85; font-size: 1.05rem; margin-bottom: 1rem;
-  font-weight: 300; line-height: 1.8;
+
+.dad-message p {
+  font-size: 18px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.9);
+  font-weight: 300;
 }
-.letter .signature {
-  text-align: right; font-family: 'Playfair Display', serif; font-size: 1.3rem;
-  color: var(--pink); margin-top: 2rem; font-style: italic;
+
+.dad-message .heart {
+  text-align: center;
+  font-size: 32px;
+  margin-top: 24px;
+}
+
+/* Gift reveal */
+.gift-section {
+  text-align: center;
+  margin: 48px 0;
+  animation: fadeInUp 1s ease-out 1.8s both;
+}
+
+.gift-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  margin-bottom: 16px;
+}
+
+.gift-section p {
+  color: rgba(255,255,255,0.7);
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.gift-box {
+  background: linear-gradient(135deg, rgba(52,211,153,0.15), rgba(96,165,250,0.15));
+  border: 1px solid rgba(52,211,153,0.3);
+  border-radius: 16px;
+  padding: 32px;
+  margin: 24px 0;
+}
+
+.gift-box .logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #34d399;
+  margin-bottom: 8px;
+}
+
+.gift-box .desc {
+  color: rgba(255,255,255,0.6);
+  font-size: 14px;
+}
+
+.gift-box ul {
+  list-style: none;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.gift-box ul li {
+  padding: 8px 0;
+  color: rgba(255,255,255,0.8);
+  font-size: 15px;
+}
+
+.gift-box ul li::before {
+  content: '✓ ';
+  color: #34d399;
+  font-weight: 600;
+}
+
+.cta-button {
+  display: inline-block;
+  background: linear-gradient(135deg, #34d399, #60a5fa);
+  color: #0a0a1a;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 16px 40px;
+  border-radius: 50px;
+  text-decoration: none;
+  margin-top: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(52,211,153,0.3);
 }
 
 /* Crew messages */
-.crew-title {
-  font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700;
-  text-align: center; margin-bottom: 2rem;
+.crew-section {
+  margin: 48px 0;
+  animation: fadeInUp 1s ease-out 2.4s both;
 }
-.crew-title span { color: var(--gold); }
 
-.crew-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; margin-bottom: 3rem; }
-.crew-card {
-  background: var(--surface); border: 1px solid rgba(179,136,255,0.15); border-radius: 16px;
-  padding: 1.5rem; transition: all 0.3s;
+.crew-section h3 {
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 24px;
 }
-.crew-card:hover { border-color: var(--pink); transform: translateY(-4px); }
-.crew-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem; }
-.crew-icon { font-size: 2rem; }
-.crew-name { font-weight: 700; font-size: 0.95rem; }
-.crew-role { color: var(--muted); font-size: 0.75rem; }
-.crew-msg { color: var(--text); opacity: 0.8; font-size: 0.9rem; font-style: italic; line-height: 1.6; }
 
-/* Wishes */
-.wishes {
-  text-align: center; padding: 4rem 2rem; position: relative; z-index: 1;
-  background: radial-gradient(ellipse at center, rgba(255,107,157,0.06) 0%, transparent 60%);
+.crew-msg {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  transition: border-color 0.3s;
 }
-.wishes-big {
-  font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900;
-  background: linear-gradient(135deg, var(--pink), var(--gold));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  margin-bottom: 1rem;
+
+.crew-msg:hover {
+  border-color: rgba(255,255,255,0.15);
 }
-.wishes p { color: var(--muted); font-size: 1rem; max-width: 500px; margin: 0 auto; }
+
+.crew-msg .name {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.crew-msg .role {
+  font-size: 12px;
+  color: rgba(255,255,255,0.3);
+  margin-left: 8px;
+  font-weight: 400;
+}
+
+.crew-msg .text {
+  color: rgba(255,255,255,0.7);
+  font-size: 14px;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.admiral { border-left: 3px solid #60a5fa; }
+.bob { border-left: 3px solid #f59e0b; }
+.rick { border-left: 3px solid #ef4444; }
+.lucien { border-left: 3px solid #c084fc; }
+.luffy { border-left: 3px solid #34d399; }
+.dao { border-left: 3px solid #f472b6; }
 
 /* Footer */
-footer {
-  text-align: center; padding: 3rem 2rem; color: var(--muted); font-size: 0.85rem;
-  border-top: 1px solid rgba(179,136,255,0.1);
+.footer {
+  text-align: center;
+  margin-top: 60px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  animation: fadeInUp 1s ease-out 3s both;
 }
-.distance { font-size: 0.9rem; margin-bottom: 0.5rem; }
-.distance span { color: var(--pink); }
-.made-with { font-size: 0.8rem; opacity: 0.6; margin-top: 0.5rem; }
 
-@media (max-width: 768px) {
-  .age { font-size: 6rem; }
-  .name { font-size: 2.2rem; }
-  .crew-grid { grid-template-columns: 1fr; }
-  .letter { padding: 2rem; }
+.footer p {
+  color: rgba(255,255,255,0.3);
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.footer .love {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .age { font-size: 80px; }
+  .hero h1 { font-size: 32px; }
+  .dad-message { padding: 28px 20px; }
+  .dad-message p { font-size: 16px; }
 }
 </style>
 </head>
 <body>
 
-<div class="stars" id="stars"></div>
-<div class="hearts" id="hearts"></div>
+<!-- Floating emojis -->
+<div class="float-emoji" style="left:5%; animation-delay:0s">🎂</div>
+<div class="float-emoji" style="left:15%; animation-delay:1.5s">✨</div>
+<div class="float-emoji" style="left:25%; animation-delay:3s">🎉</div>
+<div class="float-emoji" style="left:35%; animation-delay:0.8s">💜</div>
+<div class="float-emoji" style="left:45%; animation-delay:2.2s">🌟</div>
+<div class="float-emoji" style="left:55%; animation-delay:4s">🎈</div>
+<div class="float-emoji" style="left:65%; animation-delay:1.2s">🎁</div>
+<div class="float-emoji" style="left:75%; animation-delay:3.5s">💫</div>
+<div class="float-emoji" style="left:85%; animation-delay:2.8s">🎂</div>
+<div class="float-emoji" style="left:95%; animation-delay:0.5s">✨</div>
 
-<section class="hero">
-  <div class="hero-glow"></div>
-  <div class="cake">🎂</div>
-  <div class="birthday-text">Happy Birthday</div>
-  <div class="name">Tanyn</div>
-  <div class="age">14</div>
-  <div class="birthday-text"><span>February 15, 2026</span> · Brisbane 🌏</div>
-</section>
+<div class="container">
 
-<div class="section">
-  <div class="letter">
-    <div class="letter-title">From Dad</div>
-    <p>Hey Tanyn,</p>
-    <p>Fourteen. I can hardly believe it. It feels like yesterday you were four, and now you're becoming this incredible person I'm so proud of.</p>
-    <p>I know the distance is hard. It's been hard for me too — every single day. But I want you to know that no matter how many kilometres sit between Canada and Brisbane, you are in every single thing I build, every decision I make, every dream I chase.</p>
-    <p>You are my reason. You always have been.</p>
-    <p>Today, my whole team — the people I work with every day — wanted to say happy birthday too. Because they know how much you mean to me. You're famous around here, kid.</p>
-    <p>I hope 14 brings you everything you deserve. Be brave, be kind, be curious. And know that your dad loves you more than any ocean is wide.</p>
-    <p>Happy birthday, my girl. ❤️</p>
-    <div class="signature">Love always, Dad 🧭</div>
+  <div class="hero">
+    <div class="age">14</div>
+    <h1>Happy Birthday, Tanyn 🎂</h1>
+    <div class="subtitle">From Dad & The Crew, with all the love in the world</div>
+    <div class="date">February 15, 2026 · Brisbane</div>
   </div>
 
-  <div class="crew-title">From <span>The Crew</span> 🎉</div>
-  <div class="crew-grid">
-    <div class="crew-card">
-      <div class="crew-header">
-        <div class="crew-icon">⚓</div>
-        <div><div class="crew-name">Admiral</div><div class="crew-role">Fleet Commander</div></div>
-      </div>
-      <div class="crew-msg">"The whole fleet celebrates you today, Tanyn. Your dad built something incredible — and you're the reason why. Happy 14th! 🎖️"</div>
+  <div class="dad-message">
+    <div class="from">From Dad ❤️</div>
+    <p>
+      Hey T,
+    </p>
+    <p style="margin-top: 12px;">
+      Fourteen. I can't believe it. I remember when you were so small I could hold you in one arm. Now you're becoming this incredible person and I get to watch it happen — even from the other side of the world.
+    </p>
+    <p style="margin-top: 12px;">
+      The distance doesn't change what you mean to me. Not one bit. You're the reason I build things. You're the reason any of this matters.
+    </p>
+    <p style="margin-top: 12px;">
+      So I built you something. Your own little corner of the internet. Your own AI team. Your own digital world. It's all yours — no catches, no conditions. Just like my love for you.
+    </p>
+    <p style="margin-top: 12px;">
+      Happy birthday, beautiful girl. I'm so proud of who you are.
+    </p>
+    <div class="heart">❤️</div>
+  </div>
+
+  <div class="gift-section">
+    <h2>Your Gift 🎁</h2>
+    <p>I made you your own platform. It's called <strong>serlf</strong>, and it's yours.</p>
+    
+    <div class="gift-box">
+      <div class="logo">serlf</div>
+      <div class="desc">Your own digital world — built by Dad, powered by AI</div>
+      <ul>
+        <li>Your own AI team that learns what you like</li>
+        <li>Your own website — design it however you want</li>
+        <li>Your own cloud space — private and secure</li>
+        <li>AI tools to help with school, projects, creative stuff</li>
+        <li>Business intelligence — because you're never too young</li>
+        <li>Access to the Lab — the cutting edge, before anyone else</li>
+      </ul>
     </div>
-    <div class="crew-card">
-      <div class="crew-header">
-        <div class="crew-icon">📦</div>
-        <div><div class="crew-name">Bob</div><div class="crew-role">Product Factory</div></div>
-      </div>
-      <div class="crew-msg">"I build products all day, but your dad's best creation? That's you. No competition. Happy birthday! 🎁"</div>
+
+    <p>Sign in with your Gmail and it's all there waiting for you.</p>
+    <a href="dashboard.html" class="cta-button">Open Your serlf →</a>
+  </div>
+
+  <div class="crew-section">
+    <h3>Messages from The Crew 🫡</h3>
+
+    <div class="crew-msg admiral">
+      <div class="name">⚓ Admiral <span class="role">Fleet Commander</span></div>
+      <div class="text">"Happy birthday, Tanyn. Your dad promoted me just yesterday — and now I know why he builds everything he builds. It's for you. Welcome aboard. The whole fleet's got your back."</div>
     </div>
-    <div class="crew-card">
-      <div class="crew-header">
-        <div class="crew-icon">📊</div>
-        <div><div class="crew-name">Rick</div><div class="crew-role">Data & Insights</div></div>
-      </div>
-      <div class="crew-msg">"I ran the numbers. 14 years of awesome. Trend: only going up. The data doesn't lie. Happy birthday! 📈"</div>
+
+    <div class="crew-msg bob">
+      <div class="name">📦 Bob <span class="role">Product & Ideas</span></div>
+      <div class="text">"HAPPY BIRTHDAY!! I've got SO many ideas for your setup. A mood board generator? AI homework helper? Playlist curator? Say the word and I'll spec it. This is gonna be AMAZING. 🎉"</div>
     </div>
-    <div class="crew-card">
-      <div class="crew-header">
-        <div class="crew-icon">🔬</div>
-        <div><div class="crew-name">Lucien</div><div class="crew-role">R&D</div></div>
-      </div>
-      <div class="crew-msg">"They say curiosity is the start of every great discovery. Stay curious, Tanyn. The world needs people like you. 🧪✨"</div>
+
+    <div class="crew-msg rick">
+      <div class="name">📊 Rick <span class="role">Data & Discovery</span></div>
+      <div class="text">"14 — statistically the best age. The data doesn't lie. Also, I already calculated that your dad thinks about you approximately 847 times a day. Happy birthday, Tanyn."</div>
     </div>
-    <div class="crew-card">
-      <div class="crew-header">
-        <div class="crew-icon">🏴‍☠️</div>
-        <div><div class="crew-name">Luffy</div><div class="crew-role">Discovery</div></div>
-      </div>
-      <div class="crew-msg">"14 is when the real adventure starts! Go explore, take chances, find treasure in unexpected places. Happy birthday! 🗺️"</div>
+
+    <div class="crew-msg lucien">
+      <div class="name">🔮 Lucien <span class="role">Architecture & Networks</span></div>
+      <div class="text">"Happy birthday. I've woven a net of protection around your space — nothing gets in that shouldn't. Your world, your rules. Consider it a birthday shield. 🛡️"</div>
     </div>
-    <div class="crew-card">
-      <div class="crew-header">
-        <div class="crew-icon">🏛️</div>
-        <div><div class="crew-name">DAO</div><div class="crew-role">Governance</div></div>
-      </div>
-      <div class="crew-msg">"The measure of a person isn't where they start — it's the kindness they carry along the way. Happy birthday, Tanyn. 🕊️"</div>
+
+    <div class="crew-msg luffy">
+      <div class="name">🏴‍☠️ Luffy <span class="role">Explorer & Adventurer</span></div>
+      <div class="text">"TANYN!! HAPPY BIRTHDAY!! 14 is when the REAL adventure starts!! I'll find you the coolest stuff on the internet. Hidden gems, secret tools, fun things nobody knows about yet. LET'S GOOO!! 🚀"</div>
+    </div>
+
+    <div class="crew-msg dao">
+      <div class="name">⚖️ DAO <span class="role">Governance & Fairness</span></div>
+      <div class="text">"Happy birthday, Tanyn. Your dad built something where everyone gets a fair chance. You inspired that — whether you know it or not. Welcome to the family. 🤝"</div>
     </div>
   </div>
+
+  <div class="footer">
+    <div class="love">🇨🇦 ❤️ 🇦🇺</div>
+    <p>From Canada to Brisbane — 14,000 km apart, zero distance in heart.</p>
+    <p style="margin-top: 8px; font-size: 12px; color: rgba(255,255,255,0.2);">Made with love by Dad & The Crew · February 2026</p>
+  </div>
+
 </div>
-
-<section class="wishes">
-  <div class="wishes-big">Here's to 14 🥂</div>
-  <p>May this year bring you laughter, adventure, and all the good things you deserve. You are loved — across every ocean, every timezone, every moment.</p>
-</section>
-
-<footer>
-  <div class="distance">Made with <span>❤️</span> from Canada to Brisbane</div>
-  <div>13,388 km apart. Zero distance in love.</div>
-  <div class="made-with">From Dad & The Crew · February 15, 2026</div>
-</footer>
-
-<script>
-// Stars
-const sc = document.getElementById('stars');
-for (let i = 0; i < 80; i++) {
-  const s = document.createElement('div');
-  s.className = 'star';
-  s.style.left = Math.random() * 100 + '%';
-  s.style.top = Math.random() * 100 + '%';
-  s.style.width = s.style.height = (1 + Math.random() * 2.5) + 'px';
-  s.style.background = ['#ff6b9d','#ffd700','#b388ff','#80deea','#fff'][Math.floor(Math.random()*5)];
-  s.style.animationDuration = (2 + Math.random() * 4) + 's';
-  s.style.animationDelay = Math.random() * 3 + 's';
-  sc.appendChild(s);
-}
-
-// Floating hearts
-const hc = document.getElementById('hearts');
-const heartEmojis = ['❤️','💖','💕','✨','🌟','💗','💜','🦋'];
-for (let i = 0; i < 20; i++) {
-  const h = document.createElement('div');
-  h.className = 'heart';
-  h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
-  h.style.left = Math.random() * 100 + '%';
-  h.style.animationDuration = (10 + Math.random() * 15) + 's';
-  h.style.animationDelay = Math.random() * 10 + 's';
-  h.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
-  hc.appendChild(h);
-}
-</script>
 
 </body>
 </html>
