@@ -77,38 +77,97 @@ const agents = {
   creative: { name: '🎨 Creative', greeting: `Hey ${userName}! 🎨 I'm your Creative agent. Design ideas, branding, visual concepts, art direction — let's make something beautiful. What's the vision?` }
 };
 
-const responses = {
-  operations: [
-    "I can set that up for you. Let me organize a workflow around that. Would you like me to create a checklist or a timeline?",
-    "Great idea. I'll draft a process for that. Should I also set up reminders?",
-    "On it. I've noted this in your task queue. Want me to prioritize your current items?",
-    "I'll handle the scheduling. What's your preferred timeline — this week or next?"
-  ],
-  content: [
-    "Love it! Let me draft something. I'll have a first version for you in a moment. What tone — professional, casual, or bold?",
-    "I'll write that up. Should I keep it short and punchy or detailed and thorough?",
-    "Great topic. I'm thinking a hook-first approach. Let me sketch out a structure for you.",
-    "On it! I'll create 3 variations so you can pick the one that fits best."
-  ],
-  security: [
-    "I'll run a scan on that. Initial checks look good — no immediate red flags. Want a detailed report?",
-    "Security audit initiated. I'm checking SSL, headers, exposed endpoints, and DNS configuration.",
-    "All systems green currently. Your environment is isolated and encrypted. Want me to tighten any specific area?",
-    "I've flagged one item worth reviewing. Nothing critical, but let's discuss the best approach."
-  ],
-  research: [
-    "Interesting angle. Let me pull some data on that. Initial findings suggest there's a growing market here.",
-    "I found several relevant competitors. Want me to compare their pricing, features, and positioning?",
-    "The data shows an upward trend. Let me compile a summary report with key metrics.",
-    "I've gathered 15+ sources on this topic. Want the executive summary or the deep dive?"
-  ],
-  creative: [
-    "Ooh I love this direction! I'm thinking clean lines, bold typography, maybe a gradient accent. Let me sketch it out.",
-    "What about a dark theme with pops of color? Very modern, very sleek. Want to see a mockup?",
-    "I'll design 3 concepts for you — minimal, bold, and playful. Which direction excites you most?",
-    "Great vision! The mood board is coming together. Earthy tones or electric vibes?"
-  ]
-};
+// Smart response engine — keyword matching + context
+let msgHistory = [];
+
+function getResponse(agent, text) {
+  const t = text.toLowerCase();
+  msgHistory.push(t);
+  const msgCount = msgHistory.length;
+  
+  const r = {
+    operations: {
+      greet: ["Hey! Good to have you here. What are we tackling today?", "Welcome back! Ready to get things done. What's on the agenda?", "Hey there! Let's make today productive. What's first?"],
+      status: ["Here's where things stand: all systems are online, your products are live across 8 domains, and your AI team is active. Anything specific you want a deep dive on?", "Quick status: environment healthy, no alerts, all services running. Your last activity was today. Want me to pull up detailed metrics?"],
+      help: ["I can help with: task management, scheduling, process automation, team coordination, and workflow optimization. What sounds useful?", "Here's what I do best: organize chaos. Give me a messy situation and I'll make it clean. What needs sorting?"],
+      task: ["I've added that to your task list. Priority level? I'm thinking medium unless you say otherwise.", "Noted and queued. Want me to set a deadline or leave it open-ended?", "Got it. I'll track this and nudge you if it's not done by end of week. Sound good?"],
+      schedule: ["Let me check your calendar... looks like you've got some open slots this week. When works best?", "I'd suggest blocking 2 hours for this. Morning person or afternoon warrior?"],
+      team: ["Your AI team is all online: Operations (me!), Content, Security, Research, and Creative. Want me to loop anyone in?", "The crew's ready. Should I brief another agent on what we're working on?"],
+      default: ["Interesting — let me think about the best approach for that.", "I hear you. Let me work on that and come back with options.", "Good call. I'll put together a plan for that. Give me a moment.", "That's a solid direction. Want me to break it down into actionable steps?", "On it. I'll have something for you shortly.", "Let me map that out. First question — what's the priority level?"]
+    },
+    content: {
+      greet: ["Hey! Creative juices are flowing. What are we writing today?", "Ready to create! Blog post, email, social media, pitch deck — name it."],
+      email: ["I'll draft that email. Who's it going to and what's the vibe — formal, friendly, or persuasive?", "Email coming up! Give me the key points and I'll make it sing."],
+      blog: ["Love a good blog post. What's the topic? I'll outline it first so you can approve the structure.", "I'll write a draft with a strong hook, clear sections, and a solid CTA. Target word count?"],
+      social: ["Social media time! Which platform? The tone shifts a lot between LinkedIn, Twitter, and Instagram.", "I'll create a post with engagement bait... I mean, a compelling hook. 😄 What's the message?"],
+      help: ["I write: emails, blogs, social posts, landing pages, product descriptions, newsletters, scripts, proposals, and more. What do you need?"],
+      default: ["Great topic! Let me draft something. I'll aim for punchy and clear.", "I'm on it. First draft coming up — I'll give you 2 angles to choose from.", "Love this direction. Let me sketch out the structure first, then fill in the magic.", "Writing mode activated. This is going to be good.", "I'll craft something that grabs attention. Professional or personality-forward?", "Let me play with a few approaches and show you the best one."]
+    },
+    security: {
+      greet: ["Security status: all clear. What would you like me to check?", "Your environment is locked down. Need me to scan something?"],
+      scan: ["Initiating security scan... I'll check SSL, DNS, headers, exposed ports, and email authentication. Results in a moment.", "Running a full audit now. I check 8 vectors: SSL, HSTS, DNS, MX, SPF, DMARC, CAA, and IPv6."],
+      ssl: ["SSL certificate is valid and properly configured. TLS 1.3 active. No mixed content detected.", "Your HTTPS is solid. Certificate auto-renews via Let's Encrypt. Expiry is well ahead."],
+      password: ["Password security tip: use a password manager, enable 2FA everywhere, and never reuse passwords. Want me to audit your accounts?", "I recommend 16+ character passwords with a mix. Better yet — passkeys where supported."],
+      help: ["I monitor: SSL certs, DNS security, email authentication (SPF/DKIM/DMARC), headers, vulnerabilities, and access patterns. What should I focus on?"],
+      default: ["Security check complete on that front — no issues detected.", "I've reviewed that. One small recommendation, but nothing urgent. Want details?", "All clear. Your isolation and encryption are holding strong.", "Noted. I'll add this to the continuous monitoring queue.", "Good question from a security perspective. Let me assess the risk profile.", "I'll run a check on that. Better safe than sorry."]
+    },
+    research: {
+      greet: ["Research mode on! What are we investigating?", "Ready to dig into data. What's the question?"],
+      competitor: ["I'll pull a competitor analysis. What industry or specific companies should I focus on?", "Competitor intel coming up. I'll compare pricing, features, positioning, and market share."],
+      market: ["Let me research that market. I'll look at size, growth rate, key players, and trends.", "Market analysis initiated. I'll find TAM, SAM, SOM and identify gaps."],
+      trend: ["Trend analysis running... initial data suggests this is gaining momentum. Want the full report?", "I see an interesting pattern here. Let me pull more data points to confirm the trend."],
+      help: ["I research: markets, competitors, trends, pricing strategies, customer segments, and industry reports. What do you need?"],
+      default: ["Fascinating question. Let me dig into the data on that.", "I found some interesting insights already. Let me compile a proper analysis.", "There's more here than meets the eye. Give me a moment to pull it together.", "The data tells an interesting story. Want the quick version or the deep dive?", "I'll research that thoroughly. Expect findings within the hour.", "Good angle. Let me cross-reference a few sources on this."]
+    },
+    creative: {
+      greet: ["Hey! 🎨 Creative mode engaged. What are we designing?", "The canvas is blank and I'm excited. What's the vision?"],
+      logo: ["Logo time! Tell me the brand personality — modern, classic, playful, bold? And any colors you love?", "I'll sketch some logo concepts. Wordmark, icon, or combination? What feels right?"],
+      color: ["Let me generate a palette! Describe the mood — corporate, warm, techy, nature, luxury?", "Colors set the whole tone. I'll create 3 palettes: safe, bold, and wild. You pick."],
+      brand: ["Brand identity project! I'll cover: logo, colors, typography, tone of voice, and visual language. Let's start with your values.", "Building a brand is my favorite thing. What three words describe who you are?"],
+      help: ["I design: logos, color palettes, brand identities, UI mockups, social graphics, presentations, and creative concepts. What's the project?"],
+      default: ["Ooh I love this! Let me visualize it.", "Creative wheels are turning. This could be really special.", "I see it! Let me sketch out a few directions.", "Bold choice. I'm already thinking about how to make this pop.", "The aesthetic is coming together. Modern? Minimalist? Let me explore.", "This has so much potential. Let me play with some concepts."]
+    }
+  };
+
+  const agentR = r[agent] || r.operations;
+  
+  // Keyword matching
+  if (t.match(/\bhey\b|\bhi\b|\bhello\b|\byo\b|what'?s up/)) return pick(agentR.greet || agentR.default);
+  if (t.match(/\bstatus\b|\bhow.*(we|things|it)\b|\blooking\b/)) return pick(agentR.status || agentR.default);
+  if (t.match(/\bhelp\b|\bwhat can you\b|\bwhat do you\b/)) return pick(agentR.help || agentR.default);
+  if (t.match(/\btask\b|\btodo\b|\badd\b|\bnote\b/)) return pick(agentR.task || agentR.default);
+  if (t.match(/\bschedule\b|\bcalendar\b|\bmeeting\b|\bbook\b/)) return pick(agentR.schedule || agentR.default);
+  if (t.match(/\bteam\b|\bcrew\b|\bagent\b/)) return pick(agentR.team || agentR.default);
+  if (t.match(/\bemail\b|\binbox\b|\bsend\b/)) return pick(agentR.email || agentR.default);
+  if (t.match(/\bblog\b|\barticle\b|\bpost\b|\bwrite\b/)) return pick(agentR.blog || agentR.default);
+  if (t.match(/\bsocial\b|\btwitter\b|\blinkedin\b|\binstagram\b/)) return pick(agentR.social || agentR.default);
+  if (t.match(/\bscan\b|\baudit\b|\bcheck\b|\bvulner/)) return pick(agentR.scan || agentR.default);
+  if (t.match(/\bssl\b|\bcert\b|\bhttps\b/)) return pick(agentR.ssl || agentR.default);
+  if (t.match(/\bpassword\b|\b2fa\b|\bauth/)) return pick(agentR.password || agentR.default);
+  if (t.match(/\bcompetit\b|\brival\b/)) return pick(agentR.competitor || agentR.default);
+  if (t.match(/\bmarket\b|\bindustry\b/)) return pick(agentR.market || agentR.default);
+  if (t.match(/\btrend\b|\bgrowing\b|\bforecast\b/)) return pick(agentR.trend || agentR.default);
+  if (t.match(/\blogo\b|\bicon\b/)) return pick(agentR.logo || agentR.default);
+  if (t.match(/\bcolor\b|\bpalette\b|\bcolour\b/)) return pick(agentR.color || agentR.default);
+  if (t.match(/\bbrand\b|\bidentity\b/)) return pick(agentR.brand || agentR.default);
+  
+  return pick(agentR.default);
+}
+
+function pick(arr) {
+  // Avoid repeating last response
+  const last = msgHistory.length > 1 ? msgHistory[msgHistory.length - 2] : '';
+  let choice = arr[Math.floor(Math.random() * arr.length)];
+  if (arr.length > 1) {
+    let attempts = 0;
+    while (choice === window._lastResp && attempts < 5) {
+      choice = arr[Math.floor(Math.random() * arr.length)];
+      attempts++;
+    }
+  }
+  window._lastResp = choice;
+  return choice;
+}
 
 function addMessage(text, type, agentName) {
   const div = document.createElement('div');
@@ -145,12 +204,11 @@ function sendMessage() {
   document.getElementById('messages').appendChild(typing);
   document.getElementById('messages').scrollTop = 99999;
   
-  // Simulate response
-  const resps = responses[currentAgent];
+  // Smart response
   const delay = 800 + Math.random() * 1200;
   setTimeout(() => {
     typing.remove();
-    const resp = resps[Math.floor(Math.random() * resps.length)];
+    const resp = getResponse(currentAgent, text);
     addMessage(resp, 'ai', agents[currentAgent].name);
     
     // Log to serlf
