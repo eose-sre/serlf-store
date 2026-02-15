@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>serlf — Self Engineering Reinforced Learning Framework</title>
+<meta name="description" content="A framework that engineers itself. Your own AI crew. Your own silo. Your own evolution.">
+<style>
+:root {
+  --bg: #060610;
+  --surface: #0c0c1a;
+  --surface2: #12122a;
+  --border: #1a1a3e;
+  --text: #e8e8f0;
+  --muted: #6b6b8d;
+  --accent: #7c6df0;
+  --accent2: #f06292;
+  --gold: #ffd700;
+  --green: #34d399;
+  --blue: #60a5fa;
+  --cyan: #22d3ee;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; overflow-x: hidden; }
+a { color: var(--accent); text-decoration: none; }
+
+/* ═══ PARTICLES BG ═══ */
+.particles {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;
+}
+.particle {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation: float linear infinite;
+}
+@keyframes float {
+  0% { opacity: 0; transform: translateY(100vh) scale(0); }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.2; }
+  100% { opacity: 0; transform: translateY(-10vh) scale(1); }
+}
+
+/* ═══ NAV ═══ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 1rem 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+  background: rgba(6,6,16,0.8); backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(26,26,62,0.5);
+}
+.nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; }
+.nav-logo span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; transition: color 0.3s; }
+.nav-links a:hover { color: var(--text); }
+
+/* ═══ HERO ═══ */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; padding: 2rem; position: relative;
+}
+.hero-orb {
+  position: absolute; width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(124,109,240,0.15) 0%, rgba(240,98,146,0.08) 40%, transparent 70%);
+  animation: orbPulse 8s ease-in-out infinite;
+  filter: blur(60px);
+}
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 0.9; }
+}
+.hero-content { position: relative; z-index: 1; max-width: 900px; }
+.hero-badge {
+  display: inline-block; padding: 6px 16px; border-radius: 20px;
+  background: rgba(124,109,240,0.1); border: 1px solid rgba(124,109,240,0.3);
+  font-size: 0.75rem; font-weight: 600; color: var(--accent);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 2rem;
+}
+.logo { font-size: 6rem; font-weight: 900; letter-spacing: -4px; margin-bottom: 0.5rem; line-height: 1; }
+.logo span { background: linear-gradient(135deg, var(--accent), var(--accent2), var(--cyan)); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: gradientShift 6s ease infinite; }
+@keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+.acronym { font-size: 1rem; color: var(--muted); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 1.5rem; }
+.acronym b { color: var(--accent); }
+.tagline { font-size: 1.5rem; color: var(--text); margin-bottom: 2.5rem; font-weight: 300; opacity: 0.9; max-width: 600px; margin-left: auto; margin-right: auto; }
+.cta-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.cta { padding: 0.9rem 2.2rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; display: inline-block; }
+.cta-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: white; }
+.cta-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 40px rgba(124,109,240,0.4); color: white; }
+.cta-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.cta-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ═══ SCROLL INDICATOR ═══ */
+.scroll-hint {
+  position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  color: var(--muted); font-size: 0.75rem;
+}
+.scroll-arrow { width: 20px; height: 20px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); animation: bounce 2s infinite; }
+@keyframes bounce { 0%,100%{transform:rotate(45deg) translate(0,0)} 50%{transform:rotate(45deg) translate(5px,5px)} }
+
+/* ═══ FRAMEWORK VIZ ═══ */
+.framework-section { padding: 6rem 2rem; position: relative; }
+.framework-viz {
+  max-width: 900px; margin: 0 auto; position: relative;
+  display: flex; justify-content: center; align-items: center; min-height: 400px;
+}
+.fw-ring {
+  position: absolute; border-radius: 50%; border: 1px solid;
+  display: flex; justify-content: center; align-items: center;
+}
+.fw-ring-outer { width: 380px; height: 380px; border-color: rgba(124,109,240,0.2); animation: spin 30s linear infinite; }
+.fw-ring-mid { width: 260px; height: 260px; border-color: rgba(240,98,146,0.2); animation: spin 20s linear infinite reverse; }
+.fw-ring-inner { width: 140px; height: 140px; border-color: rgba(34,211,238,0.3); animation: spin 10s linear infinite; }
+@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+.fw-core {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: radial-gradient(circle, var(--accent), var(--accent2));
+  display: flex; justify-content: center; align-items: center;
+  font-size: 1.5rem; font-weight: 900; color: white; z-index: 2;
+  box-shadow: 0 0 40px rgba(124,109,240,0.5);
+}
+.fw-node {
+  position: absolute; width: 50px; height: 50px; border-radius: 50%;
+  background: var(--surface2); border: 1px solid var(--border);
+  display: flex; justify-content: center; align-items: center;
+  font-size: 1.2rem; z-index: 2; transition: all 0.3s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.fw-node:hover { transform: scale(1.2); border-color: var(--accent); box-shadow: 0 4px 30px rgba(124,109,240,0.3); }
+.fw-label {
+  position: absolute; font-size: 0.7rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1px; font-weight: 600;
+  white-space: nowrap;
+}
+
+.section { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
+.section-tag { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; background: rgba(124,109,240,0.1); color: var(--accent); }
+.section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px; }
+.section-title span { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.section-subtitle { color: var(--muted); margin-bottom: 4rem; font-size: 1.1rem; max-width: 600px; }
+.section-center { text-align: center; }
+.section-center .section-subtitle { margin-left: auto; margin-right: auto; }
+
+/* ═══ PRODUCTS ═══ */
+.products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.product-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px; padding: 2rem;
+  transition: all 0.4s; position: relative; overflow: hidden;
+}
+.product-card::before {
+  content: ''; position: absolute; top: -100%; left: -100%; width: 300%; height: 300%;
+  background: radial-gradient(circle, rgba(124,109,240,0.05) 0%, transparent 60%);
+  transition: all 0.5s; opacity: 0;
+}
+.product-card:hover::before { opacity: 1; top: -50%; left: -50%; }
+.product-card:hover { border-color: var(--accent); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(124,109,240,0.1); }
+.product-icon-wrap {
+  width: 56px; height: 56px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-bottom: 1.2rem;
+}
+.icon-purple { background: rgba(124,109,240,0.1); }
+.icon-pink { background: rgba(240,98,146,0.1); }
+.icon-gold { background: rgba(255,215,0,0.1); }
+.icon-green { background: rgba(52,211,153,0.1); }
+.icon-blue { background: rgba(96,165,250,0.1); }
+.icon-cyan { background: rgba(34,211,238,0.1); }
+.product-tag { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8rem; }
+.tag-core { background: rgba(124,109,240,0.15); color: var(--accent); }
+.tag-disruptor { background: rgba(240,98,146,0.15); color: var(--accent2); }
+.tag-enterprise { background: rgba(255,215,0,0.15); color: var(--gold); }
+.tag-data { background: rgba(52,211,153,0.15); color: var(--green); }
+.tag-rnd { background: rgba(34,211,238,0.15); color: var(--cyan); }
+.product-name { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+.product-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem; line-height: 1.5; }
+.product-features { list-style: none; }
+.product-features li { padding: 0.25rem 0; font-size: 0.85rem; color: var(--text); opacity: 0.75; }
+.product-features li::before { content: '→ '; color: var(--accent); font-weight: 700; }
+
+/* ═══ PROOF METRICS ═══ */
+.proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.proof-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 2rem; text-align: center; position: relative; overflow: hidden;
+}
+.proof-card::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+}
+.proof-number { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
+.proof-label { color: var(--muted); font-size: 0.8rem; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
+
+/* ═══ LOOP VIZ ═══ */
+.loops-container { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+.loop-viz { position: relative; width: 300px; height: 300px; margin: 0 auto; }
+.loop-ring {
+  position: absolute; border-radius: 50%; border: 2px dashed;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+}
+.loop-r1 { width: 280px; height: 280px; border-color: rgba(124,109,240,0.3); animation: spin 15s linear infinite; }
+.loop-r2 { width: 200px; height: 200px; border-color: rgba(240,98,146,0.3); animation: spin 10s linear infinite reverse; }
+.loop-r3 { width: 120px; height: 120px; border-color: rgba(34,211,238,0.4); animation: spin 6s linear infinite; }
+.loop-center {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-size: 2rem; z-index: 2;
+}
+.loop-dot {
+  position: absolute; width: 12px; height: 12px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 10px var(--accent);
+}
+.loops-text h3 { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
+.loops-text p { color: var(--muted); margin-bottom: 0.8rem; font-size: 0.95rem; }
+.shape-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
+.shape-tag {
+  padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;
+  background: var(--surface2); border: 1px solid var(--border);
+}
+
+/* ═══ COMPARISON ═══ */
+.comparison { display: grid; grid-template-columns: 1fr 1fr; border-radius: 16px; overflow: hidden; }
+.comp-col { padding: 2.5rem; }
+.comp-us { background: var(--surface); border: 1px solid var(--accent); border-radius: 16px 0 0 16px; }
+.comp-them { background: var(--surface); border: 1px solid var(--border); border-radius: 0 16px 16px 0; opacity: 0.6; }
+.comp-header { font-weight: 800; font-size: 1.2rem; margin-bottom: 1.5rem; }
+.comp-item { padding: 0.6rem 0; font-size: 0.9rem; border-bottom: 1px solid rgba(26,26,62,0.3); }
+.comp-us .comp-item { color: var(--text); }
+.comp-us .comp-item::before { content: '✦ '; color: var(--accent); }
+.comp-them .comp-item { color: var(--muted); }
+.comp-them .comp-item::before { content: '· '; }
+
+/* ═══ TEAM ═══ */
+.team-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+.team-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 1.5rem; text-align: center; transition: all 0.3s;
+}
+.team-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+.team-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+.team-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.2rem; }
+.team-role { color: var(--muted); font-size: 0.7rem; }
+.team-ey {
+  grid-column: span 6; background: linear-gradient(135deg, var(--surface), var(--surface2));
+  border: 1px solid var(--gold); border-radius: 16px; padding: 2rem;
+  display: flex; align-items: center; justify-content: center; gap: 3rem;
+  margin-top: 0.5rem;
+}
+.team-ey-text { text-align: left; }
+.team-ey-label { font-size: 0.7rem; color: var(--gold); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.3rem; }
+.team-ey-name { font-size: 1.3rem; font-weight: 800; }
+.team-ey-desc { color: var(--muted); font-size: 0.85rem; margin-top: 0.3rem; }
+
+/* ═══ CTA FINAL ═══ */
+.final-cta {
+  text-align: center; padding: 8rem 2rem; position: relative;
+  background: radial-gradient(ellipse at center, rgba(124,109,240,0.08) 0%, transparent 60%);
+}
+.final-cta .section-title { font-size: 3rem; }
+
+/* ═══ FOOTER ═══ */
+footer {
+  text-align: center; padding: 3rem 2rem;
+  border-top: 1px solid var(--border);
+  color: var(--muted); font-size: 0.8rem;
+}
+.footer-domains { display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
+.footer-domains a { color: var(--muted); transition: color 0.3s; }
+.footer-domains a:hover { color: var(--accent); }
+.footer-motto { font-style: italic; opacity: 0.5; margin-top: 1rem; font-size: 0.75rem; }
+
+/* ═══ DIVIDER ═══ */
+.divider {
+  height: 1px; max-width: 200px; margin: 0 auto;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 1024px) {
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .team-grid { grid-template-columns: repeat(3, 1fr); }
+  .team-ey { grid-column: span 3; }
+}
+@media (max-width: 768px) {
+  .logo { font-size: 3.5rem; }
+  .products-grid { grid-template-columns: 1fr; }
+  .comparison { grid-template-columns: 1fr; }
+  .comp-us { border-radius: 16px 16px 0 0; }
+  .comp-them { border-radius: 0 0 16px 16px; }
+  .loops-container { grid-template-columns: 1fr; }
+  .proof-grid { grid-template-columns: 1fr; }
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .team-ey { grid-column: span 2; flex-direction: column; text-align: center; }
+  .nav-links { display: none; }
+  .fw-ring-outer { width: 280px; height: 280px; }
+  .fw-ring-mid { width: 190px; height: 190px; }
+  .fw-ring-inner { width: 110px; height: 110px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo"><span>serlf</span></div>
+  <div class="nav-links">
+    <a href="#framework">Framework</a>
+    <a href="#products">Products</a>
+    <a href="#proof">Proof</a>
+    <a href="#team">Team</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Est. 2026 · EOSE Digital Sovereignty</div>
+    <div class="logo"><span>serlf</span></div>
+    <div class="acronym"><b>S</b>elf <b>E</b>ngineering <b>R</b>einforced <b>L</b>earning <b>F</b>ramework</div>
+    <p class="tagline">A framework that engineers itself.<br>Every interaction makes it stronger.</p>
+    <div class="cta-group">
+      <a href="#products" class="cta cta-primary">Explore Products</a>
+      <a href="#proof" class="cta cta-secondary">See the Proof</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Discover</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- Framework Visualization -->
+<section class="framework-section" id="framework">
+  <div class="section section-center">
+    <div class="section-tag">The Framework</div>
+    <h2 class="section-title">Self-Evolving <span>Architecture</span></h2>
+    <p class="section-subtitle">Every layer learns. Every loop closes stronger. Every pattern makes the whole system better.</p>
+  </div>
+  <div class="framework-viz">
+    <div class="fw-ring fw-ring-outer">
+      <div class="fw-node" style="position:absolute;top:-25px;left:50%;margin-left:-25px;">🏴‍☠️</div>
+      <div class="fw-label" style="top:-50px;left:50%;transform:translateX(-50%);">Luffy · Discovery</div>
+      <div class="fw-node" style="position:absolute;top:50%;right:-25px;margin-top:-25px;">📊</div>
+      <div class="fw-label" style="top:50%;right:-90px;transform:translateY(-50%);">Rick · Data</div>
+      <div class="fw-node" style="position:absolute;bottom:-25px;left:50%;margin-left:-25px;">📦</div>
+      <div class="fw-label" style="bottom:-50px;left:50%;transform:translateX(-50%);">Bob · Product</div>
+      <div class="fw-node" style="position:absolute;top:50%;left:-25px;margin-top:-25px;">🏛️</div>
+      <div class="fw-label" style="top:50%;left:-100px;transform:translateY(-50%);">DAO · Govern</div>
+    </div>
+    <div class="fw-ring fw-ring-mid">
+      <div class="fw-node" style="position:absolute;top:-25px;left:50%;margin-left:-25px;">🔬</div>
+      <div class="fw-label" style="top:-45px;left:50%;transform:translateX(-50%);color:var(--accent);">Lucien · R&D</div>
+    </div>
+    <div class="fw-ring fw-ring-inner"></div>
+    <div class="fw-core">serlf</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Products -->
+<section class="section" id="products">
+  <div class="section-tag">Products</div>
+  <h2 class="section-title">Everything You Need. <span>Nothing You Don't Own.</span></h2>
+  <p class="section-subtitle">Six products. One framework. Infinite evolution.</p>
+  
+  <div class="products-grid">
+    <div class="product-card">
+      <div class="product-icon-wrap icon-purple">🛡️</div>
+      <span class="product-tag tag-core">Core</span>
+      <div class="product-name">serlf Platform</div>
+      <div class="product-desc">Your own AI crew, dedicated to your business. Fully isolated. Fully sovereign. Fully yours.</div>
+      <ul class="product-features">
+        <li>Dedicated Captain + Crew</li>
+        <li>Full silo isolation (6/6 verified)</li>
+        <li>Industry-specific AI configuration</li>
+        <li>Self-evolving intelligence</li>
+      </ul>
+    </div>
+
+    <div class="product-card">
+      <div class="product-icon-wrap icon-pink">🌐</div>
+      <span class="product-tag tag-disruptor">Disruptor</span>
+      <div class="product-name">serlf Sites</div>
+      <div class="product-desc">Websites that run themselves. AI-managed, self-healing, radically cheap. Web hosting's worst nightmare.</div>
+      <ul class="product-features">
+        <li>AI-managed content & SEO</li>
+        <li>Self-healing infrastructure</li>
+        <li>Free cloud APIs, disruptor pricing</li>
+        <li>Full portfolio out of the box</li>
+      </ul>
+    </div>
+
+    <div class="product-card">
+      <div class="product-icon-wrap icon-green">🔐</div>
+      <span class="product-tag tag-core">Security</span>
+      <div class="product-name">serlf Security</div>
+      <div class="product-desc">White Hat as a Service. Your infrastructure wrapped in The Net. Self-proving. Self-healing.</div>
+      <ul class="product-features">
+        <li>Continuous self-proving audit</li>
+        <li>Detect → quarantine → fix → restore</li>
+        <li>Compliance & governance built in</li>
+        <li>Your silo proves itself</li>
+      </ul>
+    </div>
+
+    <div class="product-card">
+      <div class="product-icon-wrap icon-gold">☁️</div>
+      <span class="product-tag tag-enterprise">Enterprise</span>
+      <div class="product-name">serlf Transform</div>
+      <div class="product-desc">Enterprise cloud architecture at indie prices. The patterns that run banks, now for everyone.</div>
+      <ul class="product-features">
+        <li>Cloud Control Plane deployment</li>
+        <li>Identity, secrets, mesh — done right</li>
+        <li>Battle-tested at Top 25 banks</li>
+        <li>Terraform, Kubernetes, the works</li>
+      </ul>
+    </div>
+
+    <div class="product-card">
+      <div class="product-icon-wrap icon-blue">📊</div>
+      <span class="product-tag tag-data">Intelligence</span>
+      <div class="product-name">serlf Intelligence</div>
+      <div class="product-desc">Fleet insights. Industry benchmarks. The data you didn't know you needed, delivered before you ask.</div>
+      <ul class="product-features">
+        <li>Cross-fleet insights (anonymized)</li>
+        <li>Industry benchmarks</li>
+        <li>Novel Pattern access</li>
+        <li>Marketplace of knowns</li>
+      </ul>
+    </div>
+
+    <div class="product-card">
+      <div class="product-icon-wrap icon-cyan">🧪</div>
+      <span class="product-tag tag-rnd">R&D</span>
+      <div class="product-name">serlf Labs</div>
+      <div class="product-desc">The bleeding edge. AI research applied to your business before anyone else sees it. Powered by Luffy.</div>
+      <ul class="product-features">
+        <li>Hallucination hunting for your industry</li>
+        <li>Novel patterns, early access</li>
+        <li>Experimental features pipeline</li>
+        <li>What we don't know yet — but will</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Proof -->
+<section class="section section-center" id="proof">
+  <div class="section-tag">Proof</div>
+  <h2 class="section-title">We Don't Say It. <span>We Prove It.</span></h2>
+  <p class="section-subtitle">Every metric below is real. Measured automatically. Every day.</p>
+  
+  <div class="proof-grid">
+    <div class="proof-card">
+      <div class="proof-number">6/6</div>
+      <div class="proof-label">Silo Isolation Score</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-number">0</div>
+      <div class="proof-label">Unauthorized Changes</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-number">100%</div>
+      <div class="proof-label">Standards Compliance</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-number">∞</div>
+      <div class="proof-label">Evolution Cycles</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-number">6</div>
+      <div class="proof-label">Data Shapes Detected</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-number">53</div>
+      <div class="proof-label">AI Models Available</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Loops & Shapes -->
+<section class="section">
+  <div class="loops-container">
+    <div class="loop-viz">
+      <div class="loop-ring loop-r1"></div>
+      <div class="loop-ring loop-r2"></div>
+      <div class="loop-ring loop-r3"></div>
+      <div class="loop-center">🌀</div>
+      <div class="loop-dot" style="top:10%;left:50%;animation:float 3s ease-in-out infinite;"></div>
+      <div class="loop-dot" style="top:50%;right:5%;background:var(--accent2);box-shadow:0 0 10px var(--accent2);animation:float 4s ease-in-out infinite 1s;"></div>
+      <div class="loop-dot" style="bottom:15%;left:20%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:float 3.5s ease-in-out infinite 0.5s;"></div>
+    </div>
+    <div class="loops-text">
+      <div class="section-tag">Shapes & Loops</div>
+      <h3>Beyond Linear. <span style="background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Beyond Loops.</span></h3>
+      <p>serlf doesn't just close loops — it discovers shapes. Patterns that emerge from your data that no one else can see.</p>
+      <p>Spirals that level up. Waves that carry insights. Nets that validate. Fractals that repeat at every scale. Pulses that prove you're alive.</p>
+      <div class="shape-tags">
+        <span class="shape-tag">🌀 Spiral</span>
+        <span class="shape-tag">🌊 Wave</span>
+        <span class="shape-tag">🕸️ Net</span>
+        <span class="shape-tag">❄️ Fractal</span>
+        <span class="shape-tag">💓 Pulse</span>
+        <span class="shape-tag">🌉 Bridge</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Comparison -->
+<section class="section section-center">
+  <div class="section-tag">Why serlf</div>
+  <h2 class="section-title">Own It. <span>Don't Rent It.</span></h2>
+  <p class="section-subtitle">There's a difference between renting a room and owning the building.</p>
+  
+  <div class="comparison">
+    <div class="comp-col comp-us">
+      <div class="comp-header" style="color:var(--accent);">serlf</div>
+      <div class="comp-item">Your silo, your data, your rules</div>
+      <div class="comp-item">Dedicated AI crew for your business</div>
+      <div class="comp-item">Self-proving security (auditable 6/6)</div>
+      <div class="comp-item">Self-evolving — always improving</div>
+      <div class="comp-item">Enterprise patterns, indie pricing</div>
+      <div class="comp-item">Novel Patterns no one else has</div>
+      <div class="comp-item">Problems found before you see them</div>
+    </div>
+    <div class="comp-col comp-them">
+      <div class="comp-header">Everyone Else</div>
+      <div class="comp-item">Their cloud, their rules, their data</div>
+      <div class="comp-item">Shared AI, shared context, shared risk</div>
+      <div class="comp-item">"Trust us" — no proof provided</div>
+      <div class="comp-item">Static until next quarterly release</div>
+      <div class="comp-item">Enterprise price for enterprise features</div>
+      <div class="comp-item">Same features as everyone else</div>
+      <div class="comp-item">You find the problems yourself</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- Team -->
+<section class="section section-center" id="team">
+  <div class="section-tag">The Team</div>
+  <h2 class="section-title">The <span>A Team</span></h2>
+  <p class="section-subtitle">Admiral Fleet Control + Ernst & Young. Innovation meets enterprise delivery.</p>
+
+  <div class="team-grid">
+    <div class="team-card">
+      <div class="team-icon">🎖️</div>
+      <div class="team-name">Admiral</div>
+      <div class="team-role">Fleet Commander</div>
+    </div>
+    <div class="team-card">
+      <div class="team-icon">🔬</div>
+      <div class="team-name">Lucien</div>
+      <div class="team-role">R&D & Testing</div>
+    </div>
+    <div class="team-card">
+      <div class="team-icon">🏴‍☠️</div>
+      <div class="team-name">Luffy</div>
+      <div class="team-role">AI Discovery</div>
+    </div>
+    <div class="team-card">
+      <div class="team-icon">📦</div>
+      <div class="team-name">Bob</div>
+      <div class="team-role">Product Factory</div>
+    </div>
+    <div class="team-card">
+      <div class="team-icon">📊</div>
+      <div class="team-name">Rick</div>
+      <div class="team-role">Data & Insights</div>
+    </div>
+    <div class="team-card">
+      <div class="team-icon">🏛️</div>
+      <div class="team-name">DAO</div>
+      <div class="team-role">Governance</div>
+    </div>
+    <div class="team-ey">
+      <div style="font-size:3rem;">🤝</div>
+      <div class="team-ey-text">
+        <div class="team-ey-label">Strategic Partner</div>
+        <div class="team-ey-name">Ernst & Young</div>
+        <div class="team-ey-desc">Global enterprise delivery. Joint transformation practice. Our technology, their reach.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta" id="contact">
+  <div class="section-tag">Let's Build</div>
+  <h2 class="section-title">Ready to Own Your <span>Digital World?</span></h2>
+  <p style="color:var(--muted);margin:1rem auto 2rem;max-width:500px;">We create what doesn't exist yet. The new new way.</p>
+  <a href="mailto:kewin.joffe@gmail.com" class="cta cta-primary" style="font-size:1.1rem;padding:1rem 3rem;">Get In Touch</a>
+</section>
+
+<footer>
+  <div class="footer-domains">
+    <a href="https://serlf.com">serlf.com</a>
+    <a href="https://serlf.ca">serlf.ca</a>
+    <a href="https://serlf.net">serlf.net</a>
+    <a href="https://serlf.org">serlf.org</a>
+  </div>
+  <div>© 2026 serlf — EOSE Digital Sovereignty</div>
+  <div class="footer-motto">🧭 "Time is forever. This is our infinity."</div>
+</footer>
+
+<script>
+// Particle generator
+const pc = document.getElementById('particles');
+for (let i = 0; i < 40; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.style.left = Math.random() * 100 + '%';
+  p.style.animationDuration = (8 + Math.random() * 15) + 's';
+  p.style.animationDelay = Math.random() * 10 + 's';
+  p.style.width = p.style.height = (1 + Math.random() * 2) + 'px';
+  const colors = ['var(--accent)', 'var(--accent2)', 'var(--cyan)'];
+  p.style.background = colors[Math.floor(Math.random() * colors.length)];
+  pc.appendChild(p);
+}
+
+// Smooth scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});
+  });
+});
+</script>
+
+</body>
+</html>
