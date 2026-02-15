@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>serlf — $1. That's it.</title>
-<meta name="description" content="Your own AI crew. Your own silo. Your own evolution. One dollar. Fair is fair.">
+<meta name="description" content="Your own AI platform. Your own cloud. Your own security. All for one dollar. Fair is fair.">
 <style>
 :root {
   --bg: #060610;
@@ -24,12 +24,10 @@
 body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; overflow-x: hidden; }
 a { color: var(--accent); text-decoration: none; }
 
-/* ═══ PARTICLES BG ═══ */
 .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
 .particle { position: absolute; width: 2px; height: 2px; background: var(--accent); border-radius: 50%; opacity: 0; animation: float linear infinite; }
 @keyframes float { 0% { opacity: 0; transform: translateY(100vh) scale(0); } 10% { opacity: 0.6; } 90% { opacity: 0.2; } 100% { opacity: 0; transform: translateY(-10vh) scale(1); } }
 
-/* ═══ NAV ═══ */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;
@@ -43,7 +41,6 @@ nav {
 .nav-links a:hover { color: var(--text); }
 .nav-price { background: linear-gradient(135deg, var(--green), var(--cyan)); color: #060610; padding: 4px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; }
 
-/* ═══ HERO ═══ */
 .hero {
   min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
   text-align: center; padding: 2rem; position: relative;
@@ -64,12 +61,9 @@ nav {
 .logo span { background: linear-gradient(135deg, var(--accent), var(--accent2), var(--cyan)); background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: gradientShift 6s ease infinite; }
 @keyframes gradientShift { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
-.price-hero {
-  margin: 1.5rem auto 1rem; display: inline-block; position: relative;
-}
+.price-hero { margin: 1.5rem auto 1rem; display: inline-block; }
 .price-dollar { font-size: 8rem; font-weight: 900; line-height: 1; background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.price-label { font-size: 1.2rem; color: var(--muted); font-weight: 400; }
-.price-period { font-size: 1rem; color: var(--muted); }
+.price-label { font-size: 1.2rem; color: var(--muted); }
 
 .tagline { font-size: 1.6rem; color: var(--text); margin: 1.5rem auto 0.5rem; font-weight: 300; opacity: 0.9; max-width: 600px; }
 .tagline-sub { font-size: 1.1rem; color: var(--muted); margin-bottom: 2.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
@@ -89,7 +83,6 @@ nav {
 .scroll-arrow { width: 20px; height: 20px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); animation: bounce 2s infinite; }
 @keyframes bounce { 0%,100%{transform:rotate(45deg) translate(0,0)} 50%{transform:rotate(45deg) translate(5px,5px)} }
 
-/* ═══ DEAL BANNER ═══ */
 .deal-banner {
   padding: 4rem 2rem; text-align: center; position: relative; z-index: 1;
   background: linear-gradient(180deg, rgba(52,211,153,0.05) 0%, transparent 100%);
@@ -105,7 +98,6 @@ nav {
 .deal-desc { color: var(--muted); font-size: 0.9rem; }
 .deal-included { display: inline-block; margin-top: 0.8rem; padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; background: rgba(52,211,153,0.15); color: var(--green); text-transform: uppercase; letter-spacing: 1px; }
 
-/* ═══ SECTIONS ═══ */
 .section { padding: 6rem 2rem; max-width: 1200px; margin: 0 auto; position: relative; z-index: 1; }
 .section-tag { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; background: rgba(124,109,240,0.1); color: var(--accent); }
 .section-title { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px; }
@@ -115,7 +107,6 @@ nav {
 .section-center { text-align: center; }
 .section-center .section-subtitle { margin-left: auto; margin-right: auto; }
 
-/* ═══ PRODUCTS ═══ */
 .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
 .product-card {
   background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem;
@@ -140,15 +131,12 @@ nav {
 .icon-cyan { background: rgba(34,211,238,0.1); }
 .product-tag { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.8rem; }
 .tag-included { background: rgba(52,211,153,0.15); color: var(--green); }
-.tag-core { background: rgba(124,109,240,0.15); color: var(--accent); }
-.tag-free { background: rgba(255,215,0,0.15); color: var(--gold); }
 .product-name { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
 .product-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem; line-height: 1.5; }
 .product-features { list-style: none; }
 .product-features li { padding: 0.25rem 0; font-size: 0.85rem; color: var(--text); opacity: 0.75; }
 .product-features li::before { content: '✓ '; color: var(--green); font-weight: 700; }
 
-/* ═══ THE DEAL ═══ */
 .the-deal {
   padding: 6rem 2rem; text-align: center; position: relative; z-index: 1;
   background: radial-gradient(ellipse at center, rgba(52,211,153,0.06) 0%, transparent 60%);
@@ -172,7 +160,6 @@ nav {
 .deal-list li::before { content: '✦ '; color: var(--green); }
 .deal-fair { font-size: 1.3rem; font-weight: 300; color: var(--muted); font-style: italic; margin-top: 1.5rem; }
 
-/* ═══ PROOF METRICS ═══ */
 .proof-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
 .proof-card {
   background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
@@ -185,7 +172,6 @@ nav {
 .proof-number { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
 .proof-label { color: var(--muted); font-size: 0.8rem; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
 
-/* ═══ SAFETY ═══ */
 .safety-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; max-width: 800px; margin: 0 auto; }
 .safety-card {
   background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem;
@@ -196,56 +182,21 @@ nav {
 .safety-title { font-weight: 700; margin-bottom: 0.5rem; }
 .safety-desc { color: var(--muted); font-size: 0.9rem; }
 
-/* ═══ FRAMEWORK VIZ ═══ */
-.framework-section { padding: 6rem 2rem; position: relative; }
-.framework-viz {
-  max-width: 900px; margin: 0 auto; position: relative;
-  display: flex; justify-content: center; align-items: center; min-height: 400px;
+.how-section { padding: 6rem 2rem; position: relative; z-index: 1; }
+.how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; max-width: 900px; margin: 0 auto; }
+.how-step {
+  text-align: center; padding: 2rem;
 }
-.fw-ring { position: absolute; border-radius: 50%; border: 1px solid; display: flex; justify-content: center; align-items: center; }
-.fw-ring-outer { width: 380px; height: 380px; border-color: rgba(124,109,240,0.2); animation: spin 30s linear infinite; }
-.fw-ring-mid { width: 260px; height: 260px; border-color: rgba(240,98,146,0.2); animation: spin 20s linear infinite reverse; }
-.fw-ring-inner { width: 140px; height: 140px; border-color: rgba(34,211,238,0.3); animation: spin 10s linear infinite; }
-@keyframes spin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
-.fw-core {
-  width: 80px; height: 80px; border-radius: 50%;
-  background: radial-gradient(circle, var(--green), var(--cyan));
-  display: flex; justify-content: center; align-items: center;
-  font-size: 1.5rem; font-weight: 900; color: #060610; z-index: 2;
-  box-shadow: 0 0 40px rgba(52,211,153,0.5);
-}
-.fw-node {
-  position: absolute; width: 50px; height: 50px; border-radius: 50%;
-  background: var(--surface2); border: 1px solid var(--border);
-  display: flex; justify-content: center; align-items: center;
-  font-size: 1.2rem; z-index: 2; transition: all 0.3s;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-}
-.fw-node:hover { transform: scale(1.2); border-color: var(--green); box-shadow: 0 4px 30px rgba(52,211,153,0.3); }
-.fw-label {
-  position: absolute; font-size: 0.7rem; color: var(--muted);
-  text-transform: uppercase; letter-spacing: 1px; font-weight: 600; white-space: nowrap;
-}
+.how-number { font-size: 3rem; font-weight: 900; background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; margin-bottom: 1rem; }
+.how-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+.how-desc { color: var(--muted); font-size: 0.9rem; }
 
-/* ═══ TEAM ═══ */
-.team-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
-.team-card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-  padding: 1.5rem; text-align: center; transition: all 0.3s;
-}
-.team-card:hover { border-color: var(--green); transform: translateY(-4px); }
-.team-icon { font-size: 2rem; margin-bottom: 0.8rem; }
-.team-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.2rem; }
-.team-role { color: var(--muted); font-size: 0.7rem; }
-
-/* ═══ CTA FINAL ═══ */
 .final-cta {
   text-align: center; padding: 8rem 2rem; position: relative;
   background: radial-gradient(ellipse at center, rgba(52,211,153,0.08) 0%, transparent 60%);
 }
 .final-price { font-size: 5rem; font-weight: 900; background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
 
-/* ═══ FOOTER ═══ */
 footer {
   text-align: center; padding: 3rem 2rem;
   border-top: 1px solid var(--border);
@@ -254,15 +205,13 @@ footer {
 .footer-domains { display: flex; gap: 1rem; justify-content: center; margin-bottom: 1rem; flex-wrap: wrap; }
 .footer-domains a { color: var(--muted); transition: color 0.3s; font-size: 0.75rem; }
 .footer-domains a:hover { color: var(--green); }
-.footer-motto { font-style: italic; opacity: 0.5; margin-top: 1rem; font-size: 0.75rem; }
 
 .divider { height: 1px; max-width: 200px; margin: 0 auto; background: linear-gradient(90deg, transparent, var(--green), transparent); }
 
-/* ═══ RESPONSIVE ═══ */
 @media (max-width: 1024px) {
   .products-grid { grid-template-columns: repeat(2, 1fr); }
-  .team-grid { grid-template-columns: repeat(3, 1fr); }
   .deal-grid { grid-template-columns: 1fr; }
+  .how-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 768px) {
   .logo { font-size: 3.5rem; }
@@ -271,11 +220,7 @@ footer {
   .products-grid { grid-template-columns: 1fr; }
   .proof-grid { grid-template-columns: 1fr; }
   .safety-grid { grid-template-columns: 1fr; }
-  .team-grid { grid-template-columns: repeat(2, 1fr); }
   .nav-links { display: none; }
-  .fw-ring-outer { width: 280px; height: 280px; }
-  .fw-ring-mid { width: 190px; height: 190px; }
-  .fw-ring-inner { width: 110px; height: 110px; }
   .final-price { font-size: 3.5rem; }
 }
 </style>
@@ -284,14 +229,13 @@ footer {
 
 <div class="particles" id="particles"></div>
 
-<!-- Nav -->
 <nav>
   <div class="nav-logo"><span>serlf</span></div>
   <div class="nav-links">
     <a href="#products">Products</a>
-    <a href="#proof">Proof</a>
     <a href="#safe">Safety</a>
-    <a href="#team">Team</a>
+    <a href="#proof">Proof</a>
+    <a href="#how">How It Works</a>
     <span class="nav-price">$1</span>
   </div>
 </nav>
@@ -300,13 +244,13 @@ footer {
 <section class="hero">
   <div class="hero-orb"></div>
   <div class="hero-content">
-    <div class="hero-badge">🚀 Launch Day — February 2026</div>
+    <div class="hero-badge">🚀 Now Available — February 2026</div>
     <div class="logo"><span>serlf</span></div>
     <div class="price-hero">
       <div class="price-dollar">$1</div>
       <div class="price-label">Everything. One dollar.</div>
     </div>
-    <p class="tagline">Your own AI crew. Your own cloud silo.<br>Your own digital world.</p>
+    <p class="tagline">Your own AI platform. Your own cloud.<br>Your own digital world.</p>
     <p class="tagline-sub">What is fair is fair. This is a good deal. Safe too. What a bonus.</p>
     <div class="cta-group">
       <a href="#deal" class="cta cta-primary">Get Started — $1</a>
@@ -325,39 +269,39 @@ footer {
   <h2 class="section-title" style="max-width:700px;margin:1rem auto;">All Of This. <span class="green">For Real.</span></h2>
   <div class="deal-grid">
     <div class="deal-item">
-      <div class="deal-icon">🛡️</div>
-      <div class="deal-title">Your Own AI Crew</div>
-      <div class="deal-desc">A dedicated team of AI agents, configured for your business. Not shared. Yours.</div>
+      <div class="deal-icon">🤖</div>
+      <div class="deal-title">Your Own AI Team</div>
+      <div class="deal-desc">Dedicated AI agents configured for your business. They learn your patterns and get smarter every day.</div>
       <div class="deal-included">Included</div>
     </div>
     <div class="deal-item">
       <div class="deal-icon">🌐</div>
       <div class="deal-title">Your Own Website</div>
-      <div class="deal-desc">AI-managed, self-healing, always online. Professional web presence out of the box.</div>
+      <div class="deal-desc">AI-managed, always online, professional web presence. Set it up once, it runs itself.</div>
       <div class="deal-included">Included</div>
     </div>
     <div class="deal-item">
       <div class="deal-icon">🔐</div>
       <div class="deal-title">Your Own Security</div>
-      <div class="deal-desc">Enterprise-grade isolation. Encrypted. Audited. Proven safe — not just promised.</div>
+      <div class="deal-desc">Enterprise-grade protection. Encrypted. Audited automatically. Proven safe — not just promised.</div>
       <div class="deal-included">Included</div>
     </div>
     <div class="deal-item">
       <div class="deal-icon">☁️</div>
       <div class="deal-title">Your Own Cloud</div>
-      <div class="deal-desc">Dedicated cloud infrastructure. No shared tenancy. No noisy neighbors. Just you.</div>
+      <div class="deal-desc">Private cloud infrastructure. Not shared with anyone. Your environment, your rules.</div>
       <div class="deal-included">Included</div>
     </div>
     <div class="deal-item">
       <div class="deal-icon">📊</div>
-      <div class="deal-title">Your Own Insights</div>
-      <div class="deal-desc">AI-powered analytics that learn your patterns and surface what matters.</div>
+      <div class="deal-title">Your Own Analytics</div>
+      <div class="deal-desc">AI-powered insights that learn your business and surface what matters before you ask.</div>
       <div class="deal-included">Included</div>
     </div>
     <div class="deal-item">
       <div class="deal-icon">🧪</div>
-      <div class="deal-title">Your Own Lab</div>
-      <div class="deal-desc">Bleeding edge AI research, applied to your business before anyone else sees it.</div>
+      <div class="deal-title">Your Own R&D</div>
+      <div class="deal-desc">Cutting-edge AI research applied to your business. Always improving, always ahead.</div>
       <div class="deal-included">Included</div>
     </div>
   </div>
@@ -365,23 +309,23 @@ footer {
 
 <div class="divider"></div>
 
-<!-- Products Detail -->
+<!-- Products -->
 <section class="section" id="products">
   <div class="section-tag">Products</div>
   <h2 class="section-title">Six Products. <span class="green">One Dollar.</span></h2>
-  <p class="section-subtitle">Everything included. No tiers. No upsells. No gotchas. Just $1.</p>
+  <p class="section-subtitle">Everything included. No tiers. No upsells. No gotchas.</p>
 
   <div class="products-grid">
     <div class="product-card">
-      <div class="product-icon-wrap icon-green">🛡️</div>
+      <div class="product-icon-wrap icon-green">🤖</div>
       <span class="product-tag tag-included">✓ Included</span>
       <div class="product-name">serlf Platform</div>
-      <div class="product-desc">Your own AI crew, dedicated to your business. Fully isolated. Fully sovereign. Fully yours.</div>
+      <div class="product-desc">Your own AI team, dedicated to your business. Not shared. Not generic. Configured for what you actually do.</div>
       <ul class="product-features">
-        <li>Dedicated Captain + Crew</li>
-        <li>Full silo isolation (6/6 verified)</li>
-        <li>Industry-specific AI config</li>
-        <li>Self-evolving intelligence</li>
+        <li>Dedicated AI agents for your business</li>
+        <li>Private, isolated environment</li>
+        <li>Industry-specific configuration</li>
+        <li>Gets smarter every day</li>
       </ul>
     </div>
 
@@ -389,12 +333,12 @@ footer {
       <div class="product-icon-wrap icon-pink">🌐</div>
       <span class="product-tag tag-included">✓ Included</span>
       <div class="product-name">serlf Sites</div>
-      <div class="product-desc">Websites that run themselves. AI-managed, self-healing, radically cheap.</div>
+      <div class="product-desc">Websites that run themselves. AI-managed content, always online, professional from day one.</div>
       <ul class="product-features">
         <li>AI-managed content & SEO</li>
-        <li>Self-healing infrastructure</li>
-        <li>Free cloud APIs, zero hosting cost</li>
-        <li>Full portfolio out of the box</li>
+        <li>Always online, self-healing</li>
+        <li>Professional design included</li>
+        <li>Zero maintenance required</li>
       </ul>
     </div>
 
@@ -402,12 +346,12 @@ footer {
       <div class="product-icon-wrap icon-cyan">🔐</div>
       <span class="product-tag tag-included">✓ Included</span>
       <div class="product-name">serlf Security</div>
-      <div class="product-desc">White Hat as a Service. Your infrastructure wrapped in The Net. Self-proving.</div>
+      <div class="product-desc">Enterprise-grade security for everyone. Continuous monitoring, automatic fixes, compliance built in.</div>
       <ul class="product-features">
-        <li>Continuous self-proving audit</li>
-        <li>Detect → quarantine → fix → restore</li>
-        <li>Compliance & governance built in</li>
-        <li>Your silo proves itself safe</li>
+        <li>Continuous automated auditing</li>
+        <li>Detect, fix, and verify — automatically</li>
+        <li>Compliance and governance included</li>
+        <li>Proven safe, not just promised</li>
       </ul>
     </div>
 
@@ -415,12 +359,12 @@ footer {
       <div class="product-icon-wrap icon-gold">☁️</div>
       <span class="product-tag tag-included">✓ Included</span>
       <div class="product-name">serlf Transform</div>
-      <div class="product-desc">Enterprise cloud architecture at indie prices. Bank-grade patterns, for everyone.</div>
+      <div class="product-desc">Cloud architecture used by the world's biggest companies. Now available to everyone.</div>
       <ul class="product-features">
-        <li>Cloud Control Plane deployment</li>
-        <li>Identity, secrets, mesh — done right</li>
-        <li>Battle-tested at Top 25 banks</li>
-        <li>Terraform, Kubernetes, the works</li>
+        <li>Professional cloud setup</li>
+        <li>Identity & access management</li>
+        <li>Tested at Fortune 500 scale</li>
+        <li>Modern infrastructure, done right</li>
       </ul>
     </div>
 
@@ -428,12 +372,12 @@ footer {
       <div class="product-icon-wrap icon-blue">📊</div>
       <span class="product-tag tag-included">✓ Included</span>
       <div class="product-name">serlf Intelligence</div>
-      <div class="product-desc">Fleet insights. Industry benchmarks. Data you didn't know you needed.</div>
+      <div class="product-desc">Smart analytics that learn your business. Industry benchmarks. Insights delivered before you ask.</div>
       <ul class="product-features">
-        <li>Cross-fleet insights (anonymized)</li>
+        <li>AI-powered business insights</li>
         <li>Industry benchmarks</li>
-        <li>Novel Pattern access</li>
-        <li>Marketplace of knowns</li>
+        <li>Trend detection and alerts</li>
+        <li>Data you didn't know you needed</li>
       </ul>
     </div>
 
@@ -441,12 +385,12 @@ footer {
       <div class="product-icon-wrap icon-purple">🧪</div>
       <span class="product-tag tag-included">✓ Included</span>
       <div class="product-name">serlf Labs</div>
-      <div class="product-desc">The bleeding edge. AI research applied to your business before anyone else.</div>
+      <div class="product-desc">The latest in AI research, applied to your business. Early access to what's next.</div>
       <ul class="product-features">
-        <li>Hallucination hunting for your industry</li>
-        <li>Novel patterns, early access</li>
-        <li>Experimental features pipeline</li>
-        <li>What we don't know yet — but will</li>
+        <li>AI accuracy verification</li>
+        <li>Early access to new features</li>
+        <li>Experimental tools pipeline</li>
+        <li>Always on the cutting edge</li>
       </ul>
     </div>
   </div>
@@ -466,14 +410,14 @@ footer {
     </div>
     <ul class="deal-list">
       <li>All 6 products — Platform, Sites, Security, Transform, Intelligence, Labs</li>
-      <li>Your own isolated cloud silo — not shared with anyone</li>
-      <li>Your own AI crew — dedicated agents that learn your business</li>
-      <li>Enterprise-grade security — proven, not promised (6/6 score)</li>
-      <li>Self-evolving — gets better every day, automatically</li>
+      <li>Your own private cloud environment — not shared with anyone</li>
+      <li>Your own AI team — dedicated agents that learn your business</li>
+      <li>Enterprise-grade security — proven, not promised</li>
+      <li>Gets better every day, automatically</li>
       <li>No contracts. No hidden fees. Cancel anytime.</li>
       <li>Free onboarding. Free migration. Free support.</li>
     </ul>
-    <a href="mailto:kewin.joffe@gmail.com" class="cta cta-primary" style="font-size:1.1rem;padding:1rem 3rem;">Start for $1</a>
+    <a href="mailto:hello@serlf.com" class="cta cta-primary" style="font-size:1.1rem;padding:1rem 3rem;">Start for $1</a>
     <div class="deal-fair">"What is fair is fair. This is a good deal."</div>
   </div>
 </section>
@@ -484,28 +428,28 @@ footer {
 <section class="section section-center" id="safe">
   <div class="section-tag">Safety</div>
   <h2 class="section-title">Safe Too. <span class="green">What a Bonus.</span></h2>
-  <p class="section-subtitle">Your data never leaves your silo. We prove it — every day, automatically.</p>
+  <p class="section-subtitle">Your data stays yours. We prove it — every day, automatically.</p>
 
   <div class="safety-grid">
     <div class="safety-card">
       <div class="safety-icon">🔒</div>
-      <div class="safety-title">Your Silo, Your Data</div>
-      <div class="safety-desc">Fully isolated cloud environment. No shared databases. No shared compute. No shared anything. Just you.</div>
+      <div class="safety-title">Your Space, Your Data</div>
+      <div class="safety-desc">Fully private cloud environment. No shared databases. No shared servers. Nobody else has access. Just you.</div>
     </div>
     <div class="safety-card">
       <div class="safety-icon">✅</div>
       <div class="safety-title">Proven, Not Promised</div>
-      <div class="safety-desc">6/6 isolation score, verified automatically. We don't say it's safe — we prove it. Every single day.</div>
+      <div class="safety-desc">Security is verified automatically, every day. We don't just say it's safe — we prove it with real audits.</div>
     </div>
     <div class="safety-card">
-      <div class="safety-icon">🛡️</div>
-      <div class="safety-title">Bank-Grade Patterns</div>
-      <div class="safety-desc">The same security architecture used by Top 25 banks. mTLS, zero-trust, least-privilege. No shortcuts.</div>
+      <div class="safety-icon">🏦</div>
+      <div class="safety-title">Bank-Grade Protection</div>
+      <div class="safety-desc">The same security architecture used by the world's biggest banks. Encryption, zero-trust, least-privilege.</div>
     </div>
     <div class="safety-card">
       <div class="safety-icon">🔑</div>
       <div class="safety-title">You Own Everything</div>
-      <div class="safety-desc">Your keys. Your secrets. Your data. You can export, migrate, or delete everything anytime. No lock-in.</div>
+      <div class="safety-desc">Your keys. Your data. Export, migrate, or delete everything anytime. No lock-in. No tricks.</div>
     </div>
   </div>
 </section>
@@ -516,12 +460,12 @@ footer {
 <section class="section section-center" id="proof">
   <div class="section-tag">Proof</div>
   <h2 class="section-title">We Don't Say It. <span class="green">We Prove It.</span></h2>
-  <p class="section-subtitle">Every metric is real. Measured automatically. Every day.</p>
+  <p class="section-subtitle">Every number is real. Measured automatically. Every day.</p>
 
   <div class="proof-grid">
     <div class="proof-card">
-      <div class="proof-number">6/6</div>
-      <div class="proof-label">Silo Isolation Score</div>
+      <div class="proof-number">100%</div>
+      <div class="proof-label">Private & Isolated</div>
     </div>
     <div class="proof-card">
       <div class="proof-number">$1</div>
@@ -536,8 +480,8 @@ footer {
       <div class="proof-label">Products Included</div>
     </div>
     <div class="proof-card">
-      <div class="proof-number">∞</div>
-      <div class="proof-label">Evolution Cycles</div>
+      <div class="proof-number">24/7</div>
+      <div class="proof-label">Always Improving</div>
     </div>
     <div class="proof-card">
       <div class="proof-number">53+</div>
@@ -548,71 +492,28 @@ footer {
 
 <div class="divider"></div>
 
-<!-- Framework Viz -->
-<section class="framework-section" id="framework">
+<!-- How It Works -->
+<section class="how-section" id="how">
   <div class="section section-center">
-    <div class="section-tag">The Framework</div>
-    <h2 class="section-title">Self-Evolving <span class="green">Architecture</span></h2>
-    <p class="section-subtitle">Every layer learns. Every loop closes stronger. Gets better every day — automatically.</p>
+    <div class="section-tag">How It Works</div>
+    <h2 class="section-title">Three Steps. <span class="green">That's It.</span></h2>
+    <p class="section-subtitle">No complex setup. No technical knowledge required. We handle everything.</p>
   </div>
-  <div class="framework-viz">
-    <div class="fw-ring fw-ring-outer">
-      <div class="fw-node" style="position:absolute;top:-25px;left:50%;margin-left:-25px;">🏴‍☠️</div>
-      <div class="fw-label" style="top:-50px;left:50%;transform:translateX(-50%);">Discovery</div>
-      <div class="fw-node" style="position:absolute;top:50%;right:-25px;margin-top:-25px;">📊</div>
-      <div class="fw-label" style="top:50%;right:-80px;transform:translateY(-50%);">Data</div>
-      <div class="fw-node" style="position:absolute;bottom:-25px;left:50%;margin-left:-25px;">📦</div>
-      <div class="fw-label" style="bottom:-50px;left:50%;transform:translateX(-50%);">Product</div>
-      <div class="fw-node" style="position:absolute;top:50%;left:-25px;margin-top:-25px;">🏛️</div>
-      <div class="fw-label" style="top:50%;left:-90px;transform:translateY(-50%);">Govern</div>
+  <div class="how-grid">
+    <div class="how-step">
+      <div class="how-number">1</div>
+      <div class="how-title">Sign Up</div>
+      <div class="how-desc">Tell us about your business. Takes 2 minutes. We'll set up your private environment.</div>
     </div>
-    <div class="fw-ring fw-ring-mid">
-      <div class="fw-node" style="position:absolute;top:-25px;left:50%;margin-left:-25px;">🔬</div>
-      <div class="fw-label" style="top:-45px;left:50%;transform:translateX(-50%);color:var(--green);">R&D</div>
+    <div class="how-step">
+      <div class="how-number">2</div>
+      <div class="how-title">We Build It</div>
+      <div class="how-desc">Your AI team gets configured for your industry. Your cloud, your website, your security — all set up.</div>
     </div>
-    <div class="fw-ring fw-ring-inner"></div>
-    <div class="fw-core">$1</div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- Team -->
-<section class="section section-center" id="team">
-  <div class="section-tag">The Team</div>
-  <h2 class="section-title">Your <span class="green">Crew</span></h2>
-  <p class="section-subtitle">AI agents + human architects. The team that built systems for the biggest banks, now working for you.</p>
-
-  <div class="team-grid">
-    <div class="team-card">
-      <div class="team-icon">🎖️</div>
-      <div class="team-name">Admiral</div>
-      <div class="team-role">Fleet Commander</div>
-    </div>
-    <div class="team-card">
-      <div class="team-icon">🔬</div>
-      <div class="team-name">Lucien</div>
-      <div class="team-role">R&D</div>
-    </div>
-    <div class="team-card">
-      <div class="team-icon">🏴‍☠️</div>
-      <div class="team-name">Luffy</div>
-      <div class="team-role">Discovery</div>
-    </div>
-    <div class="team-card">
-      <div class="team-icon">📦</div>
-      <div class="team-name">Bob</div>
-      <div class="team-role">Product</div>
-    </div>
-    <div class="team-card">
-      <div class="team-icon">📊</div>
-      <div class="team-name">Rick</div>
-      <div class="team-role">Data</div>
-    </div>
-    <div class="team-card">
-      <div class="team-icon">🏛️</div>
-      <div class="team-name">DAO</div>
-      <div class="team-role">Governance</div>
+    <div class="how-step">
+      <div class="how-number">3</div>
+      <div class="how-title">It Gets Better</div>
+      <div class="how-desc">Every day your platform learns and improves. You focus on your business. We handle the tech.</div>
     </div>
   </div>
 </section>
@@ -621,9 +522,9 @@ footer {
 <section class="final-cta" id="contact">
   <div class="final-price">$1</div>
   <h2 class="section-title" style="margin-top:1rem;">That's It. <span class="green">For Real.</span></h2>
-  <p style="color:var(--muted);margin:1rem auto 0.5rem;max-width:550px;font-size:1.1rem;">Six products. Your own cloud. Your own AI crew. Your own security.<br>All for a dollar. Fair is fair.</p>
+  <p style="color:var(--muted);margin:1rem auto 0.5rem;max-width:550px;font-size:1.1rem;">Six products. Your own cloud. Your own AI team. Your own security.<br>All for a dollar. Fair is fair.</p>
   <p style="color:var(--muted);margin:0 auto 2rem;max-width:400px;font-size:0.95rem;opacity:0.6;">No contracts · No hidden fees · Cancel anytime</p>
-  <a href="mailto:kewin.joffe@gmail.com" class="cta cta-primary" style="font-size:1.1rem;padding:1rem 3rem;">Start for $1</a>
+  <a href="mailto:hello@serlf.com" class="cta cta-primary" style="font-size:1.1rem;padding:1rem 3rem;">Start for $1</a>
 </section>
 
 <footer>
@@ -637,8 +538,7 @@ footer {
     <a href="https://serlf.shop">serlf.shop</a>
     <a href="https://serlf.store">serlf.store</a>
   </div>
-  <div>© 2026 serlf — EOSE Digital Sovereignty</div>
-  <div class="footer-motto">🧭 "What is fair is fair. This is a good deal."</div>
+  <div>© 2026 serlf</div>
 </footer>
 
 <script>
