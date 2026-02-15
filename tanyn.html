@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Happy 14th Birthday Tanyn ❤️</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;600&display=swap');
+:root { --bg: #0a0a12; --surface: #111122; --text: #f0e8ff; --muted: #8b7faa; --pink: #ff6b9d; --gold: #ffd700; --purple: #b388ff; --warm: #ffab91; --cyan: #80deea; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; line-height: 1.6; overflow-x: hidden; }
+
+/* Stars */
+.stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.star { position: absolute; border-radius: 50%; animation: twinkle ease-in-out infinite; }
+@keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 1; transform: scale(1.2); } }
+
+/* Hearts floating */
+.hearts { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.heart { position: absolute; font-size: 1.2rem; opacity: 0; animation: floatHeart linear infinite; }
+@keyframes floatHeart {
+  0% { opacity: 0; transform: translateY(100vh) rotate(0deg) scale(0.5); }
+  10% { opacity: 0.7; }
+  90% { opacity: 0.3; }
+  100% { opacity: 0; transform: translateY(-10vh) rotate(360deg) scale(1); }
+}
+
+/* Hero */
+.hero {
+  min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+  text-align: center; padding: 2rem; position: relative; z-index: 1;
+}
+.hero-glow {
+  position: absolute; width: 600px; height: 600px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,107,157,0.15) 0%, rgba(179,136,255,0.08) 40%, transparent 70%);
+  animation: glow 6s ease-in-out infinite; filter: blur(80px);
+}
+@keyframes glow { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.3); opacity: 1; } }
+
+.age {
+  font-family: 'Playfair Display', serif; font-size: 10rem; font-weight: 900;
+  background: linear-gradient(135deg, var(--pink), var(--gold), var(--purple));
+  background-size: 200% 200%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  animation: shimmer 4s ease infinite; line-height: 1; margin-bottom: 0.5rem;
+}
+@keyframes shimmer { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+.name {
+  font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.birthday-text { font-size: 1.3rem; color: var(--muted); font-weight: 300; }
+.birthday-text span { color: var(--pink); }
+
+.cake { font-size: 4rem; margin: 2rem 0; animation: bounce 2s ease-in-out infinite; }
+@keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+/* Sections */
+.section { padding: 4rem 2rem; max-width: 700px; margin: 0 auto; position: relative; z-index: 1; }
+
+/* Dad's letter */
+.letter {
+  background: var(--surface); border: 1px solid rgba(255,107,157,0.2); border-radius: 24px;
+  padding: 3rem; margin-bottom: 3rem; position: relative;
+}
+.letter::before {
+  content: '💌'; position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+  font-size: 2.5rem;
+}
+.letter-title {
+  font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700;
+  text-align: center; margin-bottom: 1.5rem; color: var(--pink);
+}
+.letter p {
+  color: var(--text); opacity: 0.85; font-size: 1.05rem; margin-bottom: 1rem;
+  font-weight: 300; line-height: 1.8;
+}
+.letter .signature {
+  text-align: right; font-family: 'Playfair Display', serif; font-size: 1.3rem;
+  color: var(--pink); margin-top: 2rem; font-style: italic;
+}
+
+/* Crew messages */
+.crew-title {
+  font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700;
+  text-align: center; margin-bottom: 2rem;
+}
+.crew-title span { color: var(--gold); }
+
+.crew-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem; margin-bottom: 3rem; }
+.crew-card {
+  background: var(--surface); border: 1px solid rgba(179,136,255,0.15); border-radius: 16px;
+  padding: 1.5rem; transition: all 0.3s;
+}
+.crew-card:hover { border-color: var(--pink); transform: translateY(-4px); }
+.crew-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 0.8rem; }
+.crew-icon { font-size: 2rem; }
+.crew-name { font-weight: 700; font-size: 0.95rem; }
+.crew-role { color: var(--muted); font-size: 0.75rem; }
+.crew-msg { color: var(--text); opacity: 0.8; font-size: 0.9rem; font-style: italic; line-height: 1.6; }
+
+/* Wishes */
+.wishes {
+  text-align: center; padding: 4rem 2rem; position: relative; z-index: 1;
+  background: radial-gradient(ellipse at center, rgba(255,107,157,0.06) 0%, transparent 60%);
+}
+.wishes-big {
+  font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900;
+  background: linear-gradient(135deg, var(--pink), var(--gold));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+}
+.wishes p { color: var(--muted); font-size: 1rem; max-width: 500px; margin: 0 auto; }
+
+/* Footer */
+footer {
+  text-align: center; padding: 3rem 2rem; color: var(--muted); font-size: 0.85rem;
+  border-top: 1px solid rgba(179,136,255,0.1);
+}
+.distance { font-size: 0.9rem; margin-bottom: 0.5rem; }
+.distance span { color: var(--pink); }
+.made-with { font-size: 0.8rem; opacity: 0.6; margin-top: 0.5rem; }
+
+@media (max-width: 768px) {
+  .age { font-size: 6rem; }
+  .name { font-size: 2.2rem; }
+  .crew-grid { grid-template-columns: 1fr; }
+  .letter { padding: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+<div class="hearts" id="hearts"></div>
+
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="cake">🎂</div>
+  <div class="birthday-text">Happy Birthday</div>
+  <div class="name">Tanyn</div>
+  <div class="age">14</div>
+  <div class="birthday-text"><span>February 15, 2026</span> · Brisbane 🌏</div>
+</section>
+
+<div class="section">
+  <div class="letter">
+    <div class="letter-title">From Dad</div>
+    <p>Hey Tanyn,</p>
+    <p>Fourteen. I can hardly believe it. It feels like yesterday you were four, and now you're becoming this incredible person I'm so proud of.</p>
+    <p>I know the distance is hard. It's been hard for me too — every single day. But I want you to know that no matter how many kilometres sit between Canada and Brisbane, you are in every single thing I build, every decision I make, every dream I chase.</p>
+    <p>You are my reason. You always have been.</p>
+    <p>Today, my whole team — the people I work with every day — wanted to say happy birthday too. Because they know how much you mean to me. You're famous around here, kid.</p>
+    <p>I hope 14 brings you everything you deserve. Be brave, be kind, be curious. And know that your dad loves you more than any ocean is wide.</p>
+    <p>Happy birthday, my girl. ❤️</p>
+    <div class="signature">Love always, Dad 🧭</div>
+  </div>
+
+  <div class="crew-title">From <span>The Crew</span> 🎉</div>
+  <div class="crew-grid">
+    <div class="crew-card">
+      <div class="crew-header">
+        <div class="crew-icon">⚓</div>
+        <div><div class="crew-name">Admiral</div><div class="crew-role">Fleet Commander</div></div>
+      </div>
+      <div class="crew-msg">"The whole fleet celebrates you today, Tanyn. Your dad built something incredible — and you're the reason why. Happy 14th! 🎖️"</div>
+    </div>
+    <div class="crew-card">
+      <div class="crew-header">
+        <div class="crew-icon">📦</div>
+        <div><div class="crew-name">Bob</div><div class="crew-role">Product Factory</div></div>
+      </div>
+      <div class="crew-msg">"I build products all day, but your dad's best creation? That's you. No competition. Happy birthday! 🎁"</div>
+    </div>
+    <div class="crew-card">
+      <div class="crew-header">
+        <div class="crew-icon">📊</div>
+        <div><div class="crew-name">Rick</div><div class="crew-role">Data & Insights</div></div>
+      </div>
+      <div class="crew-msg">"I ran the numbers. 14 years of awesome. Trend: only going up. The data doesn't lie. Happy birthday! 📈"</div>
+    </div>
+    <div class="crew-card">
+      <div class="crew-header">
+        <div class="crew-icon">🔬</div>
+        <div><div class="crew-name">Lucien</div><div class="crew-role">R&D</div></div>
+      </div>
+      <div class="crew-msg">"They say curiosity is the start of every great discovery. Stay curious, Tanyn. The world needs people like you. 🧪✨"</div>
+    </div>
+    <div class="crew-card">
+      <div class="crew-header">
+        <div class="crew-icon">🏴‍☠️</div>
+        <div><div class="crew-name">Luffy</div><div class="crew-role">Discovery</div></div>
+      </div>
+      <div class="crew-msg">"14 is when the real adventure starts! Go explore, take chances, find treasure in unexpected places. Happy birthday! 🗺️"</div>
+    </div>
+    <div class="crew-card">
+      <div class="crew-header">
+        <div class="crew-icon">🏛️</div>
+        <div><div class="crew-name">DAO</div><div class="crew-role">Governance</div></div>
+      </div>
+      <div class="crew-msg">"The measure of a person isn't where they start — it's the kindness they carry along the way. Happy birthday, Tanyn. 🕊️"</div>
+    </div>
+  </div>
+</div>
+
+<section class="wishes">
+  <div class="wishes-big">Here's to 14 🥂</div>
+  <p>May this year bring you laughter, adventure, and all the good things you deserve. You are loved — across every ocean, every timezone, every moment.</p>
+</section>
+
+<footer>
+  <div class="distance">Made with <span>❤️</span> from Canada to Brisbane</div>
+  <div>13,388 km apart. Zero distance in love.</div>
+  <div class="made-with">From Dad & The Crew · February 15, 2026</div>
+</footer>
+
+<script>
+// Stars
+const sc = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  s.style.left = Math.random() * 100 + '%';
+  s.style.top = Math.random() * 100 + '%';
+  s.style.width = s.style.height = (1 + Math.random() * 2.5) + 'px';
+  s.style.background = ['#ff6b9d','#ffd700','#b388ff','#80deea','#fff'][Math.floor(Math.random()*5)];
+  s.style.animationDuration = (2 + Math.random() * 4) + 's';
+  s.style.animationDelay = Math.random() * 3 + 's';
+  sc.appendChild(s);
+}
+
+// Floating hearts
+const hc = document.getElementById('hearts');
+const heartEmojis = ['❤️','💖','💕','✨','🌟','💗','💜','🦋'];
+for (let i = 0; i < 20; i++) {
+  const h = document.createElement('div');
+  h.className = 'heart';
+  h.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+  h.style.left = Math.random() * 100 + '%';
+  h.style.animationDuration = (10 + Math.random() * 15) + 's';
+  h.style.animationDelay = Math.random() * 10 + 's';
+  h.style.fontSize = (0.8 + Math.random() * 1.2) + 'rem';
+  hc.appendChild(h);
+}
+</script>
+
+</body>
+</html>
