@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>serlf Mail — Professional Email</title>
+<style>
+:root { --bg: #060610; --surface: #0c0c1a; --surface2: #12122a; --border: #1a1a3e; --text: #e8e8f0; --muted: #6b6b8d; --green: #34d399; --cyan: #22d3ee; --accent: #7c6df0; --accent2: #f06292; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; }
+nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+.nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+.nav-links { display: flex; gap: 1.5rem; align-items: center; }
+.nav-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-decoration: none; }
+.nav-badge { background: rgba(52,211,153,0.15); color: var(--green); padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+.container { max-width: 800px; margin: 0 auto; padding: 3rem 2rem; }
+.header-icon { font-size: 3rem; margin-bottom: 1rem; }
+h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+h1 span { background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.desc { color: var(--muted); font-size: 1.05rem; margin-bottom: 3rem; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; margin-bottom: 1.5rem; }
+.card-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
+.card-desc { color: var(--muted); font-size: 0.9rem; }
+.email-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.5rem 0; }
+.email-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; }
+.email-addr { font-family: monospace; font-size: 0.95rem; color: var(--green); margin-bottom: 0.3rem; }
+.email-purpose { color: var(--muted); font-size: 0.8rem; }
+.features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.feature { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+.feature-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.feature-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.3rem; }
+.feature-desc { color: var(--muted); font-size: 0.85rem; }
+.btn { display: inline-block; padding: 0.8rem 2rem; border-radius: 8px; font-size: 0.95rem; font-weight: 600; text-decoration: none; transition: all 0.3s; }
+.btn-primary { background: linear-gradient(135deg, var(--green), var(--cyan)); color: #060610; }
+.btn-secondary { color: var(--text); border: 1px solid var(--border); }
+@media (max-width: 768px) { .email-grid, .features { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<nav>
+  <a href="dashboard.html" class="nav-logo">serlf</a>
+  <div class="nav-links"><span class="nav-badge">Mail</span><a href="dashboard.html">Dashboard</a></div>
+</nav>
+<div class="container">
+  <div class="header-icon">📧</div>
+  <h1>serlf <span>Mail</span></h1>
+  <p class="desc">Professional email for your business. Send and receive from your own domain. Free with your $1 plan.</p>
+
+  <div class="card">
+    <div class="card-title">Your Email Addresses</div>
+    <div class="card-desc">These addresses are ready for your business. All emails forward to your personal inbox.</div>
+    <div class="email-grid">
+      <div class="email-box"><div class="email-addr">hello@serlf.com</div><div class="email-purpose">General contact</div></div>
+      <div class="email-box"><div class="email-addr">support@serlf.com</div><div class="email-purpose">Customer support</div></div>
+      <div class="email-box"><div class="email-addr">billing@serlf.com</div><div class="email-purpose">Payment & billing</div></div>
+      <div class="email-box"><div class="email-addr">security@serlf.com</div><div class="email-purpose">Security alerts</div></div>
+      <div class="email-box"><div class="email-addr">ops@serlf.com</div><div class="email-purpose">Operations</div></div>
+      <div class="email-box"><div class="email-addr">labs@serlf.com</div><div class="email-purpose">R&D updates</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">How It Works</div>
+    <div class="card-desc">
+      <strong>Receiving:</strong> Emails sent to your @serlf addresses are forwarded to your personal email. No new inbox to check.<br><br>
+      <strong>Sending:</strong> Your AI team sends automated emails on your behalf — welcome messages, reports, alerts. All from professional @serlf addresses.<br><br>
+      <strong>Custom domain:</strong> Want your own domain? We'll set it up. you@yourbusiness.com — same system, your brand.
+    </div>
+  </div>
+
+  <div class="features">
+    <div class="feature"><div class="feature-icon">🔒</div><div class="feature-title">Encrypted</div><div class="feature-desc">TLS encryption on all email traffic.</div></div>
+    <div class="feature"><div class="feature-icon">✅</div><div class="feature-title">Authenticated</div><div class="feature-desc">SPF, DKIM, and DMARC configured.</div></div>
+    <div class="feature"><div class="feature-icon">🤖</div><div class="feature-title">AI-Powered</div><div class="feature-desc">Your AI team sends on your behalf.</div></div>
+    <div class="feature"><div class="feature-icon">🌐</div><div class="feature-title">8 Domains</div><div class="feature-desc">Available across all serlf domains.</div></div>
+  </div>
+
+  <div style="display:flex;gap:1rem;">
+    <a href="mailto:hello@serlf.com?subject=Mail Setup" class="btn btn-primary">Set Up My Email</a>
+    <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+  </div>
+</div>
+</body>
+</html>
