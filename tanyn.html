@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<script>
+// Private — for Tanyn's eyes only
+!function(){
+  var SERLF_AUTH_KEY = 'serlf_auth';
+  try {
+    var auth = JSON.parse(localStorage.getItem(SERLF_AUTH_KEY));
+    if (!auth || !auth.email || auth.email.toLowerCase() !== 'tanynjoffe@gmail.com') {
+      document.documentElement.innerHTML = '<body style="background:#0a0a1a;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;"><div><h1>🔒</h1><p style="color:rgba(255,255,255,0.5);margin-top:12px;">This page is private.</p><p style="margin-top:8px;"><a href="login.html" style="color:#34d399;">Sign in</a></p></div></body>';
+    }
+  } catch(e) {
+    document.documentElement.innerHTML = '<body style="background:#0a0a1a;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;text-align:center;"><div><h1>🔒</h1><p style="color:rgba(255,255,255,0.5);margin-top:12px;">This page is private.</p><p style="margin-top:8px;"><a href="login.html" style="color:#34d399;">Sign in</a></p></div></body>';
+  }
+}();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday Tanyn 🎂</title>
