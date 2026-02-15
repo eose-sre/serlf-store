@@ -1,268 +1,780 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>!function(){var a="serlf_auth";try{var b=JSON.parse(localStorage.getItem(a));if(!b||!b.expires||b.expires<Date.now()){localStorage.removeItem(a);window.location.href="login.html"}}catch(e){window.location.href="login.html"}}();</script>
+<script>!function(){var a="serlf_auth";try{var b=JSON.parse(localStorage.getItem(a));if(!b||!b.expires||b.expires<Date.now()){localStorage.removeItem(a);window.location.href="../login.html"}}catch(e){window.location.href="../login.html"}}();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>serlf — Dashboard</title>
+<title>📦 Your Digital Library — serlf.store</title>
 <style>
-:root { --bg: #060610; --surface: #0c0c1a; --surface2: #12122a; --border: #1a1a3e; --text: #e8e8f0; --muted: #6b6b8d; --green: #34d399; --cyan: #22d3ee; --accent: #7c6df0; --accent2: #f06292; }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; }
-nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-.nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.nav-links { display: flex; gap: 1.5rem; align-items: center; }
-.nav-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-decoration: none; transition: color 0.3s; }
-.nav-links a:hover { color: var(--text); }
-.nav-badge { background: rgba(52,211,153,0.15); color: var(--green); padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-
-.container { max-width: 1000px; margin: 0 auto; padding: 3rem 2rem; }
-
-.welcome-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem; }
-.welcome-bar h1 { font-size: 1.8rem; font-weight: 800; }
-.welcome-bar h1 span { background: linear-gradient(135deg, var(--green), var(--cyan)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.status-pill { display: flex; align-items: center; gap: 0.5rem; background: var(--surface); border: 1px solid var(--green); border-radius: 20px; padding: 6px 16px; font-size: 0.85rem; }
-.status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s ease-in-out infinite; }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; transition: all 0.3s; }
-.card:hover { border-color: var(--green); }
-.card-icon { font-size: 2rem; margin-bottom: 1rem; }
-.card-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.5rem; }
-.card-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.2rem; }
-.card-status { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; }
-.card-status .dot { width: 6px; height: 6px; border-radius: 50%; }
-.dot-live { background: var(--green); }
-.dot-setup { background: var(--cyan); animation: pulse 1.5s ease-in-out infinite; }
-
-.section-title { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; }
-
-.actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 3rem; }
-.action { display: flex; align-items: center; gap: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.5rem; text-decoration: none; color: var(--text); transition: all 0.3s; }
-.action:hover { border-color: var(--green); transform: translateY(-2px); }
-.action-icon { font-size: 1.5rem; }
-.action-text { font-weight: 600; font-size: 0.95rem; }
-.action-sub { color: var(--muted); font-size: 0.8rem; }
-
-.plan-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-.plan-info { }
-.plan-name { font-weight: 700; }
-.plan-price { color: var(--green); font-size: 0.9rem; }
-.plan-btn { padding: 8px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; background: rgba(52,211,153,0.1); color: var(--green); border: 1px solid rgba(52,211,153,0.3); text-decoration: none; transition: all 0.3s; }
-.plan-btn:hover { background: rgba(52,211,153,0.2); }
-
-@media (max-width: 768px) {
-  .grid { grid-template-columns: 1fr; }
-  .actions { grid-template-columns: 1fr; }
-  .welcome-bar { flex-direction: column; gap: 1rem; align-items: flex-start; }
-  .plan-bar { flex-direction: column; gap: 1rem; text-align: center; }
+:root { 
+  --bg: #0a0f1c; --surface: #0f1629; --surface2: #141b2e; --surface3: #1a2138;
+  --border: #243044; --text: #e2e8f5; --muted: #94a3b8; --accent: #f97316; 
+  --accent-soft: #fb923c; --accent-dark: #ea580c; --green: #34d399; --cyan: #22d3ee;
+  --glass-bg: rgba(15, 22, 41, 0.7); --glass-border: rgba(244, 244, 245, 0.1);
 }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { 
+  background: linear-gradient(135deg, var(--bg) 0%, #0c1220 50%, #0a0f1c 100%); 
+  color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; 
+  line-height: 1.6; min-height: 100vh; overflow-x: hidden;
+}
+
+/* Glass morphism navbar */
+.navbar { 
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+  background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--glass-border); padding: 1rem 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.nav-brand { 
+  display: flex; align-items: center; gap: 0.75rem; font-size: 1.2rem; 
+  font-weight: 800; text-decoration: none; color: var(--text);
+}
+.nav-brand .captain { color: var(--accent); }
+.nav-actions { display: flex; align-items: center; gap: 1rem; }
+.nav-user { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--muted); }
+.nav-user img { width: 28px; height: 28px; border-radius: 50%; }
+.nav-btn { 
+  padding: 0.5rem 1rem; background: var(--glass-bg); border: 1px solid var(--glass-border);
+  border-radius: 8px; color: var(--text); text-decoration: none; font-size: 0.85rem; 
+  font-weight: 500; transition: all 0.3s; backdrop-filter: blur(10px);
+}
+.nav-btn:hover { background: var(--accent); border-color: var(--accent); }
+
+/* Main content */
+.main { padding-top: 5rem; }
+
+/* Hero section */
+.hero { 
+  padding: 4rem 2rem; text-align: center; 
+  background: radial-gradient(circle at 50% 50%, rgba(249, 115, 22, 0.1) 0%, transparent 50%);
+}
+.hero-title { 
+  font-size: 2.5rem; font-weight: 900; margin-bottom: 1rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft)); 
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.hero-subtitle { color: var(--muted); font-size: 1.1rem; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+.hero-stats { display: flex; justify-content: center; gap: 3rem; margin-top: 2rem; flex-wrap: wrap; }
+.hero-stat { text-align: center; }
+.hero-stat-num { font-size: 2rem; font-weight: 900; color: var(--accent); }
+.hero-stat-label { color: var(--muted); font-size: 0.85rem; margin-top: 0.25rem; }
+
+/* Container */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+/* Library sections */
+.library-section { margin-bottom: 4rem; }
+.section-header { 
+  display: flex; justify-content: between; align-items: center; margin-bottom: 2rem;
+}
+.section-title { 
+  font-size: 1.8rem; font-weight: 800; display: flex; align-items: center; gap: 0.75rem;
+}
+.section-title .emoji { font-size: 2rem; }
+.section-subtitle { color: var(--muted); font-size: 0.95rem; margin-top: 0.25rem; }
+
+/* Product grid */
+.product-grid { 
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
+  gap: 1.5rem; 
+}
+.product-card { 
+  background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border); border-radius: 16px; padding: 2rem; 
+  transition: all 0.4s ease; position: relative; overflow: hidden;
+}
+.product-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.05), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+.product-card:hover { 
+  transform: translateY(-4px); border-color: var(--accent); 
+  box-shadow: 0 20px 60px rgba(249, 115, 22, 0.2);
+}
+.product-card:hover::before { opacity: 1; }
+.product-icon { 
+  font-size: 2.5rem; margin-bottom: 1rem; position: relative; z-index: 2;
+}
+.product-name { 
+  font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; position: relative; z-index: 2;
+}
+.product-desc { 
+  color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; line-height: 1.6; position: relative; z-index: 2;
+}
+.product-meta { 
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; position: relative; z-index: 2;
+}
+.product-status { 
+  display: flex; align-items: center; gap: 0.4rem; font-size: 0.8rem; font-weight: 600;
+}
+.product-status.active { color: var(--green); }
+.product-status.premium { color: var(--accent); }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; }
+.dot-green { background: var(--green); }
+.dot-orange { background: var(--accent); }
+.product-count { 
+  background: var(--surface3); padding: 0.25rem 0.75rem; border-radius: 12px; 
+  font-size: 0.8rem; color: var(--muted);
+}
+
+/* Action buttons */
+.product-actions { display: flex; gap: 0.75rem; position: relative; z-index: 2; }
+.btn { 
+  padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 0.85rem; font-weight: 600; 
+  border: none; cursor: pointer; transition: all 0.3s; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-primary { 
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft)); color: white; flex: 1; justify-content: center;
+}
+.btn-primary:hover { 
+  background: linear-gradient(135deg, var(--accent-dark), var(--accent)); 
+  transform: translateY(-1px); 
+}
+.btn-secondary { 
+  background: var(--glass-bg); border: 1px solid var(--glass-border); color: var(--muted);
+  backdrop-filter: blur(10px);
+}
+.btn-secondary:hover { color: var(--text); border-color: var(--accent); }
+
+/* Download modal */
+.modal { 
+  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+  background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); z-index: 2000;
+  align-items: center; justify-content: center; padding: 2rem;
+}
+.modal.show { display: flex; }
+.modal-content { 
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px; 
+  padding: 2.5rem; max-width: 500px; width: 100%; text-align: center;
+}
+.modal-icon { font-size: 3rem; margin-bottom: 1rem; }
+.modal-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+.modal-desc { color: var(--muted); margin-bottom: 2rem; }
+.modal-actions { display: flex; gap: 1rem; justify-content: center; }
+
+/* Quick access toolbar */
+.quick-toolbar { 
+  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 1000;
+  background: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border); border-radius: 16px; padding: 1rem;
+  display: flex; gap: 1rem; box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+}
+.toolbar-btn { 
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1rem; 
+  background: transparent; border: none; border-radius: 10px; color: var(--muted); 
+  cursor: pointer; transition: all 0.3s; font-size: 0.85rem; font-weight: 500;
+}
+.toolbar-btn:hover, .toolbar-btn.active { color: var(--accent); background: rgba(249, 115, 22, 0.1); }
+
+/* Responsive */
+@media (max-width: 768px) { 
+  .navbar { padding: 1rem; }
+  .nav-actions { gap: 0.5rem; }
+  .hero { padding: 3rem 1rem; }
+  .hero-title { font-size: 2rem; }
+  .hero-stats { gap: 2rem; }
+  .container { padding: 0 1rem; }
+  .product-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .product-card { padding: 1.5rem; }
+  .quick-toolbar { bottom: 1rem; padding: 0.75rem; flex-wrap: wrap; }
+  .modal-content { margin: 1rem; padding: 2rem; }
+}
+
+/* Loading animation */
+.loading { 
+  display: inline-block; width: 16px; height: 16px; border: 2px solid var(--glass-border); 
+  border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; 
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Badge styles */
+.badge { 
+  display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.6rem; 
+  border-radius: 8px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+}
+.badge-new { background: rgba(52, 211, 153, 0.15); color: var(--green); }
+.badge-popular { background: rgba(249, 115, 22, 0.15); color: var(--accent); }
+.badge-pro { background: rgba(124, 109, 240, 0.15); color: #7c6df0; }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-logo">serlf</div>
-  <div class="nav-links">
-    <span class="nav-badge">Subscriber</span>
-    <a href="https://serlf.com">Home</a>
-    <a href="mailto:hello@serlf.com">Support</a>
-    <span id="user-info" style="display:flex;align-items:center;gap:8px;"></span>
-    <a href="#" onclick="signOut()" style="color:var(--muted);font-size:0.8rem;">Sign Out</a>
+<!-- Navigation -->
+<nav class="navbar">
+  <a href="/" class="nav-brand">
+    <span class="captain">📦</span>
+    <span>serlf.store</span>
+  </a>
+  <div class="nav-actions">
+    <div class="nav-user" id="nav-user"></div>
+    <a href="https://serlf.ca/dashboard.html" class="nav-btn">🚀 Platform</a>
   </div>
 </nav>
 
-<div class="container">
+<!-- Main Content -->
+<main class="main">
 
-  <div class="welcome-bar">
-    <h1>Welcome to <span>serlf</span></h1>
-    <div class="status-pill">
-      <div class="status-dot"></div>
-      Setting up your environment
-    </div>
-  </div>
-
-  <div class="section-title">Your Products</div>
-  <div class="grid">
-    <a href="platform.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">🤖</div>
-      <div class="card-title">serlf Platform</div>
-      <div class="card-desc">Your dedicated AI team, learning your business.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
-    </a>
-    <a href="sites.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">🌐</div>
-      <div class="card-title">serlf Sites</div>
-      <div class="card-desc">Your AI-managed website, always online.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Ready to set up →</div>
-    </a>
-    <a href="security.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">🔐</div>
-      <div class="card-title">serlf Security</div>
-      <div class="card-desc">Enterprise-grade protection for your environment.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
-    </a>
-    <a href="transform.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">☁️</div>
-      <div class="card-title">serlf Transform</div>
-      <div class="card-desc">Your professional cloud infrastructure.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
-    </a>
-    <a href="intelligence.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">📊</div>
-      <div class="card-title">serlf Intelligence</div>
-      <div class="card-desc">AI-powered insights for your business.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
-    </a>
-    <a href="labs.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">🧪</div>
-      <div class="card-title">serlf Labs</div>
-      <div class="card-desc">Cutting-edge AI research, applied to you.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Setting up</div>
-    </a>
-    <a href="mail.html" class="card" style="text-decoration:none;color:var(--text);">
-      <div class="card-icon">📧</div>
-      <div class="card-title">serlf Mail</div>
-      <div class="card-desc">Professional email for your business.</div>
-      <div class="card-status"><div class="dot dot-setup"></div> Ready to set up →</div>
-    </a>
-  </div>
-
-  <div class="section-title">Quick Actions</div>
-  <div class="actions">
-    <a href="mailto:hello@serlf.com?subject=Onboarding" class="action">
-      <div class="action-icon">💬</div>
-      <div>
-        <div class="action-text">Start Onboarding</div>
-        <div class="action-sub">Tell us about your business</div>
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1 class="hero-title">Your Digital Library</h1>
+    <p class="hero-subtitle">Everything you need to build, design, and grow. Professional templates, tools, and resources — all in one place.</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">50+</div>
+        <div class="hero-stat-label">Templates</div>
       </div>
-    </a>
-    <a href="mailto:hello@serlf.com?subject=Support" class="action">
-      <div class="action-icon">🛟</div>
-      <div>
-        <div class="action-text">Get Support</div>
-        <div class="action-sub">We're here to help</div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">12</div>
+        <div class="hero-stat-label">Categories</div>
       </div>
-    </a>
-    <a href="https://billing.stripe.com/p/login/5kQ7v3c5L5pE5b2cMM" class="action">
-      <div class="action-icon">💳</div>
-      <div>
-        <div class="action-text">Manage Billing</div>
-        <div class="action-sub">Update payment or cancel</div>
-      </div>
-    </a>
-    <a href="https://serlf.com" class="action">
-      <div class="action-icon">📖</div>
-      <div>
-        <div class="action-text">Learn More</div>
-        <div class="action-sub">See all features and products</div>
-      </div>
-    </a>
-  </div>
-
-  <div class="plan-bar">
-    <div class="plan-info">
-      <div class="plan-name">serlf — All Products</div>
-      <div class="plan-price">$1 CAD / month · Active</div>
-    </div>
-    <a href="https://billing.stripe.com/p/login/5kQ7v3c5L5pE5b2cMM" class="plan-btn">Manage Plan</a>
-  </div>
-
-  <!-- Owner Panel -->
-  <div id="owner-panel" style="display:none;margin-top:2rem;">
-    <h2 style="font-size:1.3rem;font-weight:700;margin-bottom:1rem;color:var(--accent2);">⚓ Owner Panel</h2>
-    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
-      <a href="https://dashboard.stripe.com" target="_blank" class="card" style="text-decoration:none;">
-        <div class="card-icon">💳</div>
-        <div class="card-title">Stripe Dashboard</div>
-        <div class="card-desc">Payments, customers, revenue</div>
-      </a>
-      <a href="https://github.com/orgs/eose-sre/repositories" target="_blank" class="card" style="text-decoration:none;">
-        <div class="card-icon">📦</div>
-        <div class="card-title">GitHub Repos</div>
-        <div class="card-desc">All 8 serlf repos</div>
-      </a>
-      <a href="https://portal.azure.com" target="_blank" class="card" style="text-decoration:none;">
-        <div class="card-icon">☁️</div>
-        <div class="card-title">Azure Portal</div>
-        <div class="card-desc">DNS, KV, AKS, infrastructure</div>
-      </a>
-      <a href="https://master1.eose.ca" target="_blank" class="card" style="text-decoration:none;">
-        <div class="card-icon">⚓</div>
-        <div class="card-title">Admiral Fleet Control</div>
-        <div class="card-desc">Captain fleet management</div>
-      </a>
-      <a href="https://console.cloud.google.com" target="_blank" class="card" style="text-decoration:none;">
-        <div class="card-icon">🔑</div>
-        <div class="card-title">Google Cloud</div>
-        <div class="card-desc">OAuth, SSO, APIs</div>
-      </a>
-      <div class="card" id="stats-card">
-        <div class="card-icon">📊</div>
-        <div class="card-title">Quick Stats</div>
-        <div class="card-desc" id="quick-stats">Loading...</div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">∞</div>
+        <div class="hero-stat-label">Updates</div>
       </div>
     </div>
+  </section>
 
-    <div style="margin-top:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;">
-      <div style="font-weight:700;margin-bottom:0.75rem;">🚀 Fleet Status</div>
-      <div style="display:flex;flex-wrap:wrap;gap:0.75rem;" id="fleet-domains"></div>
+  <div class="container">
+
+    <!-- Website Templates -->
+    <section class="library-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">
+            <span class="emoji">🌐</span>
+            Website Templates
+          </h2>
+          <p class="section-subtitle">Professional websites that work out of the box</p>
+        </div>
+      </div>
+      <div class="product-grid">
+        <div class="product-card">
+          <div class="product-icon">🏢</div>
+          <h3 class="product-name">Business Starter Pack</h3>
+          <p class="product-desc">Complete website templates for service businesses. Landing pages, about pages, contact forms — everything included.</p>
+          <div class="product-meta">
+            <div class="product-status active">
+              <div class="status-dot dot-green"></div>
+              Ready to Download
+            </div>
+            <div class="product-count">8 templates</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('business-starter')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('business-starter')">👀 Preview</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-icon">🎨</div>
+          <h3 class="product-name">Creative Portfolio Kit</h3>
+          <p class="product-desc">Stunning portfolio templates for designers, photographers, and creatives. Mobile-responsive and fast-loading.</p>
+          <div class="product-meta">
+            <div class="product-status active">
+              <div class="status-dot dot-green"></div>
+              Ready to Download
+            </div>
+            <div class="product-count">5 templates</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('portfolio-kit')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('portfolio-kit')">👀 Preview</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-icon">🛍️</div>
+          <h3 class="product-name">E-commerce Essentials</h3>
+          <p class="product-desc">Modern online store templates with shopping cart, checkout, and payment integration ready to customize.</p>
+          <div class="product-meta">
+            <div class="product-status premium">
+              <div class="status-dot dot-orange"></div>
+              Premium Collection
+            </div>
+            <div class="product-count">6 templates</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('ecommerce-kit')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('ecommerce-kit')">👀 Preview</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Email Templates -->
+    <section class="library-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">
+            <span class="emoji">📧</span>
+            Email Templates
+          </h2>
+          <p class="section-subtitle">Professional email designs that convert</p>
+        </div>
+      </div>
+      <div class="product-grid">
+        <div class="product-card">
+          <div class="product-icon">📬</div>
+          <h3 class="product-name">Newsletter Collection</h3>
+          <p class="product-desc">Beautiful newsletter templates for every occasion. Welcome series, weekly updates, product launches — all covered.</p>
+          <div class="product-meta">
+            <div class="product-status active">
+              <div class="status-dot dot-green"></div>
+              Ready to Download
+            </div>
+            <div class="product-count">12 templates</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('newsletter-kit')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('newsletter-kit')">👀 Preview</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-icon">🚀</div>
+          <h3 class="product-name">Sales Email Sequences</h3>
+          <p class="product-desc">Proven email sequences that convert. Cold outreach, nurture campaigns, and follow-ups that get results.</p>
+          <div class="product-meta">
+            <div class="product-status premium">
+              <div class="status-dot dot-orange"></div>
+              Premium Collection
+            </div>
+            <div class="product-count">20 templates</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('sales-emails')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('sales-emails')">👀 Preview</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Business Templates -->
+    <section class="library-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">
+            <span class="emoji">📊</span>
+            Business Templates
+          </h2>
+          <p class="section-subtitle">Documents and tools to run your business</p>
+        </div>
+      </div>
+      <div class="product-grid">
+        <div class="product-card">
+          <div class="product-icon">📋</div>
+          <h3 class="product-name">Proposal & Contract Kit</h3>
+          <p class="product-desc">Professional proposals, contracts, and agreements. Protect your business and win more clients with proper documentation.</p>
+          <div class="product-meta">
+            <div class="product-status active">
+              <div class="status-dot dot-green"></div>
+              Ready to Download
+            </div>
+            <div class="product-count">15 documents</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('business-docs')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('business-docs')">👀 Preview</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-icon">📈</div>
+          <h3 class="product-name">Financial Planning Sheets</h3>
+          <p class="product-desc">Budgets, forecasts, and financial tracking templates. Keep your business finances organized and profitable.</p>
+          <div class="product-meta">
+            <div class="product-status active">
+              <div class="status-dot dot-green"></div>
+              Ready to Download
+            </div>
+            <div class="product-count">8 spreadsheets</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('financial-kit')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('financial-kit')">👀 Preview</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Brand Kits -->
+    <section class="library-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">
+            <span class="emoji">🎨</span>
+            Brand Kits
+          </h2>
+          <p class="section-subtitle">Complete visual identity systems</p>
+        </div>
+      </div>
+      <div class="product-grid">
+        <div class="product-card">
+          <div class="product-icon">🌈</div>
+          <h3 class="product-name">Startup Brand Kit</h3>
+          <p class="product-desc">Everything you need to brand your startup. Logos, color palettes, fonts, business cards, and brand guidelines.</p>
+          <div class="product-meta">
+            <div class="product-status premium">
+              <div class="status-dot dot-orange"></div>
+              Premium Collection
+            </div>
+            <div class="product-count">25+ assets</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('startup-brand')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('startup-brand')">👀 Preview</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-icon">📱</div>
+          <h3 class="product-name">Social Media Templates</h3>
+          <p class="product-desc">Instagram posts, stories, YouTube thumbnails, LinkedIn banners — all the social media assets you need to stand out.</p>
+          <div class="product-meta">
+            <div class="product-status active">
+              <div class="status-dot dot-green"></div>
+              Ready to Download
+            </div>
+            <div class="product-count">50+ templates</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('social-kit')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('social-kit')">👀 Preview</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- App Starters -->
+    <section class="library-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">
+            <span class="emoji">💻</span>
+            App Starters
+          </h2>
+          <p class="section-subtitle">Ready-to-deploy application templates</p>
+        </div>
+      </div>
+      <div class="product-grid">
+        <div class="product-card">
+          <div class="product-icon">⚡</div>
+          <h3 class="product-name">React Dashboard Starter</h3>
+          <p class="product-desc">Modern React dashboard with authentication, charts, tables, and dark mode. Perfect starting point for SaaS apps.</p>
+          <div class="product-meta">
+            <div class="product-status premium">
+              <div class="status-dot dot-orange"></div>
+              Premium Collection
+            </div>
+            <div class="product-count">Full stack</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('react-dashboard')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('react-dashboard')">👀 Preview</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-icon">📱</div>
+          <h3 class="product-name">Mobile App UI Kit</h3>
+          <p class="product-desc">Complete mobile app UI components and screens. iOS and Android compatible designs in Figma and React Native.</p>
+          <div class="product-meta">
+            <div class="product-status active">
+              <div class="status-dot dot-green"></div>
+              Ready to Download
+            </div>
+            <div class="product-count">100+ screens</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('mobile-ui')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('mobile-ui')">👀 Preview</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dashboard Templates -->
+    <section class="library-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">
+            <span class="emoji">📊</span>
+            Dashboard Templates
+          </h2>
+          <p class="section-subtitle">Professional admin and analytics dashboards</p>
+        </div>
+      </div>
+      <div class="product-grid">
+        <div class="product-card">
+          <div class="product-icon">🎛️</div>
+          <h3 class="product-name">Admin Panel Collection</h3>
+          <p class="product-desc">Beautiful admin dashboards for any application. User management, analytics, settings pages — all included.</p>
+          <div class="product-meta">
+            <div class="product-status active">
+              <div class="status-dot dot-green"></div>
+              Ready to Download
+            </div>
+            <div class="product-count">12 dashboards</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('admin-dashboards')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('admin-dashboards')">👀 Preview</button>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <div class="product-icon">📈</div>
+          <h3 class="product-name">Analytics Dashboard Kit</h3>
+          <p class="product-desc">Data visualization templates with charts, graphs, and KPI widgets. Perfect for business intelligence applications.</p>
+          <div class="product-meta">
+            <div class="product-status premium">
+              <div class="status-dot dot-orange"></div>
+              Premium Collection
+            </div>
+            <div class="product-count">20+ components</div>
+          </div>
+          <div class="product-actions">
+            <button class="btn btn-primary" onclick="downloadProduct('analytics-dashboard')">
+              <span>📥</span> Download
+            </button>
+            <button class="btn btn-secondary" onclick="previewProduct('analytics-dashboard')">👀 Preview</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- Download Modal -->
+<div class="modal" id="downloadModal">
+  <div class="modal-content">
+    <div class="modal-icon">📦</div>
+    <h3 class="modal-title" id="modalTitle">Preparing Download...</h3>
+    <p class="modal-desc" id="modalDesc">Your digital product is being prepared for download.</p>
+    <div class="modal-actions">
+      <button class="btn btn-primary" id="modalDownloadBtn" style="display:none;">
+        <span>📥</span> Download Now
+      </button>
+      <button class="btn btn-secondary" onclick="closeModal()">Close</button>
     </div>
   </div>
-
 </div>
 
-<script src="serlf-api.js"></script>
+<!-- Quick Access Toolbar -->
+<div class="quick-toolbar">
+  <button class="toolbar-btn active" onclick="scrollToSection('websites')">
+    <span>🌐</span> Websites
+  </button>
+  <button class="toolbar-btn" onclick="scrollToSection('emails')">
+    <span>📧</span> Emails
+  </button>
+  <button class="toolbar-btn" onclick="scrollToSection('business')">
+    <span>📊</span> Business
+  </button>
+  <button class="toolbar-btn" onclick="scrollToSection('brand')">
+    <span>🎨</span> Brand
+  </button>
+  <button class="toolbar-btn" onclick="scrollToSection('apps')">
+    <span>💻</span> Apps
+  </button>
+</div>
+
 <script>
-// Load user info from auth
-(function() {
-  var auth = JSON.parse(localStorage.getItem('serlf_auth') || '{}');
-  var userInfo = document.getElementById('user-info');
-  if (auth.picture) {
-    userInfo.innerHTML = '<img src="' + auth.picture + '" style="width:28px;height:28px;border-radius:50%;border:2px solid var(--green);" alt="">';
-  }
-  if (auth.name || auth.email) {
-    var name = auth.name || auth.email.split('@')[0];
-    userInfo.innerHTML += '<span style="color:var(--text);font-size:0.85rem;font-weight:500;">' + name + '</span>';
-  }
-  // Personalize welcome
-  if (auth.name) {
-    var h1 = document.querySelector('.welcome-bar h1');
-    if (h1) h1.innerHTML = 'Welcome, <span>' + auth.name.split(' ')[0] + '</span>';
-  }
+// Initialize user info
+const auth = JSON.parse(localStorage.getItem('serlf_auth') || '{}');
+const userEl = document.getElementById('nav-user');
+if (auth.picture) userEl.innerHTML += `<img src="${auth.picture}" alt="">`;
+userEl.innerHTML += `<span>${auth.name || auth.email || ''}</span>`;
 
-  // Owner panel
-  if (SERLF_AUTH.isOwner()) {
-    document.getElementById('owner-panel').style.display = 'block';
+// Product download simulation
+function downloadProduct(productId) {
+  const modal = document.getElementById('downloadModal');
+  const title = document.getElementById('modalTitle');
+  const desc = document.getElementById('modalDesc');
+  const downloadBtn = document.getElementById('modalDownloadBtn');
+  
+  // Product info
+  const products = {
+    'business-starter': { name: 'Business Starter Pack', files: 8, size: '12.4 MB' },
+    'portfolio-kit': { name: 'Creative Portfolio Kit', files: 5, size: '8.7 MB' },
+    'ecommerce-kit': { name: 'E-commerce Essentials', files: 6, size: '15.2 MB' },
+    'newsletter-kit': { name: 'Newsletter Collection', files: 12, size: '6.3 MB' },
+    'sales-emails': { name: 'Sales Email Sequences', files: 20, size: '4.1 MB' },
+    'business-docs': { name: 'Proposal & Contract Kit', files: 15, size: '3.8 MB' },
+    'financial-kit': { name: 'Financial Planning Sheets', files: 8, size: '2.9 MB' },
+    'startup-brand': { name: 'Startup Brand Kit', files: 25, size: '45.7 MB' },
+    'social-kit': { name: 'Social Media Templates', files: 50, size: '67.2 MB' },
+    'react-dashboard': { name: 'React Dashboard Starter', files: 1, size: '89.4 MB' },
+    'mobile-ui': { name: 'Mobile App UI Kit', files: 100, size: '123.8 MB' },
+    'admin-dashboards': { name: 'Admin Panel Collection', files: 12, size: '34.6 MB' },
+    'analytics-dashboard': { name: 'Analytics Dashboard Kit', files: 20, size: '28.9 MB' }
+  };
+  
+  const product = products[productId];
+  
+  // Show modal
+  modal.classList.add('show');
+  title.textContent = 'Preparing Download...';
+  desc.textContent = `${product.name} is being prepared for download.`;
+  downloadBtn.style.display = 'none';
+  
+  // Simulate processing
+  setTimeout(() => {
+    title.textContent = 'Ready to Download!';
+    desc.innerHTML = `
+      <strong>${product.name}</strong><br>
+      ${product.files} files • ${product.size}<br>
+      <small style="color: var(--muted); margin-top: 0.5rem; display: block;">
+        Includes source files, documentation, and license
+      </small>
+    `;
+    downloadBtn.style.display = 'inline-flex';
     
-    // Badge
-    var badge = document.querySelector('.nav-badge');
-    if (badge) { badge.textContent = 'Owner'; badge.style.background = 'rgba(240,98,146,0.15)'; badge.style.color = '#f06292'; }
-
-    // Fleet domains
-    var domains = ['serlf.ca','serlf.com','serlf.net','serlf.org','serlf.club','serlf.info','serlf.shop','serlf.store'];
-    var fleetEl = document.getElementById('fleet-domains');
-    domains.forEach(function(d) {
-      var link = document.createElement('a');
-      link.href = 'https://' + d;
-      link.target = '_blank';
-      link.style.cssText = 'padding:6px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--green);font-size:0.85rem;font-weight:600;text-decoration:none;transition:all 0.2s;';
-      link.textContent = d;
-      link.onmouseover = function() { this.style.borderColor = 'var(--green)'; };
-      link.onmouseout = function() { this.style.borderColor = 'var(--border)'; };
-      fleetEl.appendChild(link);
-    });
-
-    // Quick stats
-    document.getElementById('quick-stats').innerHTML = '8 domains · 6 products · 1 customer · $1 MRR';
-  }
-})();
-
-function signOut() {
-  localStorage.removeItem('serlf_auth');
-  window.location.href = 'login.html';
+    // Set up actual download
+    downloadBtn.onclick = () => {
+      // Create a mock download
+      const blob = new Blob(['# ' + product.name + '\n\nThis is a sample file from serlf.store.\n\nIn a real implementation, this would contain your purchased digital product.'], 
+                          { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = productId + '-sample.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+      
+      closeModal();
+      
+      // Show success message
+      showNotification('📦 Download started! Check your downloads folder.');
+    };
+  }, 1500);
+  
+  // Track download with Stripe (mock)
+  fetch('/api/track-download', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ product: productId, user: auth.email })
+  }).catch(() => {}); // Fail silently in demo
 }
+
+function previewProduct(productId) {
+  // Open preview in new tab (mock)
+  const previewUrl = `/preview/${productId}`;
+  window.open(previewUrl, '_blank');
+  showNotification('👀 Preview opening in new tab...');
+}
+
+function closeModal() {
+  document.getElementById('downloadModal').classList.remove('show');
+}
+
+function scrollToSection(section) {
+  // Update active toolbar button
+  document.querySelectorAll('.toolbar-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.closest('.toolbar-btn').classList.add('active');
+  
+  // Scroll to section (simplified for demo)
+  const sections = {
+    'websites': document.querySelector('.library-section'),
+    'emails': document.querySelectorAll('.library-section')[1],
+    'business': document.querySelectorAll('.library-section')[2],
+    'brand': document.querySelectorAll('.library-section')[3],
+    'apps': document.querySelectorAll('.library-section')[4]
+  };
+  
+  if (sections[section]) {
+    sections[section].scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function showNotification(message) {
+  // Create notification element
+  const notification = document.createElement('div');
+  notification.style.cssText = `
+    position: fixed; top: 6rem; right: 2rem; z-index: 3000;
+    background: var(--glass-bg); backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border); border-radius: 12px;
+    padding: 1rem 1.5rem; color: var(--text); font-size: 0.9rem;
+    transform: translateX(100%); transition: transform 0.3s ease;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+  `;
+  notification.textContent = message;
+  document.body.appendChild(notification);
+  
+  // Animate in
+  setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+  
+  // Remove after delay
+  setTimeout(() => {
+    notification.style.transform = 'translateX(100%)';
+    setTimeout(() => notification.remove(), 300);
+  }, 3000);
+}
+
+// Billing integration (mock Stripe)
+function initializeBilling() {
+  // In a real implementation, this would:
+  // 1. Load Stripe.js
+  // 2. Create customer session if needed
+  // 3. Handle subscription status
+  // 4. Enable/disable premium products
+  
+  console.log('Billing initialized for user:', auth.email);
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', () => {
+  initializeBilling();
+  
+  // Add smooth scroll behavior
+  document.documentElement.style.scrollBehavior = 'smooth';
+  
+  // Track page view (mock analytics)
+  if (window.gtag) {
+    gtag('event', 'page_view', {
+      page_title: 'Digital Library',
+      page_location: window.location.href
+    });
+  }
+});
+
+// Close modal on escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// Close modal on backdrop click
+document.getElementById('downloadModal').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeModal();
+});
 </script>
 
 </body>
