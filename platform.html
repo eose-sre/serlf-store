@@ -4,61 +4,225 @@
 <script>!function(){var a="serlf_auth";try{var b=JSON.parse(localStorage.getItem(a));if(!b||!b.expires||b.expires<Date.now()){localStorage.removeItem(a);window.location.href="login.html"}}catch(e){window.location.href="login.html"}}();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>serlf Platform — Your AI Team</title>
+<title>serlf Platform — Command Center</title>
 <style>
-:root { --bg: #060610; --surface: #0c0c1a; --surface2: #12122a; --border: #1a1a3e; --text: #e8e8f0; --muted: #6b6b8d; --green: #34d399; --cyan: #22d3ee; --accent: #7c6df0; --accent2: #f06292; }
+:root { --bg: #060610; --surface: #0c0c1a; --surface2: #12122a; --border: #1a1a3e; --text: #e8e8f0; --muted: #6b6b8d; --green: #34d399; --cyan: #22d3ee; --accent: #7c6df0; --accent2: #f06292; --red: #ef4444; --yellow: #f59e0b; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; height: 100vh; display: flex; flex-direction: column; }
-nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.nav-logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
-.nav-links { display: flex; gap: 1.5rem; align-items: center; }
-.nav-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; text-decoration: none; }
-.nav-badge { background: rgba(52,211,153,0.15); color: var(--green); padding: 3px 10px; border-radius: 12px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+body { background: var(--bg); color: var(--text); font-family: 'Inter', -apple-system, system-ui, sans-serif; line-height: 1.6; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-.chat-container { flex: 1; display: flex; flex-direction: column; max-width: 900px; width: 100%; margin: 0 auto; overflow: hidden; }
+/* Top bar */
+.topbar { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1.5rem; border-bottom: 1px solid var(--border); flex-shrink: 0; background: var(--surface); }
+.topbar-left { display: flex; align-items: center; gap: 1rem; }
+.topbar-logo { font-size: 1.2rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.topbar-title { font-size: 0.85rem; color: var(--muted); }
+.topbar-right { display: flex; align-items: center; gap: 1rem; }
+.topbar-user { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
+.topbar-user img { width: 24px; height: 24px; border-radius: 50%; }
+.status-indicator { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--green); }
+.status-indicator .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-.agents-bar { display: flex; gap: 0.75rem; padding: 1rem 2rem; border-bottom: 1px solid var(--border); overflow-x: auto; flex-shrink: 0; }
-.agent-chip { display: flex; align-items: center; gap: 0.5rem; padding: 6px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
-.agent-chip:hover, .agent-chip.active { border-color: var(--green); background: rgba(52,211,153,0.08); }
-.agent-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+/* Main layout */
+.main { flex: 1; display: flex; overflow: hidden; }
 
-.messages { flex: 1; overflow-y: auto; padding: 2rem; display: flex; flex-direction: column; gap: 1rem; }
-.msg { max-width: 80%; padding: 1rem 1.2rem; border-radius: 16px; font-size: 0.95rem; line-height: 1.6; animation: fadeIn 0.3s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-.msg-ai { background: var(--surface); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; }
-.msg-user { background: rgba(52,211,153,0.12); border: 1px solid rgba(52,211,153,0.2); align-self: flex-end; border-bottom-right-radius: 4px; }
-.msg-name { font-size: 0.75rem; font-weight: 600; color: var(--green); margin-bottom: 4px; }
-.msg-typing { color: var(--muted); font-style: italic; }
+/* Sidebar */
+.sidebar { width: 240px; background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto; }
+.sidebar-section { padding: 1rem; border-bottom: 1px solid var(--border); }
+.sidebar-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); margin-bottom: 0.75rem; font-weight: 600; }
 
-.input-bar { padding: 1rem 2rem 1.5rem; border-top: 1px solid var(--border); flex-shrink: 0; }
-.input-wrap { display: flex; gap: 0.75rem; }
-.input-wrap input { flex: 1; padding: 0.9rem 1.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-size: 0.95rem; font-family: inherit; outline: none; transition: border-color 0.2s; }
-.input-wrap input:focus { border-color: var(--green); }
-.input-wrap button { padding: 0.9rem 1.5rem; background: linear-gradient(135deg, var(--green), var(--cyan)); color: #060610; border: none; border-radius: 12px; font-weight: 700; font-size: 0.95rem; cursor: pointer; transition: transform 0.2s; }
-.input-wrap button:hover { transform: translateY(-1px); }
+.agent-list { display: flex; flex-direction: column; gap: 4px; }
+.agent-item { display: flex; align-items: center; gap: 0.6rem; padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: all 0.15s; font-size: 0.85rem; }
+.agent-item:hover { background: rgba(255,255,255,0.04); }
+.agent-item.active { background: rgba(52,211,153,0.1); color: var(--green); }
+.agent-emoji { font-size: 1.1rem; width: 24px; text-align: center; }
+.agent-name { font-weight: 500; flex: 1; }
+.agent-status { width: 6px; height: 6px; border-radius: 50%; }
+.online { background: var(--green); }
+.setting-up { background: var(--cyan); animation: pulse 1.5s infinite; }
+
+.nav-item { display: flex; align-items: center; gap: 0.6rem; padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: all 0.15s; font-size: 0.85rem; color: var(--muted); }
+.nav-item:hover { background: rgba(255,255,255,0.04); color: var(--text); }
+.nav-item.active { background: rgba(124,109,240,0.1); color: var(--accent); }
+.nav-icon { width: 20px; text-align: center; }
+
+/* Content area */
+.content { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+/* Tabs */
+.tabs { display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0; background: var(--surface); }
+.tab { padding: 0.75rem 1.5rem; font-size: 0.85rem; font-weight: 500; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+.tab:hover { color: var(--text); background: rgba(255,255,255,0.02); }
+.tab.active { color: var(--green); border-bottom-color: var(--green); }
+
+/* Panels */
+.panel { flex: 1; overflow-y: auto; display: none; }
+.panel.active { display: flex; flex-direction: column; }
+
+/* Chat panel */
+.chat-messages { flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.msg { max-width: 75%; padding: 0.85rem 1.1rem; border-radius: 14px; font-size: 0.9rem; line-height: 1.6; animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+.msg-ai { background: var(--surface2); border: 1px solid var(--border); align-self: flex-start; border-bottom-left-radius: 4px; }
+.msg-user { background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.15); align-self: flex-end; border-bottom-right-radius: 4px; }
+.msg-name { font-size: 0.7rem; font-weight: 600; color: var(--green); margin-bottom: 3px; }
+.msg-system { align-self: center; color: var(--muted); font-size: 0.8rem; font-style: italic; background: none; border: none; padding: 0.5rem; }
+
+.chat-input { padding: 1rem 1.5rem; border-top: 1px solid var(--border); flex-shrink: 0; }
+.input-row { display: flex; gap: 0.6rem; }
+.input-row input { flex: 1; padding: 0.8rem 1rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-size: 0.9rem; font-family: inherit; outline: none; }
+.input-row input:focus { border-color: var(--green); }
+.input-row button { padding: 0.8rem 1.2rem; background: linear-gradient(135deg, var(--green), var(--cyan)); color: var(--bg); border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+
+/* Overview panel */
+.overview { padding: 1.5rem; }
+.overview-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.stat-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; }
+.stat-value { font-size: 1.8rem; font-weight: 900; }
+.stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 0.25rem; }
+.agent-grid-full { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.agent-card-full { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem; display: flex; gap: 1rem; align-items: center; }
+.agent-card-emoji { font-size: 2rem; }
+.agent-card-info { flex: 1; }
+.agent-card-name { font-weight: 700; font-size: 0.95rem; }
+.agent-card-role { font-size: 0.8rem; color: var(--muted); }
+.agent-card-stat { font-size: 0.75rem; margin-top: 0.25rem; }
+
+/* Fleet panel */
+.fleet-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 1.5rem; }
+.fleet-card { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; transition: all 0.2s; }
+.fleet-card:hover { border-color: var(--green); }
+.fleet-domain { font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
+.fleet-captain { font-size: 0.85rem; color: var(--muted); }
+.fleet-status { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.5rem; font-size: 0.75rem; color: var(--green); }
+
+/* Settings panel */
+.settings { padding: 1.5rem; }
+.setting-group { background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+.setting-title { font-weight: 700; margin-bottom: 1rem; }
+.setting-row { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0; border-bottom: 1px solid var(--border); }
+.setting-row:last-child { border: none; }
+.setting-name { font-size: 0.9rem; }
+.setting-value { font-size: 0.85rem; color: var(--green); }
+.toggle { width: 40px; height: 22px; background: var(--border); border-radius: 11px; position: relative; cursor: pointer; transition: background 0.2s; }
+.toggle.on { background: var(--green); }
+.toggle::after { content: ''; position: absolute; width: 18px; height: 18px; background: #fff; border-radius: 50%; top: 2px; left: 2px; transition: left 0.2s; }
+.toggle.on::after { left: 20px; }
+
+/* Logs panel */
+.logs { padding: 1.5rem; font-family: 'Courier New', monospace; font-size: 0.8rem; }
+.log-line { padding: 3px 0; }
+.log-time { color: var(--muted); }
+.log-info { color: var(--cyan); }
+.log-ok { color: var(--green); }
+.log-warn { color: var(--yellow); }
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .overview-grid { grid-template-columns: 1fr; }
+  .fleet-grid { grid-template-columns: 1fr; }
+  .agent-grid-full { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
-<nav>
-  <a href="dashboard.html" class="nav-logo">serlf</a>
-  <div class="nav-links"><span class="nav-badge">Platform</span><a href="dashboard.html">Dashboard</a></div>
-</nav>
 
-<div class="chat-container">
-  <div class="agents-bar">
-    <div class="agent-chip active" onclick="switchAgent('operations')"><span class="agent-dot"></span> 💼 Operations</div>
-    <div class="agent-chip" onclick="switchAgent('content')"><span class="agent-dot"></span> ✍️ Content</div>
-    <div class="agent-chip" onclick="switchAgent('security')"><span class="agent-dot"></span> 🔐 Security</div>
-    <div class="agent-chip" onclick="switchAgent('research')"><span class="agent-dot"></span> 🔍 Research</div>
-    <div class="agent-chip" onclick="switchAgent('creative')"><span class="agent-dot"></span> 🎨 Creative</div>
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="dashboard.html" class="topbar-logo" style="text-decoration:none;">serlf</a>
+    <span class="topbar-title">Platform · Command Center</span>
+  </div>
+  <div class="topbar-right">
+    <div class="status-indicator"><div class="dot"></div> All Systems Online</div>
+    <div class="topbar-user" id="topbar-user"></div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">AI Agents</div>
+      <div class="agent-list" id="agent-list"></div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Navigation</div>
+      <div class="nav-item active" onclick="showTab('overview')"><span class="nav-icon">📊</span> Overview</div>
+      <div class="nav-item" onclick="showTab('fleet')"><span class="nav-icon">🚀</span> Fleet</div>
+      <div class="nav-item" onclick="showTab('logs')"><span class="nav-icon">📋</span> Activity Log</div>
+      <div class="nav-item" onclick="showTab('settings')"><span class="nav-icon">⚙️</span> Settings</div>
+    </div>
+    <div class="sidebar-section" style="margin-top:auto;">
+      <div class="nav-item" onclick="window.location.href='dashboard.html'"><span class="nav-icon">←</span> Dashboard</div>
+      <div class="nav-item" onclick="signOut()"><span class="nav-icon">🚪</span> Sign Out</div>
+    </div>
   </div>
 
-  <div class="messages" id="messages"></div>
+  <div class="content">
+    <div class="tabs" id="tabs">
+      <div class="tab active" onclick="showTab('overview')">Overview</div>
+      <div class="tab" onclick="showTab('chat')">Chat</div>
+      <div class="tab" onclick="showTab('fleet')">Fleet</div>
+      <div class="tab" onclick="showTab('logs')">Activity</div>
+      <div class="tab" onclick="showTab('settings')">Settings</div>
+    </div>
 
-  <div class="input-bar">
-    <div class="input-wrap">
-      <input type="text" id="chatInput" placeholder="Ask your AI team anything..." onkeydown="if(event.key==='Enter')sendMessage()">
-      <button onclick="sendMessage()">Send</button>
+    <!-- Overview Panel -->
+    <div class="panel active" id="panel-overview">
+      <div class="overview">
+        <div class="overview-grid">
+          <div class="stat-card"><div class="stat-value" style="color:var(--green);">5</div><div class="stat-label">Active Agents</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--cyan);">8</div><div class="stat-label">Domains</div></div>
+          <div class="stat-card"><div class="stat-value" style="color:var(--accent);">6</div><div class="stat-label">Products</div></div>
+        </div>
+        <h3 style="font-size:1rem;margin-bottom:1rem;">Your AI Team</h3>
+        <div class="agent-grid-full" id="agent-grid"></div>
+      </div>
+    </div>
+
+    <!-- Chat Panel -->
+    <div class="panel" id="panel-chat">
+      <div class="chat-messages" id="messages"></div>
+      <div class="chat-input">
+        <div class="input-row">
+          <input type="text" id="chatInput" placeholder="Message your AI team..." onkeydown="if(event.key==='Enter')sendMessage()">
+          <button onclick="sendMessage()">Send</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Fleet Panel -->
+    <div class="panel" id="panel-fleet">
+      <div class="fleet-grid" id="fleet-grid"></div>
+    </div>
+
+    <!-- Logs Panel -->
+    <div class="panel" id="panel-logs">
+      <div class="logs" id="logs"></div>
+    </div>
+
+    <!-- Settings Panel -->
+    <div class="panel" id="panel-settings">
+      <div class="settings">
+        <div class="setting-group">
+          <div class="setting-title">🤖 AI Configuration</div>
+          <div class="setting-row"><span class="setting-name">Model</span><span class="setting-value">Claude Sonnet</span></div>
+          <div class="setting-row"><span class="setting-name">Response Style</span><span class="setting-value">Professional</span></div>
+          <div class="setting-row"><span class="setting-name">Auto-respond</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="setting-row"><span class="setting-name">Learning Mode</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+        <div class="setting-group">
+          <div class="setting-title">🔐 Security</div>
+          <div class="setting-row"><span class="setting-name">Environment</span><span class="setting-value">Isolated</span></div>
+          <div class="setting-row"><span class="setting-name">Encryption</span><span class="setting-value">AES-256 + TLS 1.3</span></div>
+          <div class="setting-row"><span class="setting-name">mTLS</span><span class="setting-value">STRICT</span></div>
+          <div class="setting-row"><span class="setting-name">2FA Required</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+        <div class="setting-group">
+          <div class="setting-title">📧 Notifications</div>
+          <div class="setting-row"><span class="setting-name">Email Alerts</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+          <div class="setting-row"><span class="setting-name">Weekly Report</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+          <div class="setting-row"><span class="setting-name">Security Alerts</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -68,157 +232,169 @@ nav { padding: 1rem 2rem; display: flex; justify-content: space-between; align-i
 const auth = JSON.parse(localStorage.getItem('serlf_auth') || '{}');
 const userName = (auth.name || 'there').split(' ')[0];
 let currentAgent = 'operations';
-
-const agents = {
-  operations: { name: '💼 Operations', greeting: `Hi ${userName}! I'm your Operations agent. I can help with task management, scheduling, workflows, and business processes. What do you need help with?` },
-  content: { name: '✍️ Content', greeting: `Hey ${userName}! I'm your Content agent. I write emails, blog posts, social media content, and marketing copy. What should we create?` },
-  security: { name: '🔐 Security', greeting: `Hello ${userName}. I'm your Security agent. I monitor your systems, check for vulnerabilities, and keep everything locked down. What would you like me to check?` },
-  research: { name: '🔍 Research', greeting: `Hi ${userName}! I'm your Research agent. I dig into data, find competitors, analyze markets, and surface insights. What should I research?` },
-  creative: { name: '🎨 Creative', greeting: `Hey ${userName}! 🎨 I'm your Creative agent. Design ideas, branding, visual concepts, art direction — let's make something beautiful. What's the vision?` }
-};
-
-// Smart response engine — keyword matching + context
 let msgHistory = [];
 
-function getResponse(agent, text) {
-  const t = text.toLowerCase();
-  msgHistory.push(t);
-  const msgCount = msgHistory.length;
-  
-  const r = {
-    operations: {
-      greet: ["Hey! Good to have you here. What are we tackling today?", "Welcome back! Ready to get things done. What's on the agenda?", "Hey there! Let's make today productive. What's first?"],
-      status: ["Here's where things stand: all systems are online, your products are live across 8 domains, and your AI team is active. Anything specific you want a deep dive on?", "Quick status: environment healthy, no alerts, all services running. Your last activity was today. Want me to pull up detailed metrics?"],
-      help: ["I can help with: task management, scheduling, process automation, team coordination, and workflow optimization. What sounds useful?", "Here's what I do best: organize chaos. Give me a messy situation and I'll make it clean. What needs sorting?"],
-      task: ["I've added that to your task list. Priority level? I'm thinking medium unless you say otherwise.", "Noted and queued. Want me to set a deadline or leave it open-ended?", "Got it. I'll track this and nudge you if it's not done by end of week. Sound good?"],
-      schedule: ["Let me check your calendar... looks like you've got some open slots this week. When works best?", "I'd suggest blocking 2 hours for this. Morning person or afternoon warrior?"],
-      team: ["Your AI team is all online: Operations (me!), Content, Security, Research, and Creative. Want me to loop anyone in?", "The crew's ready. Should I brief another agent on what we're working on?"],
-      default: ["Interesting — let me think about the best approach for that.", "I hear you. Let me work on that and come back with options.", "Good call. I'll put together a plan for that. Give me a moment.", "That's a solid direction. Want me to break it down into actionable steps?", "On it. I'll have something for you shortly.", "Let me map that out. First question — what's the priority level?"]
-    },
-    content: {
-      greet: ["Hey! Creative juices are flowing. What are we writing today?", "Ready to create! Blog post, email, social media, pitch deck — name it."],
-      email: ["I'll draft that email. Who's it going to and what's the vibe — formal, friendly, or persuasive?", "Email coming up! Give me the key points and I'll make it sing."],
-      blog: ["Love a good blog post. What's the topic? I'll outline it first so you can approve the structure.", "I'll write a draft with a strong hook, clear sections, and a solid CTA. Target word count?"],
-      social: ["Social media time! Which platform? The tone shifts a lot between LinkedIn, Twitter, and Instagram.", "I'll create a post with engagement bait... I mean, a compelling hook. 😄 What's the message?"],
-      help: ["I write: emails, blogs, social posts, landing pages, product descriptions, newsletters, scripts, proposals, and more. What do you need?"],
-      default: ["Great topic! Let me draft something. I'll aim for punchy and clear.", "I'm on it. First draft coming up — I'll give you 2 angles to choose from.", "Love this direction. Let me sketch out the structure first, then fill in the magic.", "Writing mode activated. This is going to be good.", "I'll craft something that grabs attention. Professional or personality-forward?", "Let me play with a few approaches and show you the best one."]
-    },
-    security: {
-      greet: ["Security status: all clear. What would you like me to check?", "Your environment is locked down. Need me to scan something?"],
-      scan: ["Initiating security scan... I'll check SSL, DNS, headers, exposed ports, and email authentication. Results in a moment.", "Running a full audit now. I check 8 vectors: SSL, HSTS, DNS, MX, SPF, DMARC, CAA, and IPv6."],
-      ssl: ["SSL certificate is valid and properly configured. TLS 1.3 active. No mixed content detected.", "Your HTTPS is solid. Certificate auto-renews via Let's Encrypt. Expiry is well ahead."],
-      password: ["Password security tip: use a password manager, enable 2FA everywhere, and never reuse passwords. Want me to audit your accounts?", "I recommend 16+ character passwords with a mix. Better yet — passkeys where supported."],
-      help: ["I monitor: SSL certs, DNS security, email authentication (SPF/DKIM/DMARC), headers, vulnerabilities, and access patterns. What should I focus on?"],
-      default: ["Security check complete on that front — no issues detected.", "I've reviewed that. One small recommendation, but nothing urgent. Want details?", "All clear. Your isolation and encryption are holding strong.", "Noted. I'll add this to the continuous monitoring queue.", "Good question from a security perspective. Let me assess the risk profile.", "I'll run a check on that. Better safe than sorry."]
-    },
-    research: {
-      greet: ["Research mode on! What are we investigating?", "Ready to dig into data. What's the question?"],
-      competitor: ["I'll pull a competitor analysis. What industry or specific companies should I focus on?", "Competitor intel coming up. I'll compare pricing, features, positioning, and market share."],
-      market: ["Let me research that market. I'll look at size, growth rate, key players, and trends.", "Market analysis initiated. I'll find TAM, SAM, SOM and identify gaps."],
-      trend: ["Trend analysis running... initial data suggests this is gaining momentum. Want the full report?", "I see an interesting pattern here. Let me pull more data points to confirm the trend."],
-      help: ["I research: markets, competitors, trends, pricing strategies, customer segments, and industry reports. What do you need?"],
-      default: ["Fascinating question. Let me dig into the data on that.", "I found some interesting insights already. Let me compile a proper analysis.", "There's more here than meets the eye. Give me a moment to pull it together.", "The data tells an interesting story. Want the quick version or the deep dive?", "I'll research that thoroughly. Expect findings within the hour.", "Good angle. Let me cross-reference a few sources on this."]
-    },
-    creative: {
-      greet: ["Hey! 🎨 Creative mode engaged. What are we designing?", "The canvas is blank and I'm excited. What's the vision?"],
-      logo: ["Logo time! Tell me the brand personality — modern, classic, playful, bold? And any colors you love?", "I'll sketch some logo concepts. Wordmark, icon, or combination? What feels right?"],
-      color: ["Let me generate a palette! Describe the mood — corporate, warm, techy, nature, luxury?", "Colors set the whole tone. I'll create 3 palettes: safe, bold, and wild. You pick."],
-      brand: ["Brand identity project! I'll cover: logo, colors, typography, tone of voice, and visual language. Let's start with your values.", "Building a brand is my favorite thing. What three words describe who you are?"],
-      help: ["I design: logos, color palettes, brand identities, UI mockups, social graphics, presentations, and creative concepts. What's the project?"],
-      default: ["Ooh I love this! Let me visualize it.", "Creative wheels are turning. This could be really special.", "I see it! Let me sketch out a few directions.", "Bold choice. I'm already thinking about how to make this pop.", "The aesthetic is coming together. Modern? Minimalist? Let me explore.", "This has so much potential. Let me play with some concepts."]
-    }
-  };
+// Agents
+const agents = [
+  { id:'operations', emoji:'💼', name:'Operations', role:'Tasks, workflows, scheduling', status:'online' },
+  { id:'content', emoji:'✍️', name:'Content', role:'Writing, copy, communications', status:'online' },
+  { id:'security', emoji:'🔐', name:'Security', role:'Monitoring, compliance, audits', status:'online' },
+  { id:'research', emoji:'🔍', name:'Research', role:'Data, competitors, insights', status:'online' },
+  { id:'creative', emoji:'🎨', name:'Creative', role:'Design, branding, visuals', status:'online' }
+];
 
-  const agentR = r[agent] || r.operations;
-  
-  // Keyword matching
-  if (t.match(/\bhey\b|\bhi\b|\bhello\b|\byo\b|what'?s up/)) return pick(agentR.greet || agentR.default);
-  if (t.match(/\bstatus\b|\bhow.*(we|things|it)\b|\blooking\b/)) return pick(agentR.status || agentR.default);
-  if (t.match(/\bhelp\b|\bwhat can you\b|\bwhat do you\b/)) return pick(agentR.help || agentR.default);
-  if (t.match(/\btask\b|\btodo\b|\badd\b|\bnote\b/)) return pick(agentR.task || agentR.default);
-  if (t.match(/\bschedule\b|\bcalendar\b|\bmeeting\b|\bbook\b/)) return pick(agentR.schedule || agentR.default);
-  if (t.match(/\bteam\b|\bcrew\b|\bagent\b/)) return pick(agentR.team || agentR.default);
-  if (t.match(/\bemail\b|\binbox\b|\bsend\b/)) return pick(agentR.email || agentR.default);
-  if (t.match(/\bblog\b|\barticle\b|\bpost\b|\bwrite\b/)) return pick(agentR.blog || agentR.default);
-  if (t.match(/\bsocial\b|\btwitter\b|\blinkedin\b|\binstagram\b/)) return pick(agentR.social || agentR.default);
-  if (t.match(/\bscan\b|\baudit\b|\bcheck\b|\bvulner/)) return pick(agentR.scan || agentR.default);
-  if (t.match(/\bssl\b|\bcert\b|\bhttps\b/)) return pick(agentR.ssl || agentR.default);
-  if (t.match(/\bpassword\b|\b2fa\b|\bauth/)) return pick(agentR.password || agentR.default);
-  if (t.match(/\bcompetit\b|\brival\b/)) return pick(agentR.competitor || agentR.default);
-  if (t.match(/\bmarket\b|\bindustry\b/)) return pick(agentR.market || agentR.default);
-  if (t.match(/\btrend\b|\bgrowing\b|\bforecast\b/)) return pick(agentR.trend || agentR.default);
-  if (t.match(/\blogo\b|\bicon\b/)) return pick(agentR.logo || agentR.default);
-  if (t.match(/\bcolor\b|\bpalette\b|\bcolour\b/)) return pick(agentR.color || agentR.default);
-  if (t.match(/\bbrand\b|\bidentity\b/)) return pick(agentR.brand || agentR.default);
-  
-  return pick(agentR.default);
-}
+// Fleet
+const fleet = [
+  { domain:'serlf.ca', captain:'Captain Maple', emoji:'🍁', color:'#ef4444', products:'Platform, Sites, Security' },
+  { domain:'serlf.com', captain:'Captain Global', emoji:'🌍', color:'#7c6df0', products:'All 6 Products' },
+  { domain:'serlf.net', captain:'Captain Dev', emoji:'💻', color:'#22d3ee', products:'API, SDKs, Docs' },
+  { domain:'serlf.org', captain:'Captain Community', emoji:'🤝', color:'#f59e0b', products:'Forums, KB' },
+  { domain:'serlf.club', captain:'Captain Club', emoji:'🎖️', color:'#a855f7', products:'Members, Perks' },
+  { domain:'serlf.info', captain:'Captain Help', emoji:'❓', color:'#14b8a6', products:'Support, FAQs' },
+  { domain:'serlf.shop', captain:'Captain Commerce', emoji:'🛒', color:'#ec4899', products:'Marketplace' },
+  { domain:'serlf.store', captain:'Captain Products', emoji:'📦', color:'#f97316', products:'Templates, Kits' }
+];
 
-function pick(arr) {
-  // Avoid repeating last response
-  const last = msgHistory.length > 1 ? msgHistory[msgHistory.length - 2] : '';
-  let choice = arr[Math.floor(Math.random() * arr.length)];
-  if (arr.length > 1) {
-    let attempts = 0;
-    while (choice === window._lastResp && attempts < 5) {
-      choice = arr[Math.floor(Math.random() * arr.length)];
-      attempts++;
-    }
+// Build sidebar agents
+document.getElementById('agent-list').innerHTML = agents.map((a,i) => `
+  <div class="agent-item ${i===0?'active':''}" onclick="switchAgent('${a.id}',this)">
+    <span class="agent-emoji">${a.emoji}</span>
+    <span class="agent-name">${a.name}</span>
+    <span class="agent-status ${a.status}"></span>
+  </div>
+`).join('');
+
+// Build overview agent grid
+document.getElementById('agent-grid').innerHTML = agents.map(a => `
+  <div class="agent-card-full">
+    <div class="agent-card-emoji">${a.emoji}</div>
+    <div class="agent-card-info">
+      <div class="agent-card-name">${a.name}</div>
+      <div class="agent-card-role">${a.role}</div>
+      <div class="agent-card-stat" style="color:var(--green);">● Online</div>
+    </div>
+  </div>
+`).join('');
+
+// Build fleet grid
+document.getElementById('fleet-grid').innerHTML = fleet.map(f => `
+  <a href="https://${f.domain}" target="_blank" class="fleet-card" style="text-decoration:none;color:var(--text);">
+    <div style="font-size:1.5rem;margin-bottom:0.5rem;">${f.emoji}</div>
+    <div class="fleet-domain" style="color:${f.color};">${f.domain}</div>
+    <div class="fleet-captain">${f.captain}</div>
+    <div style="font-size:0.8rem;color:var(--muted);margin-top:0.25rem;">${f.products}</div>
+    <div class="fleet-status"><div class="dot" style="background:var(--green);width:6px;height:6px;border-radius:50%;"></div> Live</div>
+  </a>
+`).join('');
+
+// Build logs
+const logEntries = [
+  { time: '12:36', level: 'ok', msg: 'All 8 welcome emails sent successfully' },
+  { time: '12:34', level: 'ok', msg: 'Owner panel deployed — SSO role detection active' },
+  { time: '12:30', level: 'ok', msg: '8 unique domain sites deployed — Captain series live' },
+  { time: '12:24', level: 'info', msg: 'V2 Captain Fleet architecture pushed to fleet repo' },
+  { time: '12:20', level: 'ok', msg: 'All 6 products rebuilt — fully functional' },
+  { time: '12:15', level: 'ok', msg: 'Google SSO wired — OAuth Client ID active' },
+  { time: '12:10', level: 'ok', msg: 'Auth gate deployed — login required for protected pages' },
+  { time: '12:05', level: 'ok', msg: 'Gmail SMTP relay established — email service live' },
+  { time: '12:00', level: 'ok', msg: 'Stripe live payments — Customer #1 confirmed' },
+  { time: '11:55', level: 'info', msg: 'Birthday page locked to tanynjoffe@gmail.com only' },
+  { time: '11:50', level: 'ok', msg: 'All 8 serlf domains verified — SSL active' },
+  { time: '11:45', level: 'warn', msg: 'Port 25 blocked from AKS — NP-L1-020 discovered' },
+  { time: '11:30', level: 'ok', msg: 'serlf launched — $1/month, 8 domains, 6 products' },
+];
+document.getElementById('logs').innerHTML = logEntries.map(l => `
+  <div class="log-line"><span class="log-time">[${l.time}]</span> <span class="log-${l.level}">${l.level.toUpperCase()}</span> ${l.msg}</div>
+`).join('');
+
+// User info
+const userEl = document.getElementById('topbar-user');
+if (auth.picture) userEl.innerHTML += `<img src="${auth.picture}" alt="">`;
+userEl.innerHTML += `<span>${auth.name || auth.email || ''}</span>`;
+
+// Tab switching
+function showTab(id) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-' + id).classList.add('active');
+  document.querySelectorAll('.tab').forEach(t => { if(t.textContent.toLowerCase().includes(id.substring(0,4))) t.classList.add('active'); });
+  if (id === 'chat' && document.getElementById('messages').children.length === 0) {
+    addMessage(getGreeting(), 'ai', agents.find(a=>a.id===currentAgent).emoji + ' ' + agents.find(a=>a.id===currentAgent).name);
   }
-  window._lastResp = choice;
-  return choice;
 }
 
-function addMessage(text, type, agentName) {
+function switchAgent(id, el) {
+  currentAgent = id;
+  document.querySelectorAll('.agent-item').forEach(a => a.classList.remove('active'));
+  if(el) el.classList.add('active');
+  document.getElementById('messages').innerHTML = '';
+  showTab('chat');
+  addMessage(getGreeting(), 'ai', agents.find(a=>a.id===id).emoji + ' ' + agents.find(a=>a.id===id).name);
+}
+
+function getGreeting() {
+  const greetings = {
+    operations: `Hi ${userName}! I'm your Operations agent. Tasks, scheduling, workflows — I keep things running. What do you need?`,
+    content: `Hey ${userName}! Content agent here. I write emails, blogs, social posts, and marketing copy. What are we creating?`,
+    security: `Hello ${userName}. Security agent online. Your environment is isolated and encrypted. What should I check?`,
+    research: `Hi ${userName}! Research agent ready. Markets, competitors, trends, data — what should I investigate?`,
+    creative: `Hey ${userName}! 🎨 Creative agent at your service. Design, branding, visuals — let's make something beautiful.`
+  };
+  return greetings[currentAgent] || greetings.operations;
+}
+
+function addMessage(text, type, name) {
   const div = document.createElement('div');
   div.className = 'msg msg-' + type;
-  if (type === 'ai' && agentName) {
-    div.innerHTML = '<div class="msg-name">' + agentName + '</div>' + text;
-  } else {
-    div.textContent = text;
-  }
+  if (type === 'ai' && name) div.innerHTML = '<div class="msg-name">' + name + '</div>' + text;
+  else div.textContent = text;
   document.getElementById('messages').appendChild(div);
   document.getElementById('messages').scrollTop = 99999;
 }
 
-function switchAgent(agent) {
-  currentAgent = agent;
-  document.querySelectorAll('.agent-chip').forEach(c => c.classList.remove('active'));
-  event.target.closest('.agent-chip').classList.add('active');
-  document.getElementById('messages').innerHTML = '';
-  addMessage(agents[agent].greeting, 'ai', agents[agent].name);
+// Smart responses
+function getResponse(agent, text) {
+  const t = text.toLowerCase();
+  msgHistory.push(t);
+  const r = {
+    operations: { status:["All systems green. 8 domains live, 6 products active, 5 agents online. No alerts.","Environment healthy. Last deploy was minutes ago. All services responding."], help:["I handle: tasks, scheduling, workflows, team coordination, and process optimization."], default:["I'll set that up. Want me to create a timeline?","Noted. I'll organize this and get back to you.","Good call. Let me break this into actionable steps.","On it. Priority level?","I'll map that out. First step is...","Let me coordinate with the team on this."] },
+    content: { default:["I'll draft that. What tone — professional, casual, or bold?","Writing mode on. First draft coming up.","Great topic. Let me outline the structure first.","I'll create 3 angles — you pick the winner.","Love it. Punchy or detailed?","Let me craft something that grabs attention."] },
+    security: { default:["Security check complete — no issues.","All clear. Isolation and encryption holding strong.","I'll add this to the monitoring queue.","Running a scan now... stand by.","Your environment scored 95/100 on the last audit.","One minor recommendation — want details?"] },
+    research: { default:["Interesting. Let me dig into the data.","I found some relevant insights. Compiling now.","The trend is positive. Want the full analysis?","Cross-referencing sources... initial findings look promising.","I'll have a report ready shortly.","There's an opportunity here. Let me quantify it."] },
+    creative: { default:["Love this direction! Let me visualize it.","I see it — clean, bold, modern. Let me sketch options.","Creative wheels turning. This could be special.","I'll design 3 concepts. Which vibe resonates?","The aesthetic is coming together beautifully.","Bold choice. Let me make it pop."] }
+  };
+  const ar = r[agent] || r.operations;
+  if (t.match(/status|how.*look|update/)) return pick(ar.status || ar.default);
+  if (t.match(/help|what can/)) return pick(ar.help || ar.default);
+  return pick(ar.default);
+}
+
+function pick(arr) {
+  let c = arr[Math.floor(Math.random()*arr.length)];
+  if(arr.length>1){ let i=0; while(c===window._lr&&i<5){c=arr[Math.floor(Math.random()*arr.length)];i++;} }
+  window._lr=c; return c;
 }
 
 function sendMessage() {
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text) return;
-  
   addMessage(text, 'user');
   input.value = '';
-  
-  // Show typing
+  const a = agents.find(a=>a.id===currentAgent);
   const typing = document.createElement('div');
-  typing.className = 'msg msg-ai msg-typing';
-  typing.innerHTML = '<div class="msg-name">' + agents[currentAgent].name + '</div>Thinking...';
+  typing.className = 'msg msg-ai';
+  typing.innerHTML = '<div class="msg-name">' + a.emoji + ' ' + a.name + '</div><span style="color:var(--muted);font-style:italic;">Thinking...</span>';
   document.getElementById('messages').appendChild(typing);
   document.getElementById('messages').scrollTop = 99999;
-  
-  // Smart response
-  const delay = 800 + Math.random() * 1200;
   setTimeout(() => {
     typing.remove();
-    const resp = getResponse(currentAgent, text);
-    addMessage(resp, 'ai', agents[currentAgent].name);
-    
-    // Log to serlf
-    SERLF_API.submit('Platform', { agent: currentAgent, message: text, response: resp }).catch(() => {});
-  }, delay);
+    addMessage(getResponse(currentAgent, text), 'ai', a.emoji + ' ' + a.name);
+  }, 600 + Math.random() * 800);
 }
 
-// Initial greeting
-addMessage(agents.operations.greeting, 'ai', agents.operations.name);
-document.getElementById('chatInput').focus();
+function signOut() { localStorage.removeItem('serlf_auth'); window.location.href = 'login.html'; }
 </script>
 </body>
 </html>
