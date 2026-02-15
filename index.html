@@ -39,6 +39,8 @@ nav {
 .nav-links { display: flex; gap: 2rem; align-items: center; }
 .nav-links a { color: var(--muted); font-size: 0.85rem; font-weight: 500; transition: color 0.3s; }
 .nav-links a:hover { color: var(--text); }
+.nav-signin { color: var(--green) !important; font-weight: 600 !important; border: 1px solid rgba(52,211,153,0.3); padding: 6px 16px; border-radius: 8px; transition: all 0.3s !important; }
+.nav-signin:hover { background: rgba(52,211,153,0.1); border-color: var(--green); }
 .nav-price { background: linear-gradient(135deg, var(--green), var(--cyan)); color: #060610; padding: 4px 14px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; }
 
 .hero {
@@ -236,6 +238,7 @@ footer {
     <a href="#safe">Safety</a>
     <a href="#proof">Proof</a>
     <a href="#how">How It Works</a>
+    <a href="login.html" class="nav-signin">Sign In</a>
     <span class="nav-price">$1</span>
   </div>
 </nav>
