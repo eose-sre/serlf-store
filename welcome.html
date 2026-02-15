@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<script>!function(){var a="serlf_auth";try{var b=JSON.parse(localStorage.getItem(a));if(!b||!b.expires||b.expires<Date.now()){localStorage.removeItem(a);window.location.href="login.html"}}catch(e){window.location.href="login.html"}}();</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Welcome to serlf</title>
@@ -55,6 +54,50 @@ h1 { position: relative; z-index: 1; font-size: 2.5rem; font-weight: 900; margin
 <div class="footer">
   Questions? <a href="mailto:hello@serlf.com">hello@serlf.com</a>
 </div>
+
+<script>
+// Post-payment: capture email from Stripe checkout and set auth
+(function() {
+  var SERLF_AUTH_KEY = 'serlf_auth';
+  
+  // Check URL params - Stripe can pass checkout_session_id
+  var params = new URLSearchParams(window.location.search);
+  var email = params.get('email') || params.get('prefilled_email');
+  
+  if (email) {
+    // Set auth from Stripe redirect
+    var auth = { email: email, ts: Date.now(), expires: Date.now() + (30 * 24 * 60 * 60 * 1000), paid: true };
+    localStorage.setItem(SERLF_AUTH_KEY, JSON.stringify(auth));
+  } else {
+    // No email in URL - check if already authed
+    try {
+      var existing = JSON.parse(localStorage.getItem(SERLF_AUTH_KEY));
+      if (!existing) {
+        // First-time post-payment visitor - prompt for email to create session
+        var container = document.querySelector('.welcome-card');
+        var emailForm = document.createElement('div');
+        emailForm.style.cssText = 'margin-top:1.5rem;padding:1.5rem;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.25);border-radius:12px;position:relative;z-index:2;';
+        emailForm.innerHTML = '<p style="color:var(--green);font-weight:600;margin-bottom:8px;">Set up your sign-in</p>' +
+          '<p style="color:var(--muted);font-size:0.85rem;margin-bottom:12px;">Enter the email you used to pay, so you can sign in anytime.</p>' +
+          '<input type="email" id="setup-email" placeholder="you@example.com" style="width:100%;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:15px;margin-bottom:10px;outline:none;">' +
+          '<button onclick="setupAuth()" style="width:100%;padding:12px;background:linear-gradient(135deg,var(--green),var(--cyan));color:#060610;font-weight:700;border:none;border-radius:8px;cursor:pointer;font-size:15px;">Save & Continue</button>';
+        // Insert before the dashboard CTA
+        var cta = container.querySelector('.cta');
+        container.insertBefore(emailForm, cta);
+      }
+    } catch(e) {}
+  }
+})();
+
+function setupAuth() {
+  var email = document.getElementById('setup-email').value;
+  if (email && email.includes('@')) {
+    var auth = { email: email, ts: Date.now(), expires: Date.now() + (30 * 24 * 60 * 60 * 1000), paid: true };
+    localStorage.setItem('serlf_auth', JSON.stringify(auth));
+    window.location.href = 'dashboard.html';
+  }
+}
+</script>
 
 </body>
 </html>
