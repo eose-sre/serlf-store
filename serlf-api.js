@@ -1,7 +1,7 @@
 // serlf client-side API — sends form data via Formsubmit (free, no signup)
 // NP-L1-022: Zero-Backend Forms
 
-const SERLF_OWNERS = ['kewinjoffe@gmail.com', 'kewin.joffe@gmail.com'];
+const SERLF_OWNERS = [process.env.ADMIN_EMAIL || 'info@eose.ca'];
 
 const SERLF_AUTH = {
   get() {
@@ -31,7 +31,7 @@ const SERLF_AUTH = {
 };
 
 const SERLF_API = {
-  endpoint: 'https://formsubmit.co/ajax/kewinjoffe@gmail.com',
+  endpoint: 'https://formsubmit.co/ajax/info@eose.ca',
   
   async submit(product, data) {
     const auth = JSON.parse(localStorage.getItem('serlf_auth') || '{}');
@@ -56,7 +56,7 @@ const SERLF_API = {
     } catch(e) {
       // Fallback: mailto
       const body = Object.entries(payload).map(([k,v]) => `${k}: ${v}`).join('\n');
-      window.location.href = `mailto:kewinjoffe@gmail.com?subject=${encodeURIComponent(payload._subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = `mailto:info@eose.ca?subject=${encodeURIComponent(payload._subject)}&body=${encodeURIComponent(body)}`;
       return { ok: true, fallback: true };
     }
   }

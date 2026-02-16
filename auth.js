@@ -3,7 +3,7 @@
 
 const SERLF_AUTH = {
   // Admin emails (full access)
-  ADMIN_EMAILS: ['kewinjoffe@gmail.com', 'kewin.joffe@gmail.com'],
+  ADMIN_EMAILS: [process.env.ADMIN_EMAIL || 'info@eose.ca'],
   
   // Session key
   SESSION_KEY: 'serlf_session',
